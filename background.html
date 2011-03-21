@@ -35,19 +35,21 @@
   <script>
     function redrawIcon(value) {
       var canvas = document.getElementById("iconCanvas");
+      
+      var image = new Image();
+      image.src = "images/hamburger.png";
+      image.onload = function() { drawTextOnBg(canvas, image, value); };
+    }
 
+    function drawTextOnBg(canvas, image, value) {
       var ctx = canvas.getContext('2d');
 
-      var image = new Image();
-      // Taken from http://commons.wikimedia.org/wiki/File:Hamburger.svg
-      // (public domain)
-      image.src = "images/hamburger.png";
-      ctx.drawImage(image, 0, 0); // XXX doesn't work sometimes
+      ctx.drawImage(image, 0, 0);
 
       //ctx.fillRect(5, 5, 10, 10);
 
       ctx.font = '10px Arial Bold';
-      ctx.fillStyle = "rgb(0,0,0)";
+      ctx.fillStyle = "rgb(0,255,255)";
       ctx.fillText("" + value, 5, 12);
 
       var imageData = ctx.getImageData(0, 0, 19, 19);
