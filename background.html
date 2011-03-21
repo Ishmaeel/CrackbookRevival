@@ -1,0 +1,74 @@
+<html>
+<head>
+  <style>
+    body {
+      min-width:357px;
+      overflow-x:hidden;
+    }
+
+    img {
+      margin:5px;
+      border:2px solid black;
+      vertical-align:middle;
+      width:75px;
+      height:75px;
+    }
+
+    #iconCanvas {
+      display: none;
+    }
+  </style>
+
+  <!-- Google Analytics -->
+  <script>
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-6080477-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = 'https://ssl.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+  <script>
+    function redrawIcon(value) {
+      var canvas = document.getElementById("iconCanvas");
+
+      var ctx = canvas.getContext('2d');
+
+      var image = new Image();
+      // Taken from http://commons.wikimedia.org/wiki/File:Hamburger.svg
+      // (public domain)
+      image.src = "images/hamburger.png";
+      ctx.drawImage(image, 0, 0); // XXX doesn't work sometimes
+
+      //ctx.fillRect(5, 5, 10, 10);
+
+      ctx.font = '10px Arial Bold';
+      ctx.fillStyle = "rgb(0,0,0)";
+      ctx.fillText("" + value, 5, 12);
+
+      var imageData = ctx.getImageData(0, 0, 19, 19);
+      chrome.browserAction.setIcon({imageData: imageData});
+    } // redrawIcon
+
+    function init() {
+      var value = 12;
+      redrawIcon(value);
+    }
+
+  </script>
+
+</head>
+
+<body>
+
+  <canvas id="iconCanvas" width="19" height="19" />
+
+  <script>
+    init();
+  </script>
+</body>
+</html>

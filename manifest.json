@@ -6,8 +6,9 @@
     "default_icon": "images/hamburger.png",
     "popup": "popup.html"
   },
+  "options_page": "options.html",
+  "background_page": "background.html",
   "permissions": [
     "history"
   ]
 }
-
