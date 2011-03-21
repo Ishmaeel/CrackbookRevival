@@ -1,0 +1,13 @@
+{
+  "name": "Crackbook",
+  "version": "1.0",
+  "description": "A personal Facebook daily hit counter.",
+  "browser_action": {
+    "default_icon": "images/hamburger.png",
+    "popup": "popup.html"
+  },
+  "permissions": [
+    "history"
+  ]
+}
+
