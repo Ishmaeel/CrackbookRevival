@@ -1,7 +1,10 @@
 {
   "name": "Crackbook",
   "version": "1.0",
-  "description": "A personal Facebook daily hit counter.",
+  "icons": {
+    "128": "images/hamburger-128px.png"
+  },
+  "description": "Cut junk sites out of your daily infodiet.",
   "browser_action": {
     "default_icon": "images/hamburger.png",
     "popup": "popup.html"
@@ -9,6 +12,8 @@
   "options_page": "options.html",
   "background_page": "background.html",
   "permissions": [
-    "history"
+    "history",
+    "notifications",
+    "tabs"
   ]
 }
