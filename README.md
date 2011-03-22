@@ -3,25 +3,10 @@ Crackbook
 
 A Chrome extension for discouraging the use of attention-sucking websites.
 
-TODO: more complete description here
-
-
-TODO:
-
- + "Junk current domain"
- + Switch icon when current tab is junk
- + Delay access for 60 seconds to every junk page after X hits
- + Store selected domains
- - Add proper description
- === RELEASE
- - Add image to delay page
- - Animate icon switch
- - Make the chart in popup work
- - Reconstruct history for chart
- - Use JQuery for fancy visuals in options dialog.
- - Complete configuration (delays, etc.)
- - Better notifications (in-browser).
- - Better dope model (junk hit in every period y).
+First you will have to specify domains of distracting sites. Then, after
+you browse them for a while the extension will remind you a few times to stop
+wasting time, and after a while it will start blocking each junk page for one
+minute. The junk counter resets daily.
 
 
 The source code is available under the MIT license (see the file LICENSE).
