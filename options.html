@@ -19,113 +19,17 @@
     }
   </style>
 
+  <script src="lib.js"></script>
+  <script src="options.js"></script>
+
   <script>
+    window.onload = function() {
+      document.getElementById('add_domain_button').onclick = addNewDomain;
+      document.getElementById('save_button').onclick = saveSettings;
 
-    (function() {
-
-      function drawIcon(value) {
-        var canvas = document.getElementById("iconCanvas");
-
-        var ctx = canvas.getContext('2d');
-
-        var image = new Image();
-        // Taken from http://commons.wikimedia.org/wiki/File:Hamburger.svg
-        // (public domain)
-        image.src = "images/hamburger.png";
-        ctx.drawImage(image, 0, 0); // XXX doesn't work sometimes
-
-        //ctx.fillRect(5, 5, 10, 10);
-
-        ctx.font = '10px Arial Bold';
-        ctx.fillStyle = "rgb(0,0,0)";
-        ctx.fillText("" + value, 5, 12);
-
-        var imageData = ctx.getImageData(0, 0, 19, 19);
-        chrome.browserAction.setIcon({imageData: imageData});
-      } // drawIcon
-
-      function getTopUrls(historyItems, typedCounts) {
-        // Get URL data.
-        var urls = [];
-        for (var i = 0; i < historyItems.length; i++) {
-          var h = historyItems[i];
-          if (h.url && h.typedCount) {
-            // TODO: filter https (probably not spam)
-            urls.push(h.url);
-            typedCounts[h.url] = h.typedCount;
-          }
-        }
-        // Sort by typed count (descending).
-        urls.sort(function(a, b) { return typedCounts[b] - typedCounts[a] });
-        // Take top N.
-        var topUrls = urls.slice(0, 5);
-        return topUrls;
-      } // getTopUrls
-
-      function showURLSelection(topUrls, typedCounts) {
-        // Put on page.
-        for (var i = 0; i < topUrls.length; i++) {
-          var url = topUrls[i];
-          // slice off http:// and trailing slash
-          var domain = url.slice(7, -1);
-          // TODO: do not show number of hits?
-          var hitInfo = domain + " (" + typedCounts[url] + " hits)";
-
-          var input = document.createElement('input');
-          input.setAttribute('type', 'checkbox');
-          input.setAttribute('checked', 'checked');
-
-          var label = document.createElement('label');
-          label.appendChild(input);
-          label.appendChild(document.createTextNode(hitInfo));
-
-          var li = document.createElement('li');
-          li.appendChild(label);
-          document.getElementById("topVisited").appendChild(li);
-        }
-
-        // Data shown; remove placeholder.
-        var placeholder = document.getElementById("placeholder");
-        document.getElementById("topVisited").removeChild(placeholder);
-      } // showURLSelection
-
-      function historyWalk() {
-        // TODO: search last week only
-        var weekAgo = new Date().getTime() - 1000*3600*24*7;
-        chrome.history.search({ text: "", startTime: weekAgo, maxResults: 1000 },
-          function(results) {
-            var typedCounts = {};
-            var topUrls = getTopUrls(results, /*out*/ typedCounts);
-            showURLSelection(topUrls, typedCounts);
-          }
-        );
-      } // historyWalk()
-
-      function saveSettings() {
-        alert("TODO");
-      }
-
-      window.onload = function() {
-        document.getElementById('btnSave').onclick = saveSettings;
-
-        //chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-        //  if (changeInfo.url) {
-        //    console.log(changeInfo.url);
-        //  }
-        //});
-
-        //chrome.history.onVisited.addListener(function(historyItem) {
-        //  console.log("HIT: " + historyItem.url); // TODO increase hit counter
-        //});
-
-        var value = new Date().getTime() % 100; // TODO: set real hit value
-        drawIcon(value); // TODO: move to bg
-
-        historyWalk();
-      }
-
-    })();
-
+      if (getJunkDomains().length == 0)
+        loadTopUrls();
+    }
   </script>
 
   <!-- Google Analytics -->
@@ -154,12 +58,17 @@
   <ul id="topVisited">
     <li id="placeholder">Please wait...</li>
   </ul>
+  <button id="add_domain_button">Add domain</button>
 
-  <button id="btnSave">Save</button>
+  <script>
+    loadSavedUrls();
+  </script>
 
-  <!-- This is invisible. -->
-  <canvas id="iconCanvas" width="19" height="19" />
+  <p>
+    <button id="save_button">Save</button>
+  </p>
+
+  <div id="saved_message" style="display: none">Domains saved.</div>
 
 </body>
 </html>
-
