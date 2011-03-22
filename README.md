@@ -10,14 +10,14 @@ TODO:
 
 XXX What is the time the visit is registered? Before load or after load?
 
+ - "Junk current domain"
  + Switch icon when current tab is junk
- - Delay access for 60 seconds to every junk page after X hits
+ + Delay access for 60 seconds to every junk page after X hits
+ - Add image to delay page
  - Animate icon upon opening a junk page?
  + Store selected domains
- - "Junk current domain"
- - Chart in popup
+ - Make the chart in popup work
  - Reconstruct history for chart
- + Show today's hits on icon
  - Use JQuery for fancy visuals in options dialog.
  - Complete configuration (delays, etc.)
  - Better notifications (in-browser).
