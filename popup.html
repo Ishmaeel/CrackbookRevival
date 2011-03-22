@@ -15,6 +15,9 @@
     }
   </style>
 
+  <script src="lib.js"></script>
+  <script src="popup.js"></script>
+
     <script type='text/javascript' src='https://www.google.com/jsapi'></script>
     <script type='text/javascript'>
       google.load('visualization', '1', {'packages':['annotatedtimeline']});
@@ -38,6 +41,7 @@
   <script>
 
     window.onload = function() {
+      document.getElementById('mark_junk_button').onclick = markAsJunk;
       // TODO
     }
 
@@ -59,6 +63,18 @@
 </head>
 
 <body>
+
+  <button id="mark_junk_button" style="display: none">Mark current domain (<span id="current_domain"></span>) as junk</button>
+
+  <script>
+    chrome.tabs.getSelected(null, function (tab) {
+      var domain = normalizedDomain(tab.url);
+      if (!isJunkDomain(domain)) {
+        document.getElementById('current_domain').appendChild(document.createTextNode(domain));
+        document.getElementById('mark_junk_button').style.display = "block";
+      }
+    });
+  </script>
 
   <div id='chart_div' style='width: 700px; height: 240px;'></div>
 
