@@ -8,20 +8,21 @@ TODO: more complete description here
 
 TODO:
 
-XXX What is the time the visit is registered? Before load or after load?
-
- - "Junk current domain"
+ + "Junk current domain"
  + Switch icon when current tab is junk
  + Delay access for 60 seconds to every junk page after X hits
- - Add image to delay page
- - Animate icon upon opening a junk page?
  + Store selected domains
+ - Add proper description
+ === RELEASE
+ - Add image to delay page
+ - Animate icon switch
  - Make the chart in popup work
  - Reconstruct history for chart
  - Use JQuery for fancy visuals in options dialog.
  - Complete configuration (delays, etc.)
  - Better notifications (in-browser).
- ? Better dope model (junk hit in every period y).
+ - Better dope model (junk hit in every period y).
+
 
 The source code is available under the MIT license (see the file LICENSE).
 
