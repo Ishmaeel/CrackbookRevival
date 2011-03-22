@@ -6,11 +6,6 @@ var NOTIFICATION_THRESHOLD = 20;
 var NOTIFICATION_HIT_INTERVAL = 10;
 var DIMMER_THRESHOLD = 50;
 
-var NOTIFICATION_OBJ = webkitNotifications.createNotification(
-        'images/Hamburger-128px.png',
-        'Time to get back to work!',
-        "");
-
 function drawIcon(img_name) {
   img_path = "images/" + img_name;
   chrome.browserAction.setIcon({ path: img_path });
@@ -85,8 +80,13 @@ function hit(domain) {
       && (hits % NOTIFICATION_HIT_INTERVAL == 0)) {
     // If hits >= DIMMER_THRESHOLD, the notification need not be shown any
     // more.
-    NOTIFICATION_OBJ.show(); // TODO: check if repeated notifications work
-    window.setTimeout('NOTIFICATION_OBJ.cancel()', 3000);
+
+    var NOTIFICATION_OBJ = webkitNotifications.createNotification(
+            'images/Hamburger-128px.png',
+            'Time to get back to work!',
+            "");
+    NOTIFICATION_OBJ.show();
+    window.setTimeout('NOTIFICATION_OBJ.cancel()', 3000); // TODO: test me
   }
 }
 
