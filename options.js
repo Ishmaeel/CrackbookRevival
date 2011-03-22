@@ -1,21 +1,22 @@
-function getTopUrls(historyItems) {
+function getTopDomains(historyItems) {
   var typedCounts = {};
   // Get URL data.
-  var urls = [];
+  var domains = [];
   for (var i = 0; i < historyItems.length; i++) {
     var h = historyItems[i];
     if (h.url && h.typedCount) {
       // TODO: filter https (probably not spam)
-      urls.push(h.url);
-      typedCounts[h.url] = h.typedCount;
+      var domain = normalizedDomain(h.url);
+      domains.push(domain);
+      typedCounts[domain] = h.typedCount;
     }
   }
   // Sort by typed count (descending).
-  urls.sort(function(a, b) { return typedCounts[b] - typedCounts[a] });
+  domains.sort(function(a, b) { return typedCounts[b] - typedCounts[a] });
   // Take top N.
-  var topUrls = urls.slice(0, 5);
+  var topUrls = domains.slice(0, 5);
   return topUrls;
-} // getTopUrls
+} // getTopDomains
 
 function clearUrls() {
   var ul = document.getElementById("topVisited");
@@ -38,11 +39,10 @@ function addUrlField(value) {
   document.getElementById("topVisited").appendChild(li);
 }
 
-function putUrlsOnPage(topUrls) {
+function putDomainsOnPage(topUrls) {
   // Put on page.
   for (var i = 0; i < topUrls.length; i++) {
-    var url = topUrls[i];
-    var domain = normalizedDomain(url);
+    var domain = normalizedDomain(topUrls[i]);
     addUrlField(domain);
   }
 
@@ -50,12 +50,12 @@ function putUrlsOnPage(topUrls) {
   var placeholder = document.getElementById("placeholder");
   if (placeholder)
     document.getElementById("topVisited").removeChild(placeholder);
-} // putUrlsOnPage
+} // putDomainsOnPage
 
 
 function loadSavedUrls() {
   var junkDomains = getJunkDomains();
-  putUrlsOnPage(junkDomains);
+  putDomainsOnPage(junkDomains);
 }
 
 
@@ -64,8 +64,9 @@ function loadTopUrls() {
   chrome.history.search({ text: "", startTime: weekAgo,
                           maxResults: 1000 },
     function(historyItems) {
-      var topUrls = getTopUrls(historyItems);
-      putUrlsOnPage(topUrls);
+      var topUrls = getTopDomains(historyItems);
+      setJunkDomains(topUrls);
+      putDomainsOnPage(topUrls);
     }
   );
 } // loadTopUrls()
