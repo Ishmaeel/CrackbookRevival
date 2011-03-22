@@ -39,6 +39,14 @@ function setHitHistory(hist) {
   localStorage.setItem('hitHistory', JSON.stringify(hist));
 }
 
+function getTodaysHits() {
+  var hist = getHitHistory();
+  var today = todayAsString();
+  if (!hist[today])
+    hist[today] = 0;
+  return hist[today];
+}
+
 function getJunkDomains() {
   // TODO: use cache variable on bg page
   if (!('junkDomains' in localStorage)) {

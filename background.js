@@ -4,7 +4,7 @@ var HITNUM_POS_X = 3;
 var HITNUM_POS_Y = 12;
 var NOTIFICATION_THRESHOLD = 20;
 var NOTIFICATION_HIT_INTERVAL = 10;
-var DELAY_THRESHOLD = 20;
+var DIMMER_THRESHOLD = 2000; // XXX
 
 var NOTIFICATION_OBJ = webkitNotifications.createNotification(
         'images/Hamburger-128px.png',
@@ -54,7 +54,7 @@ function updateIcon(inJunk) {
 function tabUpdatedHandler(tabId, changeInfo, tab) {
   var isJunk = isJunkDomain(normalizedDomain(tab.url))
   updateIcon(isJunk);
-  if (isJunk)
+  if (isJunk && getTodaysHits() > DIMMER_THRESHOLD)
     dim(tabId);
 }
 
@@ -76,12 +76,14 @@ function hit(domain) {
   setHitHistory(hist);
   
   // TODO: store hit on associated domain
-
   var hits = hist[today];
 
-  if (hits < DELAY_THRESHOLD && hits > NOTIFICATION_THRESHOLD
+  chrome.browserAction.setBadgeText({text: "" + hits});
+  setTimeout("chrome.browserAction.setBadgeText({text: ''})", 3000);
+
+  if (hits < DIMMER_THRESHOLD && hits > NOTIFICATION_THRESHOLD
       && (hits % NOTIFICATION_HIT_INTERVAL == 0)) {
-    // If hits >= DELAY_THRESHOLD, the notification need not be shown any
+    // If hits >= DIMMER_THRESHOLD, the notification need not be shown any
     // more.
     NOTIFICATION_OBJ.show(); // TODO: check if repeated notifications work
     window.setTimeout('NOTIFICATION_OBJ.cancel()', 3000);
