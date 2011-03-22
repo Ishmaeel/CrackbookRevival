@@ -10,19 +10,9 @@ var NOTIFICATION_OBJ = webkitNotifications.createNotification(
         'Time to get back to work!',
         "");
 
-function drawIcon(img_name, value) {
+function drawIcon(img_name) {
   img_path = "images/" + img_name;
-  if (value) {
-    // Draw icon on canvas and overlay text.
-    var canvas = document.getElementById("iconCanvas");
-    
-    var image = new Image();
-    image.src = img_path;
-    image.onload = function() { drawTextOnBg(canvas, image, value); };
-  } else {
-    // Just set an icon.
-    chrome.browserAction.setIcon({ path: img_path });
-  }
+  chrome.browserAction.setIcon({ path: img_path });
 } // drawIcon
 
 function drawTextOnBg(canvas, image, value) {
