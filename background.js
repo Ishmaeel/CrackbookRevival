@@ -81,9 +81,6 @@ function hit(domain) {
   // Save incremented hit.
   setHitHistory(hist);
   
-  // Update icon.
-  drawIcon(hist[today]);
-
   // TODO: store hit on associated domain
 
   // Show notification if needed.
@@ -101,7 +98,7 @@ function initIcon() {
   var today = todayAsString();
   if (!hist[today])
     hist[today] = 0;
-  drawIcon("hamburger-19px.png", hist[today]);
+  drawIcon("hamburger-19px.png");
   // FIXME
 }
 
