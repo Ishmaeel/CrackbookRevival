@@ -10,12 +10,19 @@ var NOTIFICATION_OBJ = webkitNotifications.createNotification(
         'Time to get back to work!',
         "");
 
-function drawIcon(value) {
-  var canvas = document.getElementById("iconCanvas");
-  
-  var image = new Image();
-  image.src = "images/hamburger.png";
-  image.onload = function() { drawTextOnBg(canvas, image, value); };
+function drawIcon(img_name, value) {
+  img_path = "images/" + img_name;
+  if (value) {
+    // Draw icon on canvas and overlay text.
+    var canvas = document.getElementById("iconCanvas");
+    
+    var image = new Image();
+    image.src = img_path;
+    image.onload = function() { drawTextOnBg(canvas, image, value); };
+  } else {
+    // Just set an icon.
+    chrome.browserAction.setIcon({ path: img_path });
+  }
 } // drawIcon
 
 function drawTextOnBg(canvas, image, value) {
@@ -31,31 +38,50 @@ function drawTextOnBg(canvas, image, value) {
   chrome.browserAction.setIcon({imageData: imageData});
 } // drawTextOnBg
 
-// Returns today's date as an ISO8601 string (2011-03-04)
+// Returns today's date as an ISO8601 string (e.g., 2011-03-04)
 function todayAsString() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function onVisitedHandler(histItem) {
+function historyVisitedHandler(histItem) {
   if (!histItem.url)
     return;
-  var domains = getJunkDomains();
-  for (var i = 0; i < domains.length; i++) {
-    if (histItem.url.indexOf(domains[i]) == 0) {
-      hit(domains[i]);
-      return;
-    }
-  }
+  var domain = normalizedDomain(histItem.url);
+  if (isJunkDomain(domain))
+    hit(domain);
+}
+
+function updateIcon(inJunk) {
+  // TODO: store current state, do not change unnecessarily
+  // TODO: animate transition
+  if (inJunk)
+    drawIcon("hamburger-19px.png");
+  else
+    drawIcon("carrot-19px.png");
+}
+
+function tabUpdatedHandler(tabId, changeInfo, tab) {
+  updateIcon(isJunkDomain(normalizedDomain(tab.url)));
+}
+
+function tabSelectionChangedHandler(tabId, selectInfo) {
+  chrome.tabs.get(tabId, function(tab) {
+    updateIcon(isJunkDomain(normalizedDomain(tab.url)));
+  });
 }
 
 function hit(domain) {
-  // Update icon.
+  // Get number of hits today.
   var hist = getHitHistory();
   var today = todayAsString();
   if (!hist[today])
     hist[today] = 0;
   hist[today] += 1;
-  setHitHistory(hist); // Save incremented hit.
+
+  // Save incremented hit.
+  setHitHistory(hist);
+  
+  // Update icon.
   drawIcon(hist[today]);
 
   // TODO: store hit on associated domain
@@ -64,14 +90,24 @@ function hit(domain) {
   if (hist[today] > NOTIFICATION_THRESHOLD
       && (hist[today] % NOTIFICATION_HIT_INTERVAL == 0)) {
     NOTIFICATION_OBJ.show(); // TODO: check if repeated notifications work
+    window.setTimeout('NOTIFICATION_OBJ.cancel()', 3000);
   }
 
   // TODO: disable page for 30 to 60 seconds
 }
 
-function initExtension() {
-  chrome.history.onVisited.addListener(onVisitedHandler);
-  initIcon();
+function initIcon() {
+  var hist = getHitHistory();
+  var today = todayAsString();
+  if (!hist[today])
+    hist[today] = 0;
+  drawIcon("hamburger-19px.png", hist[today]);
+  // FIXME
 }
 
-
+function initExtension() {
+  chrome.history.onVisited.addListener(historyVisitedHandler);
+  chrome.tabs.onUpdated.addListener(tabUpdatedHandler);
+  chrome.tabs.onSelectionChanged.addListener(tabSelectionChangedHandler);
+  initIcon();
+}

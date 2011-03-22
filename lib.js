@@ -27,6 +27,7 @@ function normalizedDomain(url) {
 //
 
 function getHitHistory() {
+  // TODO: use cache variable on bg page
   if (!('hitHistory' in localStorage)) {
     localStorage.setItem('hitHistory', '{}');
   }
@@ -39,6 +40,7 @@ function setHitHistory(hist) {
 }
 
 function getJunkDomains() {
+  // TODO: use cache variable on bg page
   if (!('junkDomains' in localStorage)) {
     localStorage.setItem('junkDomains', '[]');
   }
@@ -50,11 +52,10 @@ function setJunkDomains(domains) {
   localStorage.setItem('junkDomains', JSON.stringify(domains));
 }
 
-function initIcon() {
-  var hist = getHitHistory();
-  var today = todayAsString();
-  if (!hist[today])
-    hist[today] = 0;
-  drawIcon(hist[today]);
+function isJunkDomain(domain) {
+  var junkDomains = getJunkDomains();
+  for (var i = 0; i < junkDomains.length; i++)
+    if (domain == junkDomains[i])
+      return true;
+  return false;
 }
-
