@@ -84,12 +84,8 @@ function hit(domain) {
 }
 
 function initIcon() {
-  var hist = getHitHistory();
-  var today = todayAsString();
-  if (!hist[today])
-    hist[today] = 0;
-  drawIcon("hamburger-19px.png");
-  // FIXME
+  // TODO: check the current tab
+  updateIcon(false);
 }
 
 function initExtension() {
