@@ -5,7 +5,8 @@ function getTopDomains(historyItems) {
   for (var i = 0; i < historyItems.length; i++) {
     var h = historyItems[i];
     if (h.url && h.typedCount) {
-      // TODO: filter https (probably not spam)
+      if (h.url.slice(0, 5) == 'https')
+        continue; // https URLs are probably not spam
       var domain = normalizedDomain(h.url);
       domains.push(domain);
       typedCounts[domain] = h.typedCount;
