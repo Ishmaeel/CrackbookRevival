@@ -4,6 +4,7 @@ var HITNUM_POS_X = 3;
 var HITNUM_POS_Y = 12;
 var NOTIFICATION_THRESHOLD = 20;
 var NOTIFICATION_HIT_INTERVAL = 10;
+var DELAY_THRESHOLD = 20;
 
 var NOTIFICATION_OBJ = webkitNotifications.createNotification(
         'images/Hamburger-128px.png',
@@ -51,7 +52,10 @@ function updateIcon(inJunk) {
 }
 
 function tabUpdatedHandler(tabId, changeInfo, tab) {
-  updateIcon(isJunkDomain(normalizedDomain(tab.url)));
+  var isJunk = isJunkDomain(normalizedDomain(tab.url))
+  updateIcon(isJunk);
+  if (isJunk)
+    dim(tabId);
 }
 
 function tabSelectionChangedHandler(tabId, selectInfo) {
@@ -73,14 +77,19 @@ function hit(domain) {
   
   // TODO: store hit on associated domain
 
-  // Show notification if needed.
-  if (hist[today] > NOTIFICATION_THRESHOLD
-      && (hist[today] % NOTIFICATION_HIT_INTERVAL == 0)) {
+  var hits = hist[today];
+
+  if (hits < DELAY_THRESHOLD && hits > NOTIFICATION_THRESHOLD
+      && (hits % NOTIFICATION_HIT_INTERVAL == 0)) {
+    // If hits >= DELAY_THRESHOLD, the notification need not be shown any
+    // more.
     NOTIFICATION_OBJ.show(); // TODO: check if repeated notifications work
     window.setTimeout('NOTIFICATION_OBJ.cancel()', 3000);
   }
+}
 
-  // TODO: disable page for 30 to 60 seconds
+function dim(tabId) {
+  chrome.tabs.executeScript(tabId, { file: "dimmer.js" });
 }
 
 function initIcon() {
