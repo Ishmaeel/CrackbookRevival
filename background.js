@@ -4,7 +4,7 @@ var HITNUM_POS_X = 3;
 var HITNUM_POS_Y = 12;
 var NOTIFICATION_THRESHOLD = 20;
 var NOTIFICATION_HIT_INTERVAL = 10;
-var DIMMER_THRESHOLD = 2000; // XXX
+var DIMMER_THRESHOLD = 50;
 
 var NOTIFICATION_OBJ = webkitNotifications.createNotification(
         'images/Hamburger-128px.png',
