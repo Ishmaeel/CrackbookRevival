@@ -6,8 +6,9 @@
  === RELEASE 0.1.2
  + Update icon when current domain is marked as trash
  + Fix notification close problem
+ + Rip out stats
+ - Icon update optimization (check before changing)
  - Handle subdomains when checking for junk
- - Rip out stats
  - Day starts / ends at 6am
  - Reset minute counter on tab/window switch
  - Open config page on first start
@@ -21,5 +22,3 @@
  - Complete configuration (delays, etc.)
  - Better notifications (in-browser).
  - Better dope model (junk hit in every period y).
-
- / Reconstruct history for chart [postponed in favor of server-side stats]

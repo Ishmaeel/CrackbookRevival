@@ -80,7 +80,6 @@ function junkHit(domain) {
   // Save incremented hit.
   setHitHistory(hist);
   
-  // TODO: store hit on associated domain
   var hits = hist[today];
 
   chrome.browserAction.setBadgeText({text: "" + hits});
