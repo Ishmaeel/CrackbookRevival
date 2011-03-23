@@ -7,9 +7,9 @@
  + Update icon when current domain is marked as trash
  + Fix notification close problem
  + Rip out stats
- - Icon update optimization (check before changing)
- - Handle subdomains when checking for junk
+ + Icon update optimization (check before changing)
  - Day starts / ends at 6am
+ - Handle subdomains when checking for junk
  - Reset minute counter on tab/window switch
  - Open config page on first start
  === RELEASE 0.1.3

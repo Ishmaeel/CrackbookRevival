@@ -2,6 +2,7 @@ var HITNUM_FONT = '12px Arial Bold';
 var HITNUM_COLOR = "rgb(255,255,255)";
 var HITNUM_POS_X = 3;
 var HITNUM_POS_Y = 12;
+var DAY_STARTING_HOUR = 6; // AM
 var NOTIFICATION_THRESHOLD = 20;
 var NOTIFICATION_HIT_INTERVAL = 10;
 var NOTIFICATION_TEXT = 'Time to get back to work!';
@@ -27,7 +28,9 @@ function drawTextOnBg(canvas, image, value) {
 
 // Returns today's date as an ISO8601 string (e.g., 2011-03-04)
 function todayAsString() {
-  return new Date().toISOString().slice(0, 10);
+  var now = new Date();
+  var dt = new Date(now - DAY_STARTING_HOUR * 3600 * 1000);
+  return dt.toISOString().slice(0, 10);
 }
 
 function historyVisitedHandler(histItem) {
