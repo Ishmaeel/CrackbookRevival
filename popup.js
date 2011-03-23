@@ -1,3 +1,4 @@
+// Mark the domain of the selected tab as junk.
 function markAsJunk() {
   chrome.tabs.getSelected(null, function (tab) {
     var junkDomains = getJunkDomains();
