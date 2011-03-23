@@ -10,11 +10,13 @@ After you browse websites from a predefined list for a while, the extension
 will remind you a few times to stop wasting time, and afterwards it will
 start blocking each junk page for one minute. The junk counter resets daily.
 
-
 The source code is available under the MIT license (see the file LICENSE).
 
 Copyright (C) 2011 Gintautas Miliauskas <gintautas@miliauskas.lt>
 
+
+Acknowledgements
+----------------
 
 `hamburger-19px.png` and `hamburger-128px.png` are modified
 versions of <http://commons.wikimedia.org/wiki/File:Hamburger.svg>, which has
