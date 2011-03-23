@@ -67,3 +67,7 @@ function isJunkDomain(domain) {
       return true;
   return false;
 }
+
+function bgPage() {
+  return chrome.extension.getBackgroundPage();
+}

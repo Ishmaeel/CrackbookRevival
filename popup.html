@@ -45,6 +45,7 @@
       if (!isJunkDomain(domain)) {
         document.getElementById('current_domain').appendChild(document.createTextNode(domain));
         document.getElementById('mark_junk_button').style.display = "block";
+        document.getElementById('mark_junk_button').onclick = markAsJunk;
       }
     });
   </script>
