@@ -4,6 +4,7 @@ var HITNUM_POS_X = 3;
 var HITNUM_POS_Y = 12;
 var NOTIFICATION_THRESHOLD = 20;
 var NOTIFICATION_HIT_INTERVAL = 10;
+var NOTIFICATION_TEXT = 'Time to get back to work!';
 var DIMMER_THRESHOLD = 50;
 
 function drawIcon(img_name) {
@@ -62,7 +63,7 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
 function showNotification() {
   var notification_obj = webkitNotifications.createNotification(
 	  'images/Hamburger-128px.png',
-	  'Time to get back to work!',
+	  NOTIFICATION_TEXT,
 	  "");
   notification_obj.show();
   window.setTimeout(function() { notification_obj.cancel() }, 3000);
