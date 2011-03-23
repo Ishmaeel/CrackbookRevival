@@ -38,13 +38,17 @@ function historyVisitedHandler(histItem) {
     junkHit(domain);
 }
 
+var iconState = null;
+
 function updateIcon(inJunk) {
-  // TODO: store current state, do not change unnecessarily
-  // TODO: animate transition
-  if (inJunk)
-    drawIcon("hamburger-19px.png");
-  else
-    drawIcon("carrot-19px.png");
+  if (iconState != inJunk) {
+    iconState = inJunk;
+    // TODO: animate transition
+    if (inJunk)
+      drawIcon("hamburger-19px.png");
+    else
+      drawIcon("carrot-19px.png");
+  }
 }
 
 function tabUpdatedHandler(tabId, changeInfo, tab) {
