@@ -5,15 +5,15 @@
  + Add proper description
  === RELEASE 0.1.2
  + Update icon when current domain is marked as trash
- - Day starts / ends at 6am
- - Fix multiple hits/render problem
+ + Fix notification close problem
+ - Handle subdomains when checking for junk
  - Rip out stats
+ - Day starts / ends at 6am
  - Reset minute counter on tab/window switch
- - Resize dimmer regularly in case document grows
- - Make the chart in popup work
  - Open config page on first start
- - Make a feature list
  === RELEASE 0.1.3
+ - Resize dimmer regularly in case document grows
+ - Make a feature list
  - (Major) Collect lists of blocked domains and hits by domain & time
  - Add image to delay page
  - Animate icon switch
