@@ -34,7 +34,7 @@ function historyVisitedHandler(histItem) {
     return;
   var domain = normalizedDomain(histItem.url);
   if (isJunkDomain(domain))
-    hit(domain);
+    junkHit(domain);
 }
 
 function updateIcon(inJunk) {
@@ -59,7 +59,16 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
   });
 }
 
-function hit(domain) {
+function showNotification() {
+  var notification_obj = webkitNotifications.createNotification(
+	  'images/Hamburger-128px.png',
+	  'Time to get back to work!',
+	  "");
+  notification_obj.show();
+  window.setTimeout(function() { notification_obj.cancel() }, 3000);
+}
+
+function junkHit(domain) {
   // Get number of hits today.
   var hist = getHitHistory();
   var today = todayAsString();
@@ -74,20 +83,14 @@ function hit(domain) {
   var hits = hist[today];
 
   chrome.browserAction.setBadgeText({text: "" + hits});
-  setTimeout("chrome.browserAction.setBadgeText({text: ''})", 3000);
+  setTimeout(function() { chrome.browserAction.setBadgeText({text: ''}) },
+      3000);
 
-  if (hits < DIMMER_THRESHOLD && hits > NOTIFICATION_THRESHOLD
-      && (hits % NOTIFICATION_HIT_INTERVAL == 0)) {
-    // If hits >= DIMMER_THRESHOLD, the notification need not be shown any
-    // more.
-
-    var NOTIFICATION_OBJ = webkitNotifications.createNotification(
-            'images/Hamburger-128px.png',
-            'Time to get back to work!',
-            "");
-    NOTIFICATION_OBJ.show();
-    window.setTimeout('NOTIFICATION_OBJ.cancel()', 3000); // TODO: test me
-  }
+  if ( hits < DIMMER_THRESHOLD && hits > NOTIFICATION_THRESHOLD
+      && (hits % NOTIFICATION_HIT_INTERVAL == 0))
+    // If hits >= DIMMER_THRESHOLD, the notification is not needed any
+    // more as the dimmer kicks in.
+    showNotification();
 }
 
 function dim(tabId) {
