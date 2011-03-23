@@ -3,8 +3,8 @@ Crackbook
 
 A Chrome extension for discouraging the compulsive use of attention-sucking
 websites.  The main idea of the extension is that delaying access to the
-website is more effective than an outright ban because it is less likely
-to provoke disabling of the ban.
+website is more effective than an outright ban because you are less likely
+to just disable the block after a while.
 
 After you browse websites from a predefined list for a while, the extension
 will remind you a few times to stop wasting time, and afterwards it will
