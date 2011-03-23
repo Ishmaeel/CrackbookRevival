@@ -45,7 +45,9 @@
 
     document.body.appendChild(dimmer);
 
-    var timeoutCode = "document.body.removeChild(document.getElementById('" + DIMMER_DIV_ID + "'))";
-    setTimeout(timeoutCode, 60000);
+    var timeoutFn = function() {
+      document.body.removeChild(dimmer);
+    }
+    setTimeout(timeoutFn, 60000);
   }
 })();
