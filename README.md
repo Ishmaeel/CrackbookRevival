@@ -1,12 +1,14 @@
 Crackbook
 =========
 
-A Chrome extension for discouraging the use of attention-sucking websites.
+A Chrome extension for discouraging the compulsive use of attention-sucking
+websites.  The main idea of the extension is that delaying access to the
+website is more effective than an outright ban because it is less likely
+to provoke disabling of the ban.
 
-First you will have to specify domains of distracting sites. Then, after
-you browse them for a while the extension will remind you a few times to stop
-wasting time, and after a while it will start blocking each junk page for one
-minute. The junk counter resets daily.
+After you browse websites from a predefined list for a while, the extension
+will remind you a few times to stop wasting time, and afterwards it will
+start blocking each junk page for one minute. The junk counter resets daily.
 
 
 The source code is available under the MIT license (see the file LICENSE).
