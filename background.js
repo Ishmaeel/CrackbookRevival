@@ -54,17 +54,74 @@ function updateIcon(inJunk) {
   }
 }
 
+function shouldDimPage() {
+  return getTodaysHits() > DIMMER_THRESHOLD;
+}
+
+/*
+ * Dimmer state transitions for junk pages
+ *
+ * onTabUpdated:
+ *  - tab active --> enable dimmer
+ *  - tab inactive --> enable dimmer, suspend timer
+ *
+ * onTabSelectionChanged:
+ *  - previous tab is junk -> suspend timer on previous tab
+ *  - new tab is junk -> restart timer on new tab
+ *
+ * onWindowFocusChanged:
+ *  - suspend timer on previous tab
+ *  - restart timer on active tab
+ *
+ */
+
+var lastDimmedTabId = null;
+
 function tabUpdatedHandler(tabId, changeInfo, tab) {
   var isJunk = isJunkDomain(normalizedDomain(tab.url))
   updateIcon(isJunk);
-  if (isJunk && getTodaysHits() > DIMMER_THRESHOLD)
-    dim(tabId);
+  if (isJunk && shouldDimPage()) {
+    chrome.tabs.getSelected(null, function(selectedTab) {
+      var tabIsActive = selectedTab.id != tabId;
+      if (tabIsActive)
+	lastDimmedTabId = tabId;
+      dimTab(tabId, !tabIsActive);
+    })
+  }
 }
 
 function tabSelectionChangedHandler(tabId, selectInfo) {
+  if (lastDimmedTabId) {
+    dimTab(lastDimmedTabId, true); // suspend timer
+    lastDimmedTabId = null;
+  }
+
   chrome.tabs.get(tabId, function(tab) {
-    updateIcon(isJunkDomain(normalizedDomain(tab.url)));
+    var isJunk = isJunkDomain(normalizedDomain(tab.url))
+    updateIcon(isJunk);
+    if (isJunk && shouldDimPage()) {
+      dimTab(tabId, false); // restart timer
+      lastDimmedTabId = tabId;
+    }
   });
+}
+
+function windowFocusChangedHandler(windowId) {
+  if (lastDimmedTabId) {
+    dimTab(lastDimmedTabId, true); // suspend timer
+    lastDimmedTabId = null;
+  }
+
+  if (windowId != chrome.windows.WINDOW_ID_NONE) {
+    chrome.tabs.getSelected(windowId, function(tab) {
+      var isJunk = isJunkDomain(normalizedDomain(tab.url))
+      updateIcon(isJunk);
+      if (isJunk && shouldDimPage()) {
+	dimTab(tab.id, false); // restart timer
+	lastDimmedTabId = tab.id;
+      }
+    });
+  }
 }
 
 function showNotification() {
@@ -100,8 +157,18 @@ function junkHit(domain) {
     showNotification();
 }
 
-function dim(tabId) {
-  chrome.tabs.executeScript(tabId, { file: "dimmer.js" });
+function dimTab(tabId, suspendTimer) {
+  // Dim the page and start (or restart) the timer.
+  //
+  // If the page is already dimmed, the timer is restarted.
+  //
+  // if suspendTimer is true, the timer is suspended immediately afterwards.
+  console.log("dimming " + tabId + " suspend:" + suspendTimer);
+  chrome.tabs.executeScript(tabId, { file: "dimmer.js" },
+      function() {
+	if (suspendTimer)
+	  chrome.tabs.executeScript(tabId, { file: "dimmer_suspend.js" });
+      });
 }
 
 function initIcon() {
@@ -113,5 +180,9 @@ function initExtension() {
   chrome.history.onVisited.addListener(historyVisitedHandler);
   chrome.tabs.onUpdated.addListener(tabUpdatedHandler);
   chrome.tabs.onSelectionChanged.addListener(tabSelectionChangedHandler);
+  chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
   initIcon();
+
+  if (getJunkDomains().length == 0)
+    chrome.tabs.create({ url: "options.html" });
 }

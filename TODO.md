@@ -8,10 +8,10 @@
  + Fix notification close problem
  + Rip out stats
  + Icon update optimization (check before changing)
- - Day starts / ends at 6am
- - Handle subdomains when checking for junk
+ + Day starts / ends at 6am
+ + Open config page on first start
  - Reset minute counter on tab/window switch
- - Open config page on first start
+ - Nicer design for the options page.
  === RELEASE 0.1.3
  - Resize dimmer regularly in case document grows
  - Make a feature list
@@ -22,3 +22,4 @@
  - Complete configuration (delays, etc.)
  - Better notifications (in-browser).
  - Better dope model (junk hit in every period y).
+ - Handle subdomains when checking for junk

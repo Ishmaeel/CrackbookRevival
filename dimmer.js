@@ -3,11 +3,38 @@
 (function() { // avoid polluting the local namespace
 
   DIMMER_DIV_ID = '_crackbook_dimmer_';
-  DIMMER_TEXT1 = "Enough junk for today, <em>don't you think?</em>";
+  DIMMER_TEXT1 = "Enough junk for today, don't you think?";
   DIMMER_TEXT2 = "Wait one minute for the content to appear.";
+  DIMMER_DELAY = 60 * 1000;
 
-  if (!document.getElementById(DIMMER_DIV_ID)) {
+  var timeoutFn = function() {
+    var dimmer = document.getElementById(DIMMER_DIV_ID);
+    dimmer.style.display = "none";
+    // Disable the dimmer, and do not dim this page again.
+  }
 
+  function setTimer(dimmer) {
+    // Clear old timer.
+    var timerIdInput = document.getElementById(DIMMER_DIV_ID + "timerId");
+    if (timerIdInput) {
+      timerId = parseInt(timerIdInput.value);
+      clearTimeout(timerId);
+    }
+
+    // Set timer.
+    var timerId = setTimeout(timeoutFn, DIMMER_DELAY);
+
+    // Store timer ID.
+    if (!timerIdInput) {
+      var timerIdInput = document.createElement("input");
+      timerIdInput.id = DIMMER_DIV_ID + "timerId";
+      timerIdInput.type = "hidden";
+      dimmer.appendChild(timerIdInput);
+    }
+    timerIdInput.value = timerId;
+  }
+
+  function addDimmer() {
     var dimmer = document.createElement('div');
     dimmer.id = DIMMER_DIV_ID;
 
@@ -33,8 +60,8 @@
 
     // Positioning.
     dimmer.style.position = 'absolute';
-    dimmer.style.width = window.innerWidth + "px"; // TODO: handle resizing
-    dimmer.style.height = document.height + "px";
+    dimmer.style.width = window.innerWidth + "px"; // TODO: handle window resizing
+    dimmer.style.height = document.height + "px"; // TODO: handle height changes
     dimmer.style.top = "0px";
     dimmer.style.left = '0px';
 
@@ -44,10 +71,14 @@
     dimmer.style.zIndex = "99999";
 
     document.body.appendChild(dimmer);
+    setTimer(dimmer);
+  }
 
-    var timeoutFn = function() {
-      document.body.removeChild(dimmer);
-    }
-    setTimeout(timeoutFn, 60000);
+  var dimmer_el = document.getElementById(DIMMER_DIV_ID);
+  if (!dimmer_el) {
+    addDimmer();
+  } else {
+    if (dimmer_el.style.display != "none") // dimmer not removed yet
+      setTimer(dimmer_el);
   }
 })();
