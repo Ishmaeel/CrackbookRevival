@@ -10,9 +10,9 @@
  + Icon update optimization (check before changing)
  + Day starts / ends at 6am
  + Open config page on first start
- - Reset minute counter on tab/window switch
- - Nicer design for the options page.
+ + Reset minute counter on tab/window switch
  === RELEASE 0.1.3
+ - Nicer design for the options page.
  - Resize dimmer regularly in case document grows
  - Make a feature list
  - (Major) Collect lists of blocked domains and hits by domain & time
