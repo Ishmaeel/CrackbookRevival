@@ -3,12 +3,18 @@ Crackbook
 
 A Chrome extension for discouraging the compulsive use of attention-sucking
 websites.  The main idea of the extension is that delaying access to the
-website is more effective than an outright ban because you are less likely
+website is more effective than straight blocking because you are less likely
 to just disable the block after a while.
 
 After you browse websites from a predefined list for a while, the extension
 will remind you a few times to stop wasting time, and afterwards it will
-start blocking each junk page for one minute. The junk counter resets daily.
+start blocking each junk page for one minute.
+
+Note that the timer is reset if you switch away from the tab, so you actually
+have to wait out the full minute rather than spend it doing other things.
+
+The junk page counter resets daily.
+
 
 The source code is available under the MIT license (see the file LICENSE).
 
