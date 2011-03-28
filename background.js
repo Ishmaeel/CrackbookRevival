@@ -163,7 +163,6 @@ function dimTab(tabId, suspendTimer) {
   // If the page is already dimmed, the timer is restarted.
   //
   // if suspendTimer is true, the timer is suspended immediately afterwards.
-  console.log("dimming " + tabId + " suspend:" + suspendTimer);
   chrome.tabs.executeScript(tabId, { file: "dimmer.js" },
       function() {
 	if (suspendTimer)
