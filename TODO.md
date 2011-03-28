@@ -12,6 +12,7 @@
  + Open config page on first start
  + Reset minute counter on tab/window switch
  === RELEASE 0.1.3
+ - Add note about timer restart to block page
  - Nicer design for the options page.
  - Resize dimmer regularly in case document grows
  - Make a feature list
