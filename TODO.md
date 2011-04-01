@@ -16,15 +16,18 @@
  + Add setting about reporting to server
  + Reduce timer to 30 s
  + Add note about timer restart to block page
- - Fix retroactive ban bug [test]
- - Fix user id generation
+ + Fix user id generation
+ + Figure out duplicate hits problem
+ - Test retroactive ban bugfix
+ === RELEASE 0.1.4
+ - Make the block work more rapidly by handling tabUpdated status=loading
+ - Only show warning about switching away the first time
  - Disable debug mode in webserver
- - (Major) Collect lists of blocked domains and hits by domain & time
- - Note about data collection
+ - Document data collection
  - Nicer design for the options page.
+ - Nicer design for the stats page.
  - Resize dimmer regularly in case document grows
  - Make a feature list
- === RELEASE 0.1.4
  - Submit to HN
  - Add image to delay page
  - Animate icon switch

@@ -29,7 +29,8 @@ function normalizedDomain(url) {
 var_defaults = {
   hitHistory: '{}',
   junkDomains: '[]',
-  reporting: 'false'
+  reporting: 'false',
+  user_id: 0
 }
 
 function getLocal(varname) {

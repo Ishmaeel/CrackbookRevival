@@ -70,7 +70,7 @@ function toQueryString(obj) {
 }
 
 function ajaxPost(url, fields) {
-  fields['user_id'] = '0'; // TODO
+  fields['user_id'] = getLocal('user_id');
   fields['timestamp'] = new Date().valueOf();
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url, true);
@@ -111,6 +111,13 @@ function tabUpdatedHandler(tabId, changeInfo, tab) {
   var isJunk = isJunkDomain(domain);
   var shouldDim = shouldDimPage();
   updateIcon(isJunk);
+
+  // Always update the icon, but only do other changes if the page load is complete.
+  if (changeInfo.status != 'complete')
+    return;
+
+  // TODO: see if we can harmlessly blank the page while it's loading
+
   if (isJunk) {
     registerHit(domain, shouldDim);
     if (shouldDim) {
@@ -212,7 +219,14 @@ function initIcon() {
   updateIcon(false);
 }
 
+function initUserID() {
+  var user_id = getLocal('user_id');
+  if (user_id == 0)
+    setLocal('user_id', Math.floor(Math.random() * 256*256*256*127));
+}
+
 function initExtension() {
+  initUserID();
   chrome.history.onVisited.addListener(historyVisitedHandler);
   chrome.tabs.onUpdated.addListener(tabUpdatedHandler);
   chrome.tabs.onSelectionChanged.addListener(tabSelectionChangedHandler);
