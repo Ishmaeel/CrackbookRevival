@@ -76,7 +76,6 @@
     text3.style.color = "#aaaaaa";
     dimmer.appendChild(text3);
 
-
     // Positioning.
     dimmer.style.position = 'absolute';
     dimmer.style.width = window.innerWidth + "px"; // TODO: handle window resizing
@@ -90,41 +89,49 @@
     dimmer.style.zIndex = "99999";
 
     document.body.appendChild(dimmer);
+    return dimmer;
   }
 
   // Actions
 
-  function create() {
-    var dimmer_el = document.getElementById(DIMMER_DIV_ID);
+  function create(dimmer_el) {
     if (!dimmer_el) {
       var dimmer = addDimmer();
       setTimer(dimmer);
     }
   }
 
-  function create_suspended() {
-    var dimmer_el = document.getElementById(DIMMER_DIV_ID);
+  function create_suspended(dimmer_el) {
     if (!dimmer_el) {
       var dimmer = addDimmer();
     }
   }
 
-  function suspend() {
-    var dimmer_el = document.getElementById(DIMMER_DIV_ID);
+  function suspend(dimmer_el) {
     if (dimmer_el) {
       clearTimer(dimmer_el);
     }
   }
 
-  function resume() {
-    var dimmer_el = document.getElementById(DIMMER_DIV_ID);
+  function resume(dimmer_el) {
     if (dimmer_el && dimmer_el.style.display != "none")
       setTimer(dimmer_el);
   }
 
-  var action_fns = {create: create, suspend: suspend, resume: resume,
-                    create_suspended: create_suspended};
+  // Dispatch by action name.
+
+  var action_fns = {
+    create: create,
+    suspend: suspend,
+    resume: resume,
+    create_suspended: create_suspended
+  };
+
   var action_fn = action_fns[_dimmer_action_];
-  action_fn();
+
+  var dimmer_el = document.getElementById(DIMMER_DIV_ID);
+  action_fn(dimmer_el);
+
   delete _dimmer_action_;
+
 })();
