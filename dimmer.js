@@ -1,11 +1,11 @@
-/* Dim the current page for 60 seconds */
+/* Dim the current page for 30 seconds */
 
 (function() { // avoid polluting the local namespace
 
   DIMMER_DIV_ID = '_crackbook_dimmer_';
   DIMMER_TEXT1 = "Enough junk for today, don't you think?";
-  DIMMER_TEXT2 = "Wait one minute for the content to appear.";
-  DIMMER_DELAY = 60 * 1000;
+  DIMMER_TEXT2 = "Wait half a minute for the content to appear.";
+  DIMMER_DELAY = 30 * 1000;
 
   var timeoutFn = function() {
     var dimmer = document.getElementById(DIMMER_DIV_ID);
