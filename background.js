@@ -7,6 +7,7 @@ var NOTIFICATION_THRESHOLD = 20;
 var NOTIFICATION_HIT_INTERVAL = 10;
 var NOTIFICATION_TEXT = 'Time to get back to work!';
 var DIMMER_THRESHOLD = 50;
+var API_URL = 'http://crackbook.info/api/';
 
 function drawIcon(img_name) {
   img_path = "images/" + img_name;
@@ -58,6 +59,34 @@ function shouldDimPage() {
   return getTodaysHits() > DIMMER_THRESHOLD;
 }
 
+function toQueryString(obj) {
+  // Convert an object to a query string.
+  var components = [];
+  for (k in obj) {
+    var v = obj[k];
+    components.push(k + '=' + encodeURIComponent(v));
+  }
+  return components.join('&');
+}
+
+function ajaxPost(url, fields) {
+  fields['user_id'] = '0'; // TODO
+  fields['timestamp'] = new Date().valueOf();
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", url, true);
+  xhr.send(toQueryString(fields));
+}
+
+function registerHit(domain) {
+  if (getLocal('reporting'))
+    ajaxPost(API_URL + 'register_hit', {domain: domain});
+}
+
+function registerConfigChange(domains) {
+  if (getLocal('reporting'))
+    ajaxPost(API_URL + 'register_configuration', {domains: JSON.stringify(domains);});
+}
+
 /*
  * Dimmer state transitions for junk pages
  *
@@ -78,7 +107,8 @@ function shouldDimPage() {
 var lastDimmedTabId = null;
 
 function tabUpdatedHandler(tabId, changeInfo, tab) {
-  var isJunk = isJunkDomain(normalizedDomain(tab.url))
+  var domain = normalizedDomain(tab.url);
+  var isJunk = isJunkDomain(domain);
   updateIcon(isJunk);
   if (isJunk && shouldDimPage()) {
     chrome.tabs.getSelected(null, function(selectedTab) {
@@ -86,9 +116,15 @@ function tabUpdatedHandler(tabId, changeInfo, tab) {
       if (tabIsActive)
 	lastDimmedTabId = tabId;
       dimTab(tabId, !tabIsActive);
+
+      registerHit(domain); // XXX register also if not blocked, send block as status bit
     })
   }
 }
+
+// XXX: Bug in the following two functions: if a tab was not dimmed
+// because shouldDimPage() == False and you switch to the tab, it may be
+// dimmed. A fix would be to properly discern between "dim()" and "redim()".
 
 function tabSelectionChangedHandler(tabId, selectInfo) {
   if (lastDimmedTabId) {

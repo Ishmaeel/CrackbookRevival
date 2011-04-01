@@ -26,17 +26,32 @@ function normalizedDomain(url) {
 // Local storage functions.
 //
 
-function getHitHistory() {
-  // TODO: use cache variable on bg page
-  if (!('hitHistory' in localStorage)) {
-    localStorage.setItem('hitHistory', '{}');
+var_defaults = {
+  hitHistory: '{}',
+  junkDomains: '[]',
+  reporting: 'false'
+}
+
+function getLocal(varname) {
+  if (!(varname in localStorage)) {
+    localStorage.setItem(varname, var_defaults[varname]);
   }
-  var s = localStorage.getItem('hitHistory');
+  var s = localStorage.getItem(varname);
   return JSON.parse(s);
 }
 
+function setLocal(varname, value) {
+  localStorage.setItem(varname, JSON.stringify(value));
+}
+
+function getHitHistory() {
+  // BBB
+  return getLocal('hitHistory');
+}
+
 function setHitHistory(hist) {
-  localStorage.setItem('hitHistory', JSON.stringify(hist));
+  // BBB
+  return setLocal('hitHistory', hist);
 }
 
 function getTodaysHits() {
@@ -48,16 +63,11 @@ function getTodaysHits() {
 }
 
 function getJunkDomains() {
-  // TODO: use cache variable on bg page
-  if (!('junkDomains' in localStorage)) {
-    localStorage.setItem('junkDomains', '[]');
-  }
-  var s = localStorage.getItem('junkDomains');
-  return JSON.parse(s);
+  return getLocal('junkDomains');
 }
 
 function setJunkDomains(domains) {
-  localStorage.setItem('junkDomains', JSON.stringify(domains));
+  setLocal('junkDomains', domains);
 }
 
 function isJunkDomain(domain) {

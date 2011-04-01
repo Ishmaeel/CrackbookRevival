@@ -87,6 +87,7 @@ function saveSettings() {
     }
   }
   setJunkDomains(junkDomains);
+  bgPage().registerConfigChange(domains);
 
   // Show status message.
   document.getElementById('saved_message').style['display'] = 'block';
