@@ -29,7 +29,7 @@ function normalizedDomain(url) {
 var_defaults = {
   hitHistory: '{}',
   junkDomains: '[]',
-  reporting: 'false',
+  reporting: 'true',
   user_id: 0
 }
 
