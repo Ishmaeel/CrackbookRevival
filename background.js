@@ -77,14 +77,14 @@ function ajaxPost(url, fields) {
   xhr.send(toQueryString(fields));
 }
 
-function registerHit(domain) {
+function registerHit(domain, blocked) {
   if (getLocal('reporting'))
-    ajaxPost(API_URL + 'register_hit', {domain: domain});
+    ajaxPost(API_URL + 'register_hit', {domain: domain, blocked: blocked});
 }
 
 function registerConfigChange(domains) {
   if (getLocal('reporting'))
-    ajaxPost(API_URL + 'register_configuration', {domains: JSON.stringify(domains);});
+    ajaxPost(API_URL + 'register_configuration', {domains: JSON.stringify(domains)});
 }
 
 /*
@@ -109,26 +109,24 @@ var lastDimmedTabId = null;
 function tabUpdatedHandler(tabId, changeInfo, tab) {
   var domain = normalizedDomain(tab.url);
   var isJunk = isJunkDomain(domain);
+  var shouldDim = shouldDimPage();
   updateIcon(isJunk);
-  if (isJunk && shouldDimPage()) {
-    chrome.tabs.getSelected(null, function(selectedTab) {
-      var tabIsActive = selectedTab.id != tabId;
-      if (tabIsActive)
-	lastDimmedTabId = tabId;
-      dimTab(tabId, !tabIsActive);
-
-      registerHit(domain); // XXX register also if not blocked, send block as status bit
-    })
+  if (isJunk) {
+    registerHit(domain, shouldDim);
+    if (shouldDim) {
+      chrome.tabs.getSelected(null, function(selectedTab) {
+	var tabIsActive = selectedTab.id != tabId;
+	if (tabIsActive)
+	  lastDimmedTabId = tabId;
+	invokeDimmer(tabId, tabIsActive ? "create" : "create_suspended");
+      });
+    }
   }
 }
 
-// XXX: Bug in the following two functions: if a tab was not dimmed
-// because shouldDimPage() == False and you switch to the tab, it may be
-// dimmed. A fix would be to properly discern between "dim()" and "redim()".
-
 function tabSelectionChangedHandler(tabId, selectInfo) {
   if (lastDimmedTabId) {
-    dimTab(lastDimmedTabId, true); // suspend timer
+    invokeDimmer(lastDimmedTabId, "suspend");
     lastDimmedTabId = null;
   }
 
@@ -136,7 +134,7 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
     var isJunk = isJunkDomain(normalizedDomain(tab.url))
     updateIcon(isJunk);
     if (isJunk && shouldDimPage()) {
-      dimTab(tabId, false); // restart timer
+      invokeDimmer(tabId, "resume");
       lastDimmedTabId = tabId;
     }
   });
@@ -144,7 +142,7 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
 
 function windowFocusChangedHandler(windowId) {
   if (lastDimmedTabId) {
-    dimTab(lastDimmedTabId, true); // suspend timer
+    invokeDimmer(lastDimmedTabId, "suspend");
     lastDimmedTabId = null;
   }
 
@@ -153,7 +151,7 @@ function windowFocusChangedHandler(windowId) {
       var isJunk = isJunkDomain(normalizedDomain(tab.url))
       updateIcon(isJunk);
       if (isJunk && shouldDimPage()) {
-	dimTab(tab.id, false); // restart timer
+	invokeDimmer(tab.id, "resume");
 	lastDimmedTabId = tab.id;
       }
     });
@@ -193,17 +191,20 @@ function junkHit(domain) {
     showNotification();
 }
 
-function dimTab(tabId, suspendTimer) {
+function invokeDimmer(tabId, action) {
   // Dim the page and start (or restart) the timer.
   //
-  // If the page is already dimmed, the timer is restarted.
-  //
-  // if suspendTimer is true, the timer is suspended immediately afterwards.
-  chrome.tabs.executeScript(tabId, { file: "dimmer.js" },
-      function() {
-	if (suspendTimer)
-	  chrome.tabs.executeScript(tabId, { file: "dimmer_suspend.js" });
-      });
+  // Actions:
+  // - "create": a dimmer is created on the page if it is not already there and a timer is started
+  // - "create_suspended": a dimmer is created on the page if it is not already there, no timer is started
+  // - "suspend": the countdown is suspended if there is a dimmer on the page
+  // - "resume": the countdown is resumed if there is a dimmer on the page
+
+  var primer_code = "var _dimmer_action_ = '" + action + "';";
+  chrome.tabs.executeScript(tabId, { code: primer_code }, function() {
+    // Set desired action and then invoke the script.
+    chrome.tabs.executeScript(tabId, { file: "dimmer.js" });
+  });
 }
 
 function initIcon() {
