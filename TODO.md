@@ -18,16 +18,18 @@
  + Add note about timer restart to block page
  + Fix user id generation
  + Figure out duplicate hits problem
- - Test retroactive ban bugfix
+ + Test retroactive ban bugfix
  === RELEASE 0.1.4
- - Make the block work more rapidly by handling tabUpdated status=loading
- - Only show warning about switching away the first time
+ - [F] Make the block work more rapidly by handling tabUpdated status=loading
+ - [B] Fix historyVisitedHandler to make sure only a single visit is counted
+ - [F] Only show warning about switching away the first time
  - Disable debug mode in webserver
- - Document data collection
- - Nicer design for the options page.
- - Nicer design for the stats page.
- - Resize dimmer regularly in case document grows
- - Make a feature list
+ - [M] Add some charts on crackbook.info
+ - [S] Document data collection
+ - [S] Nicer design for the options page.
+ - [S] Nicer design for the stats page.
+ - [S] Resize dimmer regularly in case document grows
+ - [S] Make a feature list
  - Submit to HN
  - Add image to delay page
  - Animate icon switch
