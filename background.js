@@ -39,7 +39,7 @@ function historyVisitedHandler(histItem) {
     return;
   var domain = normalizedDomain(histItem.url);
   if (isJunkDomain(domain))
-    junkHit(domain);
+    junkHit(domain); // XXX seems to be counting excessively
 }
 
 var iconState = null;
@@ -122,7 +122,7 @@ function tabUpdatedHandler(tabId, changeInfo, tab) {
     registerHit(domain, shouldDim);
     if (shouldDim) {
       chrome.tabs.getSelected(null, function(selectedTab) {
-	var tabIsActive = selectedTab.id != tabId;
+	var tabIsActive = selectedTab.id == tabId;
 	if (tabIsActive)
 	  lastDimmedTabId = tabId;
 	invokeDimmer(tabId, tabIsActive ? "create" : "create_suspended");
