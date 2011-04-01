@@ -67,6 +67,8 @@ function loadTopUrls() {
     function(historyItems) {
       var topUrls = getTopDomains(historyItems);
       setJunkDomains(topUrls);
+      // Not calling registerConfigChange here to give the chance for the
+      // user to clean the domain list.
       putDomainsOnPage(topUrls);
     }
   );
