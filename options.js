@@ -74,6 +74,9 @@ function loadTopUrls() {
 
 
 function saveSettings() {
+  /* Save settings from submitted form. */
+
+  // Collect settings.
   var ul = document.getElementById("topVisited");
 
   junkDomains = [];
@@ -86,7 +89,12 @@ function saveSettings() {
         junkDomains.push(normalizedDomain(input.value));
     }
   }
-  setJunkDomains(junkDomains);
+
+  var reporting = document.getElementById("upload_stats").checked;
+
+  // Save settings.
+  setLocal('reporting', reporting);
+  setLocal('junkDomains', junkDomains);
   bgPage().registerConfigChange(domains);
 
   // Show status message.

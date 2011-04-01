@@ -65,6 +65,15 @@
   </script>
 
   <p>
+  <label><input id="upload_stats" name="upload_stats" type="checkbox" />Upload statistics to <a href="http://crackbook.info">http://crackbook.info</a></label>
+  </p>
+
+  <script>
+    if (getLocal('reporting'))
+      document.getElementById("upload_stats").checked = true;
+  </script>
+
+  <p>
     <button id="save_button">Save</button>
   </p>
 
