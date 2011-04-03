@@ -107,14 +107,16 @@ function registerConfigChange(domains) {
 var lastDimmedTabId = null;
 
 function tabUpdatedHandler(tabId, changeInfo, tab) {
+  // In practice events seem to always come in doubles, 'loading' and
+  // 'complete'. Here the intent is to eliminate the duplicates under the
+  // assumption that a 'complete' update always follows a 'loading' update.
+  if (changeInfo.status == 'complete')
+    return;
+
   var domain = normalizedDomain(tab.url);
   var isJunk = isJunkDomain(domain);
   var shouldDim = shouldDimPage();
   updateIcon(isJunk);
-
-  // Always update the icon, but only do other changes if the page load is complete.
-  if (changeInfo.status != 'complete')
-    return;
 
   // TODO: see if we can harmlessly blank the page while it's loading
 
