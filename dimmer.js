@@ -88,7 +88,7 @@
     dimmer.style.opacity = "0.95";
     dimmer.style.zIndex = "99999";
 
-    document.body.appendChild(dimmer);
+    document.body.insertBefore(dimmer, document.body.firstChild);
     return dimmer;
   }
 
