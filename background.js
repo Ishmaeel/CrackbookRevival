@@ -34,14 +34,6 @@ function todayAsString() {
   return dt.toISOString().slice(0, 10);
 }
 
-function historyVisitedHandler(histItem) {
-  if (!histItem.url)
-    return;
-  var domain = normalizedDomain(histItem.url);
-  if (isJunkDomain(domain))
-    junkHit(domain); // XXX seems to be counting excessively
-}
-
 var iconState = null;
 
 function updateIcon(inJunk) {
@@ -118,9 +110,8 @@ function tabUpdatedHandler(tabId, changeInfo, tab) {
   var shouldDim = shouldDimPage();
   updateIcon(isJunk);
 
-  // TODO: see if we can harmlessly blank the page while it's loading
-
   if (isJunk) {
+    incrementJunkCounter(domain);
     registerHit(domain, shouldDim);
     if (shouldDim) {
       chrome.tabs.getSelected(null, function(selectedTab) {
@@ -176,7 +167,7 @@ function showNotification() {
   window.setTimeout(function() { notification_obj.cancel() }, 3000);
 }
 
-function junkHit(domain) {
+function incrementJunkCounter(domain) {
   // Get number of hits today.
   var hist = getHitHistory();
   var today = todayAsString();
@@ -229,7 +220,6 @@ function initUserID() {
 
 function initExtension() {
   initUserID();
-  chrome.history.onVisited.addListener(historyVisitedHandler);
   chrome.tabs.onUpdated.addListener(tabUpdatedHandler);
   chrome.tabs.onSelectionChanged.addListener(tabSelectionChangedHandler);
   chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
