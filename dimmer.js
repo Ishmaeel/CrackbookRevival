@@ -5,7 +5,7 @@
   DIMMER_DIV_ID = '_crackbook_dimmer_';
   DIMMER_TEXT1 = "Enough junk for today, don't you think?";
   DIMMER_TEXT2 = "Wait half a minute for the content to appear.";
-  DIMMER_TEXT3 = "Stay on the page. The timer will restart if you switch away from this tab.";
+  DIMMER_TEXT3 = "Stay on the page. The timer restarts if you switch away from this tab.";
   DIMMER_DELAY = 30 * 1000;
 
   var timeoutFn = function() {
@@ -70,6 +70,8 @@
 
     var text3 = document.createElement("div");
     text3.innerHTML = DIMMER_TEXT3;
+    text3.id = DIMMER_DIV_ID + 'stayput';
+    text3.style.display = "none";
     text3.style.textAlign = "center";
     text3.style.paddingTop = "10px";
     text3.style.fontSize = "14px";
@@ -114,8 +116,12 @@
   }
 
   function resume(dimmer_el) {
-    if (dimmer_el && dimmer_el.style.display != "none")
+    if (dimmer_el && dimmer_el.style.display != "none") {
       setTimer(dimmer_el);
+
+      var text3 = document.getElementById(DIMMER_DIV_ID + 'stayput');
+      text3.style.display = "block";
+    }
   }
 
   // Dispatch by action name.
