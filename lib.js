@@ -3,6 +3,8 @@
 //
 
 function normalizedDomain(url) {
+  // 0. Trim whitespace.
+  url = url.trim();
   // 1. Strip protocol.
   var p = url.indexOf('://');
   if (p > -1) {
