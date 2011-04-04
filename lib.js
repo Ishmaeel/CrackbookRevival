@@ -32,9 +32,9 @@ var_defaults = {
   hitHistory: '{}',
   junkDomains: '[]',
   reporting: 'true',
-  user_id: 0,
-  dimmerThreshold: 50,
-  dimmerDelay: 30
+  user_id: '0',
+  dimmerThreshold: '50',
+  dimmerDelay: '30'
 };
 
 function getLocal(varname) {
