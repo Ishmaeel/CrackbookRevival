@@ -7,5 +7,6 @@ function markAsJunk() {
     setJunkDomains(junkDomains);
     document.getElementById('mark_junk_button').style.display = "none";
     bgPage().updateIcon(true);
+    bgPage().submitConfigChange();
   });
 }
