@@ -71,7 +71,7 @@ function loadTopUrls() {
     function(historyItems) {
       var topUrls = getTopDomains(historyItems);
       setJunkDomains(topUrls);
-      // Not calling registerConfigChange here to give the chance for the
+      // Not calling submitConfigChange here to give the chance for the
       // user to clean the domain list.
       putDomainsOnPage(topUrls);
     }
@@ -99,12 +99,15 @@ function saveSettings() {
   var reporting = document.getElementById("upload_stats").checked;
   var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
 
+  if (!dimmerThreshold || dimmerThreshold <= 0)
+    dimmerThreshold = getLocal('dimmerThreshold');
+
   // Save settings.
   setLocal('reporting', reporting);
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('junkDomains', junkDomains);
 
-  bgPage().registerConfigChange(junkDomains);
+  bgPage().submitConfigChange(junkDomains, dimmerThreshold);
 
   // Show status message.
   document.getElementById('saved_message').style['display'] = 'block';

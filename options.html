@@ -35,6 +35,11 @@
     input#dimmerThreshold {
       width: 2em;
     }
+
+    #privacyDetails {
+      font-size: x-small;
+      margin-top: 4px;
+    }
   </style>
 
   <script src="lib.js"></script>
@@ -87,13 +92,22 @@
     loadSavedUrls();
   </script>
 
-  <p>
-  <label><input id="upload_stats" name="upload_stats" type="checkbox" />Upload statistics to http://crackbook.info</label>
-  </p>
+  <div>
+    <label>
+      <input id="upload_stats" name="upload_stats" type="checkbox" />Contribute usage data
+    </label>
+    <div id="privacyDetails">
+      Your list of junk sites and times of visits to the junk sites will be
+      uploaded anonymously. Statistics are available at <a id="crackbookLink" href="#">http://crackbook.info</a>.
+    </div>
+  </div>
 
   <script>
     if (getLocal('reporting'))
       document.getElementById("upload_stats").checked = true;
+    document.getElementById('crackbookLink').onclick = function() {
+      chrome.tabs.create({url: 'http://crackbook.info'});
+    }
   </script>
 
   <p>

@@ -76,9 +76,12 @@ function registerHit(domain, blocked) {
     ajaxPost(API_URL + 'register_hit', {domain: domain, blocked: blocked});
 }
 
-function registerConfigChange(domains) {
+function submitConfigChange(domains, dimmerThreshold) {
   if (getLocal('reporting'))
-    ajaxPost(API_URL + 'register_configuration', {domains: JSON.stringify(domains)});
+    ajaxPost(API_URL + 'register_configuration', {
+	    domains: JSON.stringify(domains),
+	    dimmer_threshold: dimmerThreshold
+    });
 }
 
 /*
