@@ -1,6 +1,8 @@
 Crackbook
 =========
 
+See http://xkcd.com/862/
+
 This is a Chrome extension for discouraging the compulsive use of
 attention-sucking websites.  The main idea of the extension is that delaying
 access to the website is more effective than straight blocking because you
@@ -8,10 +10,12 @@ are less likely to just disable the block after a while.
 
 After you browse websites from a predefined list for a while, the extension
 will remind you a few times to stop wasting time, and afterwards it will
-start blocking each junk page for one minute.
+start blocking each junk page for half a minute.  The timer is reset if you
+switch away from the tab, so you actually have to wait it out.
 
-Note that the timer is reset if you switch away from the tab, so you actually
-have to wait out the full minute rather than spend it doing other things.
+Unless disabled in settings, the extension will collect and anonymously
+submit usage data. Aggregate statistics are available at
+<http://crackbook.info>.
 
 The junk page counter resets daily.
 
@@ -26,8 +30,8 @@ Acknowledgements
 ----------------
 
 `hamburger-19px.png` and `hamburger-128px.png` are modified
-versions of <http://commons.wikimedia.org/wiki/File:Hamburger.svg>, which has
-been put into public domain by the author.
+versions of <http://commons.wikimedia.org/wiki/File:Hamburger.svg>, which
+has been put into public domain by the author.
 
 `carrot-19px.png` is a modified version of
 <http://www.clker.com/clipart-10133.html> , which is in the public domain.
