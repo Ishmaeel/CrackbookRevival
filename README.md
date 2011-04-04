@@ -20,6 +20,9 @@ submit usage data. Aggregate statistics are available at
 The junk page counter resets daily.
 
 
+The extension is available on the Chrome Store at:
+https://chrome.google.com/extensions/detail/nbgjmohekjolcgemlolblankocjlgalf
+
 The source code is available under the MIT license (see the file LICENSE).
 It is hosted at http://github.com/gintas/crackbook (patches welcome!).
 
