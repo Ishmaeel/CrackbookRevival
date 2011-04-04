@@ -32,13 +32,13 @@ var_defaults = {
   hitHistory: '{}',
   junkDomains: '[]',
   reporting: 'true',
-  user_id: 0
-}
+  user_id: 0,
+  dimmerThreshold: 50
+};
 
 function getLocal(varname) {
-  if (!(varname in localStorage)) {
+  if (!(varname in localStorage))
     localStorage.setItem(varname, var_defaults[varname]);
-  }
   var s = localStorage.getItem(varname);
   return JSON.parse(s);
 }

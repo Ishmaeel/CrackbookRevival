@@ -1,9 +1,12 @@
 <html>
 <head>
   <style>
+
     body {
       min-width:357px;
       overflow-x:hidden;
+      font-family: Verdana, sans-serif;
+      font-size: small;
     }
 
     img {
@@ -14,8 +17,23 @@
       height:75px;
     }
 
-    #iconCanvas {
-      display: none;
+    #heading {
+      font-weight: bold;
+      font-size: large;
+    }
+
+    #junkListHeader {
+      font-weight: bold;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 1em;
+      margin-top: 0.5em;
+    }
+
+    input#dimmerThreshold {
+      width: 2em;
     }
   </style>
 
@@ -49,16 +67,21 @@
 
 <body>
 
-  <h1>Crackbook settings</h1>
+  <div id="heading">Crackbook settings</div>
 
-  <h2>Top visited sites</h2>
+  <p>
+  <label>Start blocking pages after <input id="dimmerThreshold" name="dimmerThreshold" type="text" /> junk site hits a day</label>
+  </p>
+  <script>
+    document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
+  </script>
 
-  <p>Select junky sites:</p>
+  <div id="junkListHeader">Junk site list</div>
 
   <ul id="topVisited">
     <li id="placeholder">Please wait...</li>
+    <li><button id="add_domain_button">Add domain</button></li>
   </ul>
-  <button id="add_domain_button">Add a custom domain</button>
 
   <script>
     loadSavedUrls();

@@ -1,10 +1,10 @@
 Crackbook
 =========
 
-A Chrome extension for discouraging the compulsive use of attention-sucking
-websites.  The main idea of the extension is that delaying access to the
-website is more effective than straight blocking because you are less likely
-to just disable the block after a while.
+This is a Chrome extension for discouraging the compulsive use of
+attention-sucking websites.  The main idea of the extension is that delaying
+access to the website is more effective than straight blocking because you
+are less likely to just disable the block after a while.
 
 After you browse websites from a predefined list for a while, the extension
 will remind you a few times to stop wasting time, and afterwards it will
@@ -17,6 +17,7 @@ The junk page counter resets daily.
 
 
 The source code is available under the MIT license (see the file LICENSE).
+It is hosted at http://github.com/gintas/crackbook (patches welcome!).
 
 Copyright (C) 2011 Gintautas Miliauskas <gintautas@miliauskas.lt>
 

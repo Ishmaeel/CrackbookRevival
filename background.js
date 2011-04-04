@@ -3,11 +3,13 @@ var HITNUM_COLOR = "rgb(255,255,255)";
 var HITNUM_POS_X = 3;
 var HITNUM_POS_Y = 12;
 var DAY_STARTING_HOUR = 6; // AM
+var NOTIFICATION_TEXT = 'Time to get back to work!';
+var API_URL = 'http://crackbook.info/api/';
+
+// TODO: the following should be configurable
+
 var NOTIFICATION_THRESHOLD = 20;
 var NOTIFICATION_HIT_INTERVAL = 10;
-var NOTIFICATION_TEXT = 'Time to get back to work!';
-var DIMMER_THRESHOLD = 50;
-var API_URL = 'http://crackbook.info/api/';
 
 function drawIcon(img_name) {
   img_path = "images/" + img_name;
@@ -48,7 +50,7 @@ function updateIcon(inJunk) {
 }
 
 function shouldDimPage() {
-  return getTodaysHits() > DIMMER_THRESHOLD;
+  return getTodaysHits() > getLocal('dimmerThreshold');
 }
 
 function toQueryString(obj) {
@@ -184,11 +186,12 @@ function incrementJunkCounter(domain) {
   setTimeout(function() { chrome.browserAction.setBadgeText({text: ''}) },
       3000);
 
-  if ( hits < DIMMER_THRESHOLD && hits > NOTIFICATION_THRESHOLD
+  if (hits > NOTIFICATION_THRESHOLD
       && (hits % NOTIFICATION_HIT_INTERVAL == 0))
-    // If hits >= DIMMER_THRESHOLD, the notification is not needed any
+    // If hits >= dimmerThreshold, the notification is not needed any
     // more as the dimmer kicks in.
-    showNotification();
+    if (hits < getLocal('dimmerThreshold'))
+      showNotification();
 }
 
 function invokeDimmer(tabId, action) {

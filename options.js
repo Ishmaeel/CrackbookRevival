@@ -37,7 +37,11 @@ function addUrlField(value) {
   var li = document.createElement('li');
   li.appendChild(checkbox);
   li.appendChild(input);
-  document.getElementById("topVisited").appendChild(li);
+
+  var ul = document.getElementById("topVisited");
+  var button_li = document.getElementById("add_domain_button").parentNode;
+  // Insert field before the "add domain" button.
+  ul.insertBefore(li, button_li);
 }
 
 function putDomainsOnPage(topUrls) {
@@ -93,9 +97,11 @@ function saveSettings() {
   }
 
   var reporting = document.getElementById("upload_stats").checked;
+  var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
 
   // Save settings.
   setLocal('reporting', reporting);
+  setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('junkDomains', junkDomains);
 
   bgPage().registerConfigChange(junkDomains);
