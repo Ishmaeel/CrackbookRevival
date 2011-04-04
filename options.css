@@ -1,0 +1,38 @@
+body {
+  min-width:357px;
+  overflow-x:hidden;
+  font-family: Verdana, sans-serif;
+  font-size: small;
+}
+
+img {
+  margin:5px;
+  border:2px solid black;
+  vertical-align:middle;
+  width:75px;
+  height:75px;
+}
+
+#heading {
+  font-weight: bold;
+  font-size: large;
+}
+
+#junkListHeader {
+  font-weight: bold;
+}
+
+ul {
+  list-style: none;
+  padding-left: 1em;
+  margin-top: 0.5em;
+}
+
+input#dimmerThreshold, input#dimmerDelay {
+  width: 2em;
+}
+
+#privacyDetails {
+  font-size: x-small;
+  margin-top: 4px;
+}

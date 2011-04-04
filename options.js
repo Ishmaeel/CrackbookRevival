@@ -97,17 +97,22 @@ function saveSettings() {
   }
 
   var reporting = document.getElementById("upload_stats").checked;
-  var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
 
+  var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
   if (!dimmerThreshold || dimmerThreshold <= 0)
     dimmerThreshold = getLocal('dimmerThreshold');
+
+  var dimmerDelay = parseInt(document.getElementById("dimmerDelay").value);
+  if (!dimmerDelay || dimmerDelay <= 0)
+    dimmerDelay = getLocal('dimmerDelay');
 
   // Save settings.
   setLocal('reporting', reporting);
   setLocal('dimmerThreshold', dimmerThreshold);
+  setLocal('dimmerDelay', dimmerDelay);
   setLocal('junkDomains', junkDomains);
 
-  bgPage().submitConfigChange(junkDomains, dimmerThreshold);
+  bgPage().submitConfigChange(junkDomains, dimmerThreshold, dimmerDelay);
 
   // Show status message.
   document.getElementById('saved_message').style['display'] = 'block';

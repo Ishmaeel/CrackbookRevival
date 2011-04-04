@@ -6,7 +6,6 @@
   DIMMER_TEXT1 = "Enough junk for today, don't you think?";
   DIMMER_TEXT2 = "Wait half a minute for the content to appear.";
   DIMMER_TEXT3 = "Stay on the page. The timer restarts if you switch away from this tab.";
-  DIMMER_DELAY = 30 * 1000;
 
   var timeoutFn = function() {
     var dimmer = document.getElementById(DIMMER_DIV_ID);
@@ -33,7 +32,7 @@
     }
 
     // Set timer.
-    var timerId = setTimeout(timeoutFn, DIMMER_DELAY);
+    var timerId = setTimeout(timeoutFn, _dimmer_delay_ * 1000);
 
     // Store timer ID.
     if (!timerIdInput) {
@@ -139,5 +138,6 @@
   action_fn(dimmer_el);
 
   delete _dimmer_action_;
+  delete _dimmer_delay_;
 
 })();

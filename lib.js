@@ -33,7 +33,8 @@ var_defaults = {
   junkDomains: '[]',
   reporting: 'true',
   user_id: 0,
-  dimmerThreshold: 50
+  dimmerThreshold: 50,
+  dimmerDelay: 30
 };
 
 function getLocal(varname) {

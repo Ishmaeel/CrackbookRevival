@@ -76,11 +76,12 @@ function registerHit(domain, blocked) {
     ajaxPost(API_URL + 'register_hit', {domain: domain, blocked: blocked});
 }
 
-function submitConfigChange(domains, dimmerThreshold) {
+function submitConfigChange() {
   if (getLocal('reporting'))
     ajaxPost(API_URL + 'register_configuration', {
-	    domains: JSON.stringify(domains),
-	    dimmer_threshold: dimmerThreshold
+	    domains: JSON.stringify(getLocal('junkDomains')),
+	    dimmer_threshold: getLocal('dimmerThreshold'),
+	    dimmer_delay: getLocal('dimmerDelay')
     });
 }
 
@@ -206,7 +207,9 @@ function invokeDimmer(tabId, action) {
   // - "suspend": the countdown is suspended if there is a dimmer on the page
   // - "resume": the countdown is resumed if there is a dimmer on the page
 
-  var primer_code = "var _dimmer_action_ = '" + action + "';";
+  // TODO: just pass a JSON dictionary
+  var primer_code = ("var _dimmer_action_ = '" + action + "';" +
+		  " var _dimmer_delay_ = " + getLocal('dimmerDelay') + ";");
   chrome.tabs.executeScript(tabId, { code: primer_code }, function() {
     // Set desired action and then invoke the script.
     chrome.tabs.executeScript(tabId, { file: "dimmer.js" });

@@ -1,49 +1,10 @@
 <html>
 <head>
-  <style>
-
-    body {
-      min-width:357px;
-      overflow-x:hidden;
-      font-family: Verdana, sans-serif;
-      font-size: small;
-    }
-
-    img {
-      margin:5px;
-      border:2px solid black;
-      vertical-align:middle;
-      width:75px;
-      height:75px;
-    }
-
-    #heading {
-      font-weight: bold;
-      font-size: large;
-    }
-
-    #junkListHeader {
-      font-weight: bold;
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 1em;
-      margin-top: 0.5em;
-    }
-
-    input#dimmerThreshold {
-      width: 2em;
-    }
-
-    #privacyDetails {
-      font-size: x-small;
-      margin-top: 4px;
-    }
-  </style>
 
   <script src="lib.js"></script>
   <script src="options.js"></script>
+
+  <link rel="stylesheet" href="options.css" type="text/css" />
 
   <script>
     window.onload = function() {
@@ -75,10 +36,17 @@
   <div id="heading">Crackbook settings</div>
 
   <p>
-  <label>Start blocking pages after <input id="dimmerThreshold" name="dimmerThreshold" type="text" /> junk site hits a day</label>
+  <label>Start blocking junk sites after <input id="dimmerThreshold" name="dimmerThreshold" type="text" /> hits a day</label>
   </p>
   <script>
     document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
+  </script>
+
+  <p>
+  <label>Delay junk sites for <input id="dimmerDelay" name="dimmerDelay" type="text" /> seconds</label>
+  </p>
+  <script>
+    document.getElementById("dimmerDelay").value = getLocal('dimmerDelay');
   </script>
 
   <div id="junkListHeader">Junk site list</div>
