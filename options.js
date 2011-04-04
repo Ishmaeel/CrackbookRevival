@@ -97,7 +97,8 @@ function saveSettings() {
   // Save settings.
   setLocal('reporting', reporting);
   setLocal('junkDomains', junkDomains);
-  bgPage().registerConfigChange(domains);
+
+  bgPage().registerConfigChange(junkDomains);
 
   // Show status message.
   document.getElementById('saved_message').style['display'] = 'block';
