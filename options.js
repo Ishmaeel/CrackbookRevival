@@ -112,7 +112,7 @@ function saveSettings() {
   setLocal('dimmerDelay', dimmerDelay);
   setLocal('junkDomains', junkDomains);
 
-  bgPage().submitConfigChange(junkDomains, dimmerThreshold, dimmerDelay);
+  bgPage().submitConfigChange();
 
   // Show status message.
   document.getElementById('saved_message').style['display'] = 'block';
