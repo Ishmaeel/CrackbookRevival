@@ -115,7 +115,7 @@ function saveSettings() {
   bgPage().submitConfigChange();
 
   // Show status message.
-  document.getElementById('saved_message').style['display'] = 'block';
+  document.getElementById('saved_message').style['display'] = 'inline';
 } // saveSettings
 
 function addNewDomain() {
