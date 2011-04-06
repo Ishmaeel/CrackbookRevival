@@ -79,9 +79,9 @@ function registerHit(domain, blocked) {
 function submitConfigChange() {
   if (getLocal('reporting'))
     ajaxPost(API_URL + 'register_configuration', {
-	    domains: JSON.stringify(getLocal('junkDomains')),
-	    dimmer_threshold: getLocal('dimmerThreshold'),
-	    dimmer_delay: getLocal('dimmerDelay')
+            domains: JSON.stringify(getLocal('junkDomains')),
+            dimmer_threshold: getLocal('dimmerThreshold'),
+            dimmer_delay: getLocal('dimmerDelay')
     });
 }
 
@@ -121,10 +121,10 @@ function tabUpdatedHandler(tabId, changeInfo, tab) {
     registerHit(domain, shouldDim);
     if (shouldDim) {
       chrome.tabs.getSelected(null, function(selectedTab) {
-	var tabIsActive = selectedTab.id == tabId;
-	if (tabIsActive)
-	  lastDimmedTabId = tabId;
-	invokeDimmer(tabId, tabIsActive ? "create" : "create_suspended");
+        var tabIsActive = selectedTab.id == tabId;
+        if (tabIsActive)
+          lastDimmedTabId = tabId;
+        invokeDimmer(tabId, tabIsActive ? "create" : "create_suspended");
       });
     }
   }
@@ -157,8 +157,8 @@ function windowFocusChangedHandler(windowId) {
       var isJunk = isJunkDomain(normalizedDomain(tab.url))
       updateIcon(isJunk);
       if (isJunk && shouldDimPage()) {
-	invokeDimmer(tab.id, "resume");
-	lastDimmedTabId = tab.id;
+        invokeDimmer(tab.id, "resume");
+        lastDimmedTabId = tab.id;
       }
     });
   }
@@ -166,9 +166,9 @@ function windowFocusChangedHandler(windowId) {
 
 function showNotification() {
   var notification_obj = webkitNotifications.createNotification(
-	  'images/Hamburger-128px.png',
-	  NOTIFICATION_TEXT,
-	  "");
+          'images/Hamburger-128px.png',
+          NOTIFICATION_TEXT,
+          "");
   notification_obj.show();
   window.setTimeout(function() { notification_obj.cancel() }, 3000);
 }
@@ -209,7 +209,7 @@ function invokeDimmer(tabId, action) {
 
   // TODO: just pass a JSON dictionary
   var primer_code = ("var _dimmer_action_ = '" + action + "';" +
-		  " var _dimmer_delay_ = " + getLocal('dimmerDelay') + ";");
+                  " var _dimmer_delay_ = " + getLocal('dimmerDelay') + ";");
   chrome.tabs.executeScript(tabId, { code: primer_code }, function() {
     // Set desired action and then invoke the script.
     chrome.tabs.executeScript(tabId, { file: "dimmer.js" });
