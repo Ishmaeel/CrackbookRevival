@@ -4,7 +4,7 @@
 
   DIMMER_DIV_ID = '_crackbook_dimmer_';
   DIMMER_TEXT1 = "Enough junk for today, don't you think?";
-  DIMMER_TEXT2 = "Wait half a minute for the content to appear.";
+  DIMMER_TEXT2 = "Wait %d seconds for the content to appear.";
   DIMMER_TEXT3 = "Stay on the page. The timer restarts if you switch away from this tab.";
 
   var timeoutFn = function() {
@@ -72,7 +72,7 @@
     dimmer.appendChild(text1);
 
     var text2 = document.createElement("div");
-    text2.innerHTML = DIMMER_TEXT2;
+    text2.innerHTML = DIMMER_TEXT2.replace('%d', _dimmer_delay_);
     text2.style.textAlign = "center";
     text2.style.paddingTop = "50px";
     text2.style.fontSize = "20px";
