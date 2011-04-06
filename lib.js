@@ -33,7 +33,7 @@ var_defaults = {
   junkDomains: '[]',
   reporting: 'true',
   user_id: '0',
-  dimmerThreshold: '50',
+  dimmerThreshold: '20',
   dimmerDelay: '30'
 };
 

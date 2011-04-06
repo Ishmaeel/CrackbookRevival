@@ -8,8 +8,8 @@ var API_URL = 'http://crackbook.info/api/';
 
 // TODO: the following should be configurable
 
-var NOTIFICATION_THRESHOLD = 20;
-var NOTIFICATION_HIT_INTERVAL = 10;
+var NOTIFICATION_THRESHOLD = 5;
+var NOTIFICATION_HIT_INTERVAL = 5;
 
 function drawIcon(img_name) {
   img_path = "images/" + img_name;
