@@ -6,8 +6,10 @@ function getTopDomains(historyItems) {
     var h = historyItems[i];
     if (h.url && h.typedCount) {
       if (h.url.slice(0, 5) == 'https')
-        continue; // https URLs are probably not spam
+        continue; // https URLs are probably not junk
       var domain = normalizedDomain(h.url);
+      if (domain.indexOf('google.') != -1) // add some other major sites?
+        continue;
       domains.push(domain);
       typedCounts[domain] = h.typedCount;
     }
