@@ -6,16 +6,6 @@
 
   <link rel="stylesheet" href="options.css" type="text/css" />
 
-  <script>
-    window.onload = function() {
-      document.getElementById('add_domain_button').onclick = addNewDomain;
-      document.getElementById('save_button').onclick = saveSettings;
-
-      if (getJunkDomains().length == 0)
-        loadTopUrls();
-    }
-  </script>
-
   <!-- Google Analytics -->
   <script>
     var _gaq = _gaq || [];
@@ -38,16 +28,10 @@
   <p>
   <label>Start blocking junk sites after <input id="dimmerThreshold" name="dimmerThreshold" type="text" /> hits a day</label>
   </p>
-  <script>
-    document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
-  </script>
 
   <p>
   <label>Delay junk sites for <input id="dimmerDelay" name="dimmerDelay" type="text" /> seconds</label>
   </p>
-  <script>
-    document.getElementById("dimmerDelay").value = getLocal('dimmerDelay');
-  </script>
 
   <div id="junkListHeader">Junk site list</div>
 
@@ -55,10 +39,6 @@
     <li id="placeholder">Please wait...</li>
     <li><button id="add_domain_button">Add domain</button></li>
   </ul>
-
-  <script>
-    loadSavedUrls();
-  </script>
 
   <div>
       Extension enabled between
@@ -78,17 +58,6 @@
     <label><input id="weekday-6" name="weekday-6" type="checkbox" />Sat</label>
   </div>
 
-  <script>
-    document.getElementById("startTime").value = renderTime(getLocal('startTime'));
-    document.getElementById("endTime").value = renderTime(getLocal('endTime'));
-
-    var currentWeekdays = getLocal('weekdays');
-    for (var i = 0; i < 7; i++) {
-      document.getElementById("weekday-" + i).checked = currentWeekdays.indexOf("" + i) != -1;
-    }
-  </script>
-
-
   </p>
 
   <div>
@@ -101,14 +70,6 @@
       are available at <a id="crackbookLink" href="#">http://crackbook.info</a>.
     </div>
   </div>
-
-  <script>
-    if (getLocal('reporting'))
-      document.getElementById("upload_stats").checked = true;
-    document.getElementById('crackbookLink').onclick = function() {
-      chrome.tabs.create({url: 'http://crackbook.info'});
-    }
-  </script>
 
   <p>
     <button id="save_button">Save</button>

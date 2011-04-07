@@ -79,6 +79,41 @@ function loadTopUrls() {
 } // loadTopUrls()
 
 
+function bindControlHandlers() {
+  document.getElementById('add_domain_button').onclick = addNewDomain;
+  document.getElementById('save_button').onclick = saveSettings;
+  document.getElementById('crackbookLink').onclick = function() {
+    chrome.tabs.create({url: 'http://crackbook.info'});
+  }
+}
+
+
+function showSettings() {
+  // Threshold & delay
+  document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
+  document.getElementById("dimmerDelay").value = getLocal('dimmerDelay');
+
+  // Junk domains.
+  if (getJunkDomains().length == 0)
+    loadTopUrls();
+  else
+    loadSavedUrls();
+
+  // Schedule
+  document.getElementById("startTime").value = renderTime(getLocal('startTime'));
+  document.getElementById("endTime").value = renderTime(getLocal('endTime'));
+
+  var currentWeekdays = getLocal('weekdays');
+  for (var i = 0; i < 7; i++) {
+    document.getElementById("weekday-" + i).checked = currentWeekdays.indexOf("" + i) != -1;
+  }
+
+  // Reporting
+  if (getLocal('reporting'))
+    document.getElementById("upload_stats").checked = true;
+}
+
+
 function saveSettings() {
   /* Save settings from submitted form. */
 
@@ -130,6 +165,13 @@ function saveSettings() {
   document.getElementById('saved_message').style['display'] = 'inline';
 } // saveSettings
 
+
 function addNewDomain() {
   addUrlField('');
+}
+
+
+window.onload = function() {
+  bindControlHandlers();
+  showSettings();
 }
