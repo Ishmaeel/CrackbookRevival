@@ -59,8 +59,7 @@ function putDomainsOnPage(topUrls) {
 
 
 function loadSavedUrls() {
-  var junkDomains = getJunkDomains();
-  putDomainsOnPage(junkDomains);
+  putDomainsOnPage(getLocal('junkDomains'));
 }
 
 
@@ -70,7 +69,7 @@ function loadTopUrls() {
                           maxResults: 1000 },
     function(historyItems) {
       var topUrls = getTopDomains(historyItems);
-      setJunkDomains(topUrls);
+      setLocal('junkDomains', topUrls);
       // Not calling submitConfigChange here to give the chance for the
       // user to clean the domain list.
       putDomainsOnPage(topUrls);
@@ -94,7 +93,7 @@ function showSettings() {
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay');
 
   // Junk domains.
-  if (getJunkDomains().length == 0)
+  if (getLocal('junkDomains').length == 0)
     loadTopUrls();
   else
     loadSavedUrls();

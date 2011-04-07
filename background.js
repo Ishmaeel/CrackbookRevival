@@ -2,7 +2,6 @@ var HITNUM_FONT = '12px Arial Bold';
 var HITNUM_COLOR = "rgb(255,255,255)";
 var HITNUM_POS_X = 3;
 var HITNUM_POS_Y = 12;
-var DAY_STARTING_HOUR = 6; // AM
 var NOTIFICATION_TEXT = 'Time to get back to work!';
 var API_URL = 'http://crackbook.info/api/';
 
@@ -28,13 +27,6 @@ function drawTextOnBg(canvas, image, value) {
   var imageData = ctx.getImageData(0, 0, 19, 19);
   chrome.browserAction.setIcon({imageData: imageData});
 } // drawTextOnBg
-
-// Returns today's date as an ISO8601 string (e.g., 2011-03-04)
-function todayAsString() {
-  var now = new Date();
-  var dt = new Date(now - DAY_STARTING_HOUR * 3600 * 1000);
-  return dt.toISOString().slice(0, 10);
-}
 
 var iconState = null;
 
@@ -199,22 +191,22 @@ function showNotification() {
 }
 
 function incrementJunkCounter(domain) {
-  // Get number of hits today.
-  var hist = getHitHistory();
   var today = todayAsString();
-  if (!hist[today])
-    hist[today] = 0;
-  hist[today] += 1;
-
-  // Save incremented hit.
-  setHitHistory(hist);
-  
-  var hits = hist[today];
+  var day = getLocal('day');
+  var hits = getLocal('dayHits');
+  if (day == today) {
+    hits += 1;
+  } else {
+    setLocal('day', today);
+    hits = 1;
+  }
+  setLocal('dayHits', hits);
 
   chrome.browserAction.setBadgeText({text: "" + hits});
   setTimeout(function() { chrome.browserAction.setBadgeText({text: ''}) },
       3000);
 
+  // Show notification if needed.
   if (hits > NOTIFICATION_THRESHOLD
       && (hits % NOTIFICATION_HIT_INTERVAL == 0))
     // If hits >= dimmerThreshold, the notification is not needed any
@@ -259,6 +251,6 @@ function initExtension() {
   chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
   initIcon();
 
-  if (getJunkDomains().length == 0)
+  if (getLocal('junkDomains').length == 0)
     chrome.tabs.create({ url: "options.html" });
 }

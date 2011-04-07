@@ -1,3 +1,5 @@
+var DAY_STARTING_HOUR = 6; // AM
+
 //
 // Helper functions.
 //
@@ -24,6 +26,13 @@ function normalizedDomain(url) {
   return domain;
 }
 
+// Returns today's date as an ISO8601 string (e.g., 2011-03-04)
+function todayAsString() {
+  var now = new Date();
+  var dt = new Date(now - DAY_STARTING_HOUR * 3600 * 1000);
+  return dt.toISOString().slice(0, 10);
+}
+
 //
 // Local storage functions.
 //
@@ -37,7 +46,9 @@ var_defaults = {
   dimmerDelay: '30',
   startTime: '480',
   endTime: '1080',
-  weekdays: '"12345"'
+  weekdays: '"12345"',
+  day: '""',
+  dayHits: "0"
 };
 
 function getLocal(varname) {
@@ -51,34 +62,16 @@ function setLocal(varname, value) {
   localStorage.setItem(varname, JSON.stringify(value));
 }
 
-function getHitHistory() {
-  // BBB
-  return getLocal('hitHistory');
-}
-
-function setHitHistory(hist) {
-  // BBB
-  return setLocal('hitHistory', hist);
-}
-
 function getTodaysHits() {
-  var hist = getHitHistory();
-  var today = todayAsString();
-  if (!hist[today])
-    hist[today] = 0;
-  return hist[today];
-}
-
-function getJunkDomains() {
-  return getLocal('junkDomains');
-}
-
-function setJunkDomains(domains) {
-  setLocal('junkDomains', domains);
+  if (getLocal('day') == todayAsString()) {
+      return getLocal('dayHits');
+  } else {
+      return 0;
+  }
 }
 
 function isJunkDomain(domain) {
-  var junkDomains = getJunkDomains();
+  var junkDomains = getLocal('junkDomains');
   for (var i = 0; i < junkDomains.length; i++)
     if (domain == junkDomains[i])
       return true;
