@@ -1,3 +1,5 @@
+var TOP_DOMAINS_NUM = 6;
+
 function getTopDomains(historyItems) {
   var typedCounts = {};
   // Get URL data.
@@ -17,7 +19,7 @@ function getTopDomains(historyItems) {
   // Sort by typed count (descending).
   domains.sort(function(a, b) { return typedCounts[b] - typedCounts[a] });
   // Take top N.
-  var topUrls = domains.slice(0, 5);
+  var topUrls = domains.slice(0, TOP_DOMAINS_NUM);
   return topUrls;
 } // getTopDomains
 
