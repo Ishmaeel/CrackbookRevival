@@ -117,22 +117,23 @@ function showSettings() {
 function saveSettings() {
   /* Save settings from submitted form. */
 
-  // Collect settings.
+  // Junk domains
   var ul = document.getElementById("topVisited");
-
   junkDomains = [];
   for (var i = 0; i < ul.childNodes.length; i++) {
     if (ul.childNodes[i].nodeName == "LI") {
       var li = ul.childNodes[i];
       var checkbox = li.childNodes[0];
       var input = li.childNodes[1];
-      if (checkbox.checked)
-        junkDomains.push(normalizedDomain(input.value));
+      if (checkbox.checked) {
+        var domain = normalizedDomain(input.value);
+        if (domain.indexOf(".") != -1)
+          junkDomains.push(domain);
+      }
     }
   }
 
-  var reporting = document.getElementById("upload_stats").checked;
-
+  // Threshold & delay
   var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
   if (!dimmerThreshold || dimmerThreshold <= 0)
     dimmerThreshold = getLocal('dimmerThreshold');
@@ -150,7 +151,9 @@ function saveSettings() {
     if (document.getElementById("weekday-" + i).checked)
       weekdays += i;
 
-  // Save settings.
+  var reporting = document.getElementById("upload_stats").checked;
+
+  // Write settings to storage.
   setLocal('reporting', reporting);
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('dimmerDelay', dimmerDelay);
