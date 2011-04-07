@@ -61,6 +61,37 @@
   </script>
 
   <div>
+      Extension enabled between
+      <input id="startTime" name="startTime" type="text" />
+      and
+      <input id="endTime" name="endTime" type="text" />
+      <span style="font-size: x-small">(24-hour format)</span>
+  </div>
+
+  <div id="weekdays">
+    <label><input id="weekday-0" name="weekday-0" type="checkbox" />Sun</label>
+    <label><input id="weekday-1" name="weekday-1" type="checkbox" />Mon</label>
+    <label><input id="weekday-2" name="weekday-2" type="checkbox" />Tue</label>
+    <label><input id="weekday-3" name="weekday-3" type="checkbox" />Wed</label>
+    <label><input id="weekday-4" name="weekday-4" type="checkbox" />Thu</label>
+    <label><input id="weekday-5" name="weekday-5" type="checkbox" />Fri</label>
+    <label><input id="weekday-6" name="weekday-6" type="checkbox" />Sat</label>
+  </div>
+
+  <script>
+    document.getElementById("startTime").value = renderTime(getLocal('startTime'));
+    document.getElementById("endTime").value = renderTime(getLocal('endTime'));
+
+    var currentWeekdays = getLocal('weekdays');
+    for (var i = 0; i < 7; i++) {
+      document.getElementById("weekday-" + i).checked = currentWeekdays.indexOf("" + i) != -1;
+    }
+  </script>
+
+
+  </p>
+
+  <div>
     <label>
       <input id="upload_stats" name="upload_stats" type="checkbox" />Contribute usage data
     </label>

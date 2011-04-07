@@ -34,7 +34,10 @@ var_defaults = {
   reporting: 'true',
   user_id: '0',
   dimmerThreshold: '20',
-  dimmerDelay: '30'
+  dimmerDelay: '30',
+  startTime: '480',
+  endTime: '1080',
+  weekdays: '"12345"'
 };
 
 function getLocal(varname) {
@@ -84,4 +87,25 @@ function isJunkDomain(domain) {
 
 function bgPage() {
   return chrome.extension.getBackgroundPage();
+}
+
+function lzero(x) {
+  // Add a leading zero to a number.
+  return x > 9 ? x : '0' + x;
+}
+
+function renderTime(minutes) {
+  return lzero((Math.floor(minutes / 60))) + ':' + lzero(minutes % 60);
+}
+
+function parseTime(s) {
+  var components = s.split(':');
+  var hr = parseInt(components[0], 10) | 0;
+  if (hr < 0 || hr >= 24) hr = 0;
+  var min = parseInt(components[1], 10) | 0;
+  if (min < 0 || min >= 60) hr = 0;
+  var r = hr * 60 + min;
+  if (r >= 60*24)
+    r = 0;
+  return r;
 }

@@ -106,11 +106,23 @@ function saveSettings() {
   if (!dimmerDelay || dimmerDelay <= 0)
     dimmerDelay = getLocal('dimmerDelay');
 
+  // TODO: better validation
+  var startTime = parseTime(document.getElementById("startTime").value);
+  var endTime = parseTime(document.getElementById("endTime").value);
+
+  var weekdays = "";
+  for (var i = 0; i < 7; i++)
+    if (document.getElementById("weekday-" + i).checked)
+      weekdays += i;
+
   // Save settings.
   setLocal('reporting', reporting);
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('dimmerDelay', dimmerDelay);
   setLocal('junkDomains', junkDomains);
+  setLocal('startTime', startTime);
+  setLocal('endTime', endTime);
+  setLocal('weekdays', weekdays);
 
   bgPage().submitConfigChange();
 

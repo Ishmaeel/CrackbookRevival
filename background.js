@@ -49,6 +49,23 @@ function updateIcon(inJunk) {
   }
 }
 
+function extensionActive() {
+  var now = new Date();
+  // Check weekday.
+  if (getLocal('weekdays').indexOf("" + now.getDay()) == -1)
+    return false;
+  // Check time.
+  var nowMins = parseTime(now.getHours() + ":" + now.getMinutes());
+  var startTime = getLocal('startTime');
+  var endTime = getLocal('endTime');
+  if (startTime <= endTime) {
+    return (startTime <= nowMins) && (nowMins <= endTime);
+  } else {
+    // Handle the case when, e.g. the end time is in the night (14:00-3:00).
+    return (startTime <= nowMins) || (nowMins <= endTime);
+  }
+}
+
 function shouldDimPage() {
   return getTodaysHits() > getLocal('dimmerThreshold');
 }
@@ -71,17 +88,21 @@ function ajaxPost(url, fields) {
   xhr.send(toQueryString(fields));
 }
 
-function registerHit(domain, blocked) {
+function registerHit(domain, blocked, active) {
+  var params = {domain: domain, blocked: blocked, active: active};
   if (getLocal('reporting'))
-    ajaxPost(API_URL + 'register_hit', {domain: domain, blocked: blocked});
+    ajaxPost(API_URL + 'register_hit', params);
 }
 
 function submitConfigChange() {
   if (getLocal('reporting'))
     ajaxPost(API_URL + 'register_configuration', {
-            domains: JSON.stringify(getLocal('junkDomains')),
-            dimmer_threshold: getLocal('dimmerThreshold'),
-            dimmer_delay: getLocal('dimmerDelay')
+        domains: JSON.stringify(getLocal('junkDomains')),
+        dimmer_threshold: getLocal('dimmerThreshold'),
+        dimmer_delay: getLocal('dimmerDelay'),
+        start_time: getLocal('startTime'),
+        end_time: getLocal('endTime'),
+        weekdays: getLocal('weekdays')
     });
 }
 
@@ -113,13 +134,17 @@ function tabUpdatedHandler(tabId, changeInfo, tab) {
 
   var domain = normalizedDomain(tab.url);
   var isJunk = isJunkDomain(domain);
+  var active = extensionActive();
   var shouldDim = shouldDimPage();
   updateIcon(isJunk);
 
   if (isJunk) {
-    incrementJunkCounter(domain);
-    registerHit(domain, shouldDim);
-    if (shouldDim) {
+    if (active) {
+      // Do not increment the counter if the extension is not active.
+      incrementJunkCounter(domain);
+    }
+    registerHit(domain, shouldDim, active);
+    if (active && shouldDim) {
       chrome.tabs.getSelected(null, function(selectedTab) {
         var tabIsActive = selectedTab.id == tabId;
         if (tabIsActive)
