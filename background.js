@@ -30,14 +30,28 @@ function drawTextOnBg(canvas, image, value) {
 
 var iconState = null;
 
-function updateIcon(inJunk) {
-  if (iconState != inJunk) {
-    iconState = inJunk;
-    // TODO: animate transition
-    if (inJunk)
-      drawIcon("hamburger-19px.png");
-    else
-      drawIcon("carrot-19px.png");
+function updateIcon(active, inJunk) {
+  if (active == null) // null or undefined
+    active = extensionActive();
+  if (inJunk == null) { // null or undefined
+    chrome.tabs.getSelected(null, function(selectedTab) {
+      var domain = normalizedDomain(selectedTab.url);
+      var inJunk = isJunkDomain(domain);
+      updateIcon(active, inJunk);
+    });
+    return;
+  }
+
+  var newIcon = null;
+
+  newIcon = inJunk ? 'hamburger' : 'carrot';
+  if (!active)
+    newIcon += '-inactive';
+  newIcon += '-19px.png';
+    
+  if (iconState != newIcon) {
+    iconState = newIcon;
+    drawIcon(newIcon);
   }
 }
 
@@ -128,7 +142,7 @@ function tabUpdatedHandler(tabId, changeInfo, tab) {
   var isJunk = isJunkDomain(domain);
   var active = extensionActive();
   var shouldDim = shouldDimPage();
-  updateIcon(isJunk);
+  updateIcon(active, isJunk);
 
   if (isJunk) {
     if (active) {
@@ -155,7 +169,7 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
 
   chrome.tabs.get(tabId, function(tab) {
     var isJunk = isJunkDomain(normalizedDomain(tab.url))
-    updateIcon(isJunk);
+    updateIcon(null, isJunk);
     if (isJunk && shouldDimPage()) {
       invokeDimmer(tabId, "resume");
       lastDimmedTabId = tabId;
@@ -172,7 +186,7 @@ function windowFocusChangedHandler(windowId) {
   if (windowId != chrome.windows.WINDOW_ID_NONE) {
     chrome.tabs.getSelected(windowId, function(tab) {
       var isJunk = isJunkDomain(normalizedDomain(tab.url))
-      updateIcon(isJunk);
+      updateIcon(null, isJunk);
       if (isJunk && shouldDimPage()) {
         invokeDimmer(tab.id, "resume");
         lastDimmedTabId = tab.id;
@@ -234,8 +248,7 @@ function invokeDimmer(tabId, action) {
 }
 
 function initIcon() {
-  // TODO: check the current tab
-  updateIcon(false);
+  updateIcon(null, false);
 }
 
 function initUserID() {

@@ -6,7 +6,9 @@ function markAsJunk() {
     junkDomains.push(domain);
     setLocal('junkDomains', junkDomains);
     document.getElementById('mark_junk_button').style.display = "none";
-    bgPage().updateIcon(true);
-    bgPage().submitConfigChange();
+    var bg = bgPage();
+    var active = bg.extensionActive();
+    bg.updateIcon(active, true);
+    bg.submitConfigChange();
   });
 }

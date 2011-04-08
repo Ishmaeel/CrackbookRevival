@@ -166,9 +166,11 @@ function saveSettings() {
   setLocal('weekdays', weekdays);
 
   bgPage().submitConfigChange();
+  bgPage().updateIcon(null, true);
 
   // Show status message.
   document.getElementById('saved_message').style['display'] = 'inline';
+
 } // saveSettings
 
 
