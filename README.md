@@ -38,3 +38,7 @@ has been put into public domain by the author.
 
 `carrot-19px.png` is a modified version of
 <http://www.clker.com/clipart-10133.html> , which is in the public domain.
+
+`wrench.png` is <http://commons.wikimedia.org/wiki/File:Farm-Fresh_wrench.png>,
+which is provided under the Creative Commons Attribution 3.0 US licence
+by FatCow Web Hosting at <http://www.fatcow.com/free-icons/>.

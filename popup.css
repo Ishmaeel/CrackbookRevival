@@ -1,0 +1,16 @@
+body {
+  min-width: 300px;
+  overflow-x:hidden;
+  font-family: Georgia;
+  white-space: nowrap;
+}
+
+img.icon {
+  width: 16px;
+  height: 16px;
+  border: 0;
+}
+
+span#current_domain {
+  font-weight: bold;
+}

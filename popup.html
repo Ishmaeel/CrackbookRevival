@@ -1,19 +1,6 @@
 <html>
 <head>
-  <style>
-    body {
-      min-width: 300px;
-      overflow-x:hidden;
-    }
-
-    img {
-      margin:5px;
-      border:2px solid black;
-      vertical-align:middle;
-      width:75px;
-      height:75px;
-    }
-  </style>
+  <link rel="stylesheet" href="popup.css" type="text/css" />
 
   <script src="lib.js"></script>
   <script src="popup.js"></script>
@@ -36,7 +23,10 @@
 <body>
 
   <p>
-  <a href="#" id="mark_junk_button" style="display: none">Mark current domain (<span id="current_domain"></span>) as junk</button>
+  <a href="#" id="mark_junk_button" style="display: none">
+    <img src="/images/hamburger-19px.png" class="icon" />
+    Mark <span id="current_domain"></span> as junk
+  </a>
   </p>
 
   <script>
@@ -57,7 +47,10 @@
   -->
 
   <p>
-  <a href="options.html">Configure...</a>
+    <a href="options.html">
+      <img src="/images/wrench.png" class="icon"/>
+      Configure...
+    </a>
   </p>
 
 </body>
