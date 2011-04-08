@@ -64,7 +64,8 @@
     // Message
     dimmer.style.color = "#ffffff";
     dimmer.style.paddingTop = window.innerHeight / 2 - 30 + "px";
-    dimmer.style.fontSize = '30px';
+    dimmer.style.fontSize = '36px';
+    dimmer.style.fontFamily = 'Georgia';
 
     var text1 = document.createElement("div");
     text1.innerHTML = DIMMER_TEXT1;
