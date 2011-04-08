@@ -1,4 +1,5 @@
 var TOP_DOMAINS_NUM = 6;
+var MSG_SAVED_DELAY = 2*1000;
 
 function getTopDomains(historyItems) {
   var typedCounts = {};
@@ -183,7 +184,10 @@ function saveSettings() {
   showSettings();
 
   // Show status message.
-  document.getElementById('saved_message').style['display'] = 'inline';
+  var msg = document.getElementById('saved_message');
+  msg.style['display'] = 'inline';
+  // TODO: fade out
+  window.setTimeout(function() { msg.style.display = 'none'}, MSG_SAVED_DELAY);
 
 } // saveSettings
 
