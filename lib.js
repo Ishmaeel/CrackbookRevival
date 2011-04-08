@@ -44,11 +44,11 @@ var_defaults = {
   user_id: '0',
   dimmerThreshold: '20',
   dimmerDelay: '30',
-  startTime: '480',
-  endTime: '1080',
+  startTime: '0',
+  endTime: '' + 24*60-1,
   weekdays: '"12345"',
   day: '""',
-  dayHits: "0"
+  dayHits: '0'
 };
 
 function getLocal(varname) {
