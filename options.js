@@ -39,6 +39,7 @@ function addUrlField(value) {
   input.value = value;
 
   var li = document.createElement('li');
+  li.setAttribute('class', 'domain');
   li.appendChild(checkbox);
   li.appendChild(input);
 
@@ -46,6 +47,15 @@ function addUrlField(value) {
   var button_li = document.getElementById("add_domain_button").parentNode;
   // Insert field before the "add domain" button.
   ul.insertBefore(li, button_li);
+}
+
+function clearDomainsFromPage() {
+  var ul = document.getElementById("topVisited");
+  for (var i = ul.children.length-1; i >= 0; i--) {
+    var li = ul.children[i];
+    if (li.getAttribute('class') == 'domain')
+      ul.removeChild(li);
+  }
 }
 
 function putDomainsOnPage(topUrls) {
@@ -97,6 +107,7 @@ function showSettings() {
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay');
 
   // Junk domains.
+  clearDomainsFromPage();
   if (getLocal('junkDomains').length == 0)
     loadTopUrls();
   else
@@ -167,6 +178,9 @@ function saveSettings() {
 
   bgPage().submitConfigChange();
   bgPage().updateIcon(null, true);
+
+  // Re-render saved settings so that invalid settings can be seen.
+  showSettings();
 
   // Show status message.
   document.getElementById('saved_message').style['display'] = 'inline';
