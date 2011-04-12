@@ -35,9 +35,8 @@ function updateIcon(active, inJunk) {
     active = extensionActive();
   if (inJunk == null) { // null or undefined
     chrome.tabs.getSelected(null, function(selectedTab) {
-      var domain = normalizedDomain(selectedTab.url);
-      var inJunk = isJunkDomain(domain);
-      updateIcon(active, inJunk);
+      var junkDomain = lookupJunkDomain(selectedTab.url);
+      updateIcon(active, !!junkDomain);
     });
     return;
   }
@@ -138,18 +137,17 @@ function tabUpdatedHandler(tabId, changeInfo, tab) {
   if (changeInfo.status == 'complete')
     return;
 
-  var domain = normalizedDomain(tab.url);
-  var isJunk = isJunkDomain(domain);
+  var junkDomain = lookupJunkDomain(tab.url);
   var active = extensionActive();
   var shouldDim = shouldDimPage();
-  updateIcon(active, isJunk);
+  updateIcon(active, !!junkDomain);
 
-  if (isJunk) {
+  if (junkDomain) {
     if (active) {
       // Do not increment the counter if the extension is not active.
-      incrementJunkCounter(domain);
+      incrementJunkCounter(junkDomain);
     }
-    registerHit(domain, shouldDim, active);
+    registerHit(junkDomain, shouldDim, active);
     if (active && shouldDim) {
       chrome.tabs.getSelected(null, function(selectedTab) {
         var tabIsActive = selectedTab.id == tabId;
@@ -168,9 +166,9 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
   }
 
   chrome.tabs.get(tabId, function(tab) {
-    var isJunk = isJunkDomain(normalizedDomain(tab.url))
-    updateIcon(null, isJunk);
-    if (isJunk && shouldDimPage()) {
+    var junkDomain = lookupJunkDomain(tab.url);
+    updateIcon(null, !!junkDomain);
+    if (junkDomain && shouldDimPage()) {
       invokeDimmer(tabId, "resume");
       lastDimmedTabId = tabId;
     }
@@ -185,9 +183,9 @@ function windowFocusChangedHandler(windowId) {
 
   if (windowId != chrome.windows.WINDOW_ID_NONE) {
     chrome.tabs.getSelected(windowId, function(tab) {
-      var isJunk = isJunkDomain(normalizedDomain(tab.url))
-      updateIcon(null, isJunk);
-      if (isJunk && shouldDimPage()) {
+      var junkDomain = lookupJunkDomain(tab.url);
+      updateIcon(null, !!junkDomain);
+      if (junkDomain && shouldDimPage()) {
         invokeDimmer(tab.id, "resume");
         lastDimmedTabId = tab.id;
       }

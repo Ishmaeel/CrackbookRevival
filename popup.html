@@ -29,17 +29,6 @@
   </a>
   </p>
 
-  <script>
-    chrome.tabs.getSelected(null, function (tab) {
-      var domain = normalizedDomain(tab.url);
-      if (!isJunkDomain(domain)) {
-        document.getElementById('current_domain').appendChild(document.createTextNode(domain));
-        document.getElementById('mark_junk_button').style.display = "block";
-        document.getElementById('mark_junk_button').onclick = markAsJunk;
-      }
-    });
-  </script>
-
   <!-- TODO
   <p>
     <a href="stats.html">Statistics</a>

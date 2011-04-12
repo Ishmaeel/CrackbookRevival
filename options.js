@@ -10,9 +10,17 @@ function getTopDomains(historyItems) {
     if (h.url && h.typedCount) {
       if (h.url.slice(0, 5) == 'https')
         continue; // https URLs are probably not junk
-      var domain = normalizedDomain(h.url);
-      if (domain.indexOf('google.') != -1) // add some other major sites?
-        continue;
+
+      var url = trimWWW(trimProtocol(h.url.trim()));
+      var domain = trimPath(url);
+
+      // Special case for Google Reader.
+      // TODO: test me
+      var components = url.split('/');
+      if (components.length > 1 && components[0].indexOf('google.') != -1 && components[1] == 'reader') {
+	domain = components[0] + '/' + components[1];
+      }
+
       domains.push(domain);
       typedCounts[domain] = h.typedCount;
     }
@@ -62,8 +70,7 @@ function clearDomainsFromPage() {
 function putDomainsOnPage(topUrls) {
   // Put on page.
   for (var i = 0; i < topUrls.length; i++) {
-    var domain = normalizedDomain(topUrls[i]);
-    addUrlField(domain);
+    addUrlField(topUrls[i]);
   }
 
   // Remove placeholder, if any.
@@ -140,10 +147,9 @@ function saveSettings() {
       var li = ul.childNodes[i];
       var checkbox = li.childNodes[0];
       var input = li.childNodes[1];
-      if (checkbox.checked) {
-        var domain = normalizedDomain(input.value);
-        if (domain.indexOf(".") != -1)
-          junkDomains.push(domain);
+      if (checkbox.checked && input.value.indexOf('.') != -1) {
+        var url = trimWWW(trimProtocol(input.value.trim()));
+        junkDomains.push(url);
       }
     }
   }

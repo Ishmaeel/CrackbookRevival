@@ -4,25 +4,26 @@ var DAY_STARTING_HOUR = 6; // AM
 // Helper functions.
 //
 
-function normalizedDomain(url) {
-  // 0. Trim whitespace.
-  url = url.trim();
-  // 1. Strip protocol.
+function trimProtocol(url) {
   var p = url.indexOf('://');
   if (p > -1) {
     url = url.slice(p + '://'.length);
   }
-  // 2. Strip path.
+  return url;
+}
+
+function trimWWW(url) {
+  if (url.slice(0, 4) == 'www.')
+    url = url.slice(4);
+  return url;
+}
+
+function trimPath(url) {
   p = url.indexOf('/');
   if (p > -1)
     domain = url.slice(0, p);
   else
     domain = url;
-
-  // 3. Strip leading 'www'.
-  if (domain.slice(0, 4) == 'www.')
-    domain = domain.slice(4);
-
   return domain;
 }
 
@@ -70,12 +71,14 @@ function getTodaysHits() {
   }
 }
 
-function isJunkDomain(domain) {
+function lookupJunkDomain(url) {
   var junkDomains = getLocal('junkDomains');
-  for (var i = 0; i < junkDomains.length; i++)
-    if (domain == junkDomains[i])
-      return true;
-  return false;
+  var normalized_url = trimWWW(trimProtocol(url.trim()));
+  for (var i = 0; i < junkDomains.length; i++) {
+    if (normalized_url.indexOf(junkDomains[i]) == 0)
+      return junkDomains[i];
+  }
+  return null;
 }
 
 function bgPage() {
