@@ -41,9 +41,10 @@ div#weekdays {
   padding: 0;
 }
 
-#privacyDetails {
+.details {
   font-size: x-small;
   margin-top: 4px;
+  color: #999;
 }
 
 #saved_message {

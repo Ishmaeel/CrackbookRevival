@@ -35,6 +35,10 @@
 
   <div id="junkListHeader">Junk site list</div>
 
+  <div class="details">
+    Domains with paths are allowed, e.g. "google.com/reader".
+  </div>
+
   <ul id="topVisited">
     <li id="placeholder">Please wait...</li>
     <li><button id="add_domain_button">Add domain</button></li>
@@ -45,7 +49,7 @@
       <input id="startTime" name="startTime" type="text" />
       and
       <input id="endTime" name="endTime" type="text" />
-      <span style="font-size: x-small">(24-hour format)</span>
+      <span class="details">(24-hour format)</span>
   </div>
 
   <div id="weekdays">
@@ -64,7 +68,7 @@
     <label>
       <input id="upload_stats" name="upload_stats" type="checkbox" />Contribute usage data
     </label>
-    <div id="privacyDetails">
+    <div class="details">
       Your extension settings (including the list of junk sites) and times
       of visits to the junk sites will be uploaded anonymously. Statistics
       are available at <a id="crackbookLink" href="#">http://crackbook.info</a>.
