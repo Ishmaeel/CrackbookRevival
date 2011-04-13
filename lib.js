@@ -31,7 +31,7 @@ function trimPath(url) {
 function todayAsString() {
   var now = new Date();
   var dt = new Date(now - DAY_STARTING_HOUR * 3600 * 1000);
-  return dt.toISOString().slice(0, 10);
+  return dt.getFullYear() + "-" + lzero(dt.getMonth() + 1) + "-" + lzero(dt.getDate());
 }
 
 //
