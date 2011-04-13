@@ -45,6 +45,7 @@ function addUrlField(value) {
 
   var input = document.createElement('input');
   input.setAttribute('type', 'text');
+  input.setAttribute('class', 'domain');
   input.value = value;
 
   var li = document.createElement('li');

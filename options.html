@@ -23,17 +23,18 @@
 
 <body>
 
-  <div id="heading">Crackbook settings</div>
+  <div id="header" class="heading">Crackbook settings</div>
 
-  <p>
-  <label>Start blocking junk sites after <input id="dimmerThreshold" name="dimmerThreshold" type="text" /> hits in one day</label>
-  </p>
+  <div style="padding-top: 0.5em; padding-bottom: 0.5em">
+    <div>
+      <label>Start blocking junk sites after <input id="dimmerThreshold" name="dimmerThreshold" type="text" /> junk hits in one day</label>
+    </div>
+    <div>
+      <label>Delay junk sites for <input id="dimmerDelay" name="dimmerDelay" type="text" /> seconds</label>
+    </div>
+  </div>
 
-  <p>
-  <label>Delay junk sites for <input id="dimmerDelay" name="dimmerDelay" type="text" /> seconds</label>
-  </p>
-
-  <div id="junkListHeader">Junk site list</div>
+  <div class="subheading">Junk site list</div>
 
   <div class="details">
     Domains with paths are allowed, e.g. "google.com/reader".
@@ -43,6 +44,8 @@
     <li id="placeholder">Please wait...</li>
     <li><button id="add_domain_button">Add domain</button></li>
   </ul>
+
+  <div class="subheading">Schedule</div>
 
   <div>
       Extension enabled between
@@ -64,6 +67,7 @@
 
   </p>
 
+  <div class="subheading" style="padding-bottom: 0.5em">Usage data</div>
   <div>
     <label>
       <input id="upload_stats" name="upload_stats" type="checkbox" />Contribute usage data

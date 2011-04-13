@@ -3,6 +3,7 @@ body {
   overflow-x:hidden;
   font-family: Verdana, sans-serif;
   font-size: small;
+  color: #080e73;
 }
 
 img {
@@ -13,19 +14,28 @@ img {
   height:75px;
 }
 
-#heading {
+#header {
   font-weight: bold;
   font-size: large;
 }
 
-#junkListHeader {
+.heading {
+  color: #1921b1;
+}
+
+.subheading {
+  color: #1921b1;
   font-weight: bold;
 }
 
-ul {
+ul#topVisited {
   list-style: none;
   padding-left: 1em;
   margin-top: 0.5em;
+}
+
+ul#topVisited li input.domain {
+  width: 15em;
 }
 
 input#dimmerThreshold, input#dimmerDelay {
@@ -45,6 +55,19 @@ div#weekdays {
   font-size: x-small;
   margin-top: 4px;
   color: #999;
+}
+
+button {
+  color: #333333;
+  background: #d9dbff;
+  font-family: Verdana;
+  border: 1px solid #007;
+  border-radius: 3px;
+}
+
+button#save_button {
+  font-size: large;
+  padding: 0.05em 0.5em 0.15em 0.5em;
 }
 
 #saved_message {
