@@ -44,17 +44,6 @@
     timerIdInput.value = timerId;
   }
 
-  function maximizeDimmer(dimmer) {
-    if (dimmer.style.display != 'none') {
-      // Grow dimmer to the size of the document.
-      dimmer.style.width = window.innerWidth + "px";
-      dimmer.style.height = document.height + "px";
-      // Make sure that if the document changes size in the future,
-      // the dimmer will be resized too.
-      setTimeout(function() { maximizeDimmer(dimmer); }, 1000);
-    }
-  }
-
   function addDimmer() {
     var dimmer = document.createElement('div');
     dimmer.id = DIMMER_DIV_ID;
@@ -90,9 +79,11 @@
     dimmer.appendChild(text3);
 
     // Positioning.
-    dimmer.style.position = "absolute";
+    dimmer.style.position = "fixed";
     dimmer.style.top = "0px";
     dimmer.style.left = "0px";
+    dimmer.style.width = "100%";
+    dimmer.style.height = "100%";
 
     // Background.
     dimmer.style.background = "#001000";
@@ -100,8 +91,6 @@
     dimmer.style.zIndex = "99999";
 
     document.body.insertBefore(dimmer, document.body.firstChild);
-
-    maximizeDimmer(dimmer);
 
     return dimmer;
   }
