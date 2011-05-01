@@ -195,7 +195,7 @@ function windowFocusChangedHandler(windowId) {
 
 function showNotification() {
   var notification_obj = webkitNotifications.createNotification(
-          'images/Hamburger-128px.png',
+          'images/hamburger-128px.png',
           NOTIFICATION_TEXT,
           "");
   notification_obj.show();
