@@ -5,7 +5,7 @@
   DIMMER_DIV_ID = '_crackbook_dimmer_';
   DIMMER_TEXT1 = "Enough junk for today, don't you think?";
   DIMMER_TEXT2 = "Wait %d seconds for the content to appear.";
-  DIMMER_TEXT3 = "Stay on the page. The timer restarts if you switch away from this tab.";
+  DIMMER_TEXT3 = "The timer restarts if you switch away from this tab.";
 
   var timeoutFn = function() {
     var dimmer = document.getElementById(DIMMER_DIV_ID);
