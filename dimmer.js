@@ -1,12 +1,22 @@
-/* Dim the current page for 30 seconds */
+/* Dims the current page for a given time in seconds
 
-(function() { // avoid polluting the local namespace
+'action' is one of the following:
+  - "create": a dimmer is created on the page if it is not already there and a timer is started
+  - "create_suspended": a dimmer is created on the page if it is not already there, no timer is started
+  - "suspend": the countdown is suspended if there is a dimmer on the page
+  - "resume": the countdown is resumed if there is a dimmer on the page
 
-  DIMMER_DIV_ID = '_crackbook_dimmer_';
-  DIMMER_TEXT1 = "Enough junk for today, don't you think?";
-  DIMMER_TEXT2 = "Wait %d seconds for the content to appear.";
-  DIMMER_TEXT3 = "The timer restarts if you switch away from this tab.";
+'delay' is time to delay in seconds.
+*/
 
+var BODY_POLL_MS = 50;
+var DIMMER_DIV_ID = '_crackbook_dimmer_';
+var DIMMER_TEXT1 = "Enough junk for today, don't you think?";
+var DIMMER_TEXT2 = "Wait %d seconds for the content to appear.";
+var DIMMER_TEXT3 = "The timer restarts if you switch away from this tab.";
+
+function dim(action, delay) {
+// TODO Move some of the contents out?
   var timeoutFn = function() {
     var dimmer = document.getElementById(DIMMER_DIV_ID);
     dimmer.style.display = "none";
@@ -32,7 +42,7 @@
     }
 
     // Set timer.
-    var timerId = setTimeout(timeoutFn, _dimmer_delay_ * 1000);
+    var timerId = setTimeout(timeoutFn, delay * 1000);
 
     // Store timer ID.
     if (!timerIdInput) {
@@ -62,7 +72,7 @@
     dimmer.appendChild(text1);
 
     var text2 = document.createElement("div");
-    text2.innerHTML = DIMMER_TEXT2.replace('%d', _dimmer_delay_);
+    text2.innerHTML = DIMMER_TEXT2.replace('%d', delay);
     text2.style.textAlign = "center";
     text2.style.paddingTop = "50px";
     text2.style.fontSize = "20px";
@@ -126,7 +136,6 @@
   }
 
   // Dispatch by action name.
-
   var action_fns = {
     create: create,
     suspend: suspend,
@@ -134,12 +143,29 @@
     create_suspended: create_suspended
   };
 
-  var action_fn = action_fns[_dimmer_action_];
+  var action_fn = action_fns[action];
 
   var dimmer_el = document.getElementById(DIMMER_DIV_ID);
   action_fn(dimmer_el);
+}
 
-  delete _dimmer_action_;
-  delete _dimmer_delay_;
+/* Forwarder function for calls using executeScript() */
+function invoke_dimmer(args) {
+  dim(args.action, args.delay);
+}
 
-})();
+// On initial load, check if this page is supposed to be dimmed.
+chrome.extension.sendRequest({}, function(response) {
+  if (response.should_dim) {
+    function delayedDimmerFn() {
+      if (document.body != null) {
+        // The body of the document has started loading, the dimmer can be shown.
+        invoke_dimmer(response);
+      } else {
+        // The body is not yet available.
+        setTimeout(delayedDimmerFn, BODY_POLL_MS);
+      }
+    }
+    setTimeout(delayedDimmerFn, BODY_POLL_MS);
+  }
+});

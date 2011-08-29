@@ -131,6 +131,8 @@ function submitConfigChange() {
 var lastDimmedTabId = null;
 
 function tabUpdatedHandler(tabId, changeInfo, tab) {
+  // TODO: remove this completely in favor of newPageHandler
+
   // In practice events seem to always come in doubles, 'loading' and
   // 'complete'. Here the intent is to eliminate the duplicates under the
   // assumption that a 'complete' update always follows a 'loading' update.
@@ -193,6 +195,25 @@ function windowFocusChangedHandler(windowId) {
   }
 }
 
+function newPageHandler(request, sender, sendResponse) {
+  // TODO: Also look up current (or last selected) tab to see if the user
+  // is branching from a slack site.  Add a config option?
+  var junkDomain = lookupJunkDomain(sender.tab.url);
+  var active = extensionActive();
+  var shouldDim = shouldDimPage();
+
+  if (!(junkDomain && active && shouldDim)) {
+    sendResponse({should_dim: false});
+  } else {
+    chrome.tabs.getSelected(null, function(selectedTab) {
+      var tabIsActive = (selectedTab.id == sender.tab.id);
+      sendResponse({should_dim: true,
+                    action: tabIsActive ? "create" : "create_suspended",
+                    delay: getLocal('dimmerDelay')});
+    });
+  }
+}
+
 function showNotification() {
   var notification_obj = webkitNotifications.createNotification(
           'images/hamburger-128px.png',
@@ -235,14 +256,9 @@ function invokeDimmer(tabId, action) {
   // - "create_suspended": a dimmer is created on the page if it is not already there, no timer is started
   // - "suspend": the countdown is suspended if there is a dimmer on the page
   // - "resume": the countdown is resumed if there is a dimmer on the page
-
-  // TODO: just pass a JSON dictionary
-  var primer_code = ("var _dimmer_action_ = '" + action + "';" +
-                  " var _dimmer_delay_ = " + getLocal('dimmerDelay') + ";");
-  chrome.tabs.executeScript(tabId, { code: primer_code }, function() {
-    // Set desired action and then invoke the script.
-    chrome.tabs.executeScript(tabId, { file: "dimmer.js" });
-  });
+  var args = {action: action, delay: getLocal('dimmerDelay')};
+  var primer_code = "invoke_dimmer(" + JSON.stringify(args) + ");";
+  chrome.tabs.executeScript(tabId, { code: primer_code });
 }
 
 function initIcon() {
@@ -257,6 +273,7 @@ function initUserID() {
 
 function initExtension() {
   initUserID();
+  chrome.extension.onRequest.addListener(newPageHandler)
   chrome.tabs.onUpdated.addListener(tabUpdatedHandler);
   chrome.tabs.onSelectionChanged.addListener(tabSelectionChangedHandler);
   chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
