@@ -1,3 +1,9 @@
+var BODY_POLL_MS = 30;
+var DIMMER_DIV_ID = '_crackbook_dimmer_';
+var DIMMER_TEXT1 = "Enough junk for today, don't you think?";
+var DIMMER_TEXT2 = "Wait %d seconds for the content to appear.";
+var DIMMER_TEXT3 = "The timer restarts if you switch away from this tab.";
+
 /* Dims the current page for a given time in seconds
 
 'action' is one of the following:
@@ -8,13 +14,6 @@
 
 'delay' is time to delay in seconds.
 */
-
-var BODY_POLL_MS = 50;
-var DIMMER_DIV_ID = '_crackbook_dimmer_';
-var DIMMER_TEXT1 = "Enough junk for today, don't you think?";
-var DIMMER_TEXT2 = "Wait %d seconds for the content to appear.";
-var DIMMER_TEXT3 = "The timer restarts if you switch away from this tab.";
-
 function dim(action, delay) {
 // TODO Move some of the contents out?
   var timeoutFn = function() {
