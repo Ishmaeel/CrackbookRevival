@@ -130,37 +130,6 @@ function submitConfigChange() {
 
 var lastDimmedTabId = null;
 
-function tabUpdatedHandler(tabId, changeInfo, tab) {
-  // TODO: remove this completely in favor of newPageHandler
-
-  // In practice events seem to always come in doubles, 'loading' and
-  // 'complete'. Here the intent is to eliminate the duplicates under the
-  // assumption that a 'complete' update always follows a 'loading' update.
-  if (changeInfo.status == 'complete')
-    return;
-
-  var junkDomain = lookupJunkDomain(tab.url);
-  var active = extensionActive();
-  var shouldDim = shouldDimPage();
-  updateIcon(active, !!junkDomain);
-
-  if (junkDomain) {
-    if (active) {
-      // Do not increment the counter if the extension is not active.
-      incrementJunkCounter(junkDomain);
-    }
-    registerHit(junkDomain, shouldDim, active);
-    if (active && shouldDim) {
-      chrome.tabs.getSelected(null, function(selectedTab) {
-        var tabIsActive = selectedTab.id == tabId;
-        if (tabIsActive)
-          lastDimmedTabId = tabId;
-        invokeDimmer(tabId, tabIsActive ? "create" : "create_suspended");
-      });
-    }
-  }
-}
-
 function tabSelectionChangedHandler(tabId, selectInfo) {
   if (lastDimmedTabId) {
     invokeDimmer(lastDimmedTabId, "suspend");
@@ -195,12 +164,22 @@ function windowFocusChangedHandler(windowId) {
   }
 }
 
+// TODO: Also look up current (or last selected) tab to see if the user
+// is branching from a slack site.  Add a config option?
+
 function newPageHandler(request, sender, sendResponse) {
-  // TODO: Also look up current (or last selected) tab to see if the user
-  // is branching from a slack site.  Add a config option?
+  // Every code path in this function should end with a call to sendResponse.
   var junkDomain = lookupJunkDomain(sender.tab.url);
   var active = extensionActive();
   var shouldDim = shouldDimPage();
+
+  if (junkDomain) {
+    if (active) {
+      // Do not increment the counter if the extension is not active.
+      incrementJunkCounter(junkDomain);
+    }
+    registerHit(junkDomain, shouldDim, active);
+  }
 
   if (!(junkDomain && active && shouldDim)) {
     sendResponse({should_dim: false});
@@ -274,7 +253,6 @@ function initUserID() {
 function initExtension() {
   initUserID();
   chrome.extension.onRequest.addListener(newPageHandler)
-  chrome.tabs.onUpdated.addListener(tabUpdatedHandler);
   chrome.tabs.onSelectionChanged.addListener(tabSelectionChangedHandler);
   chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
   initIcon();
