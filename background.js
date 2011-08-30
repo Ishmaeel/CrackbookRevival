@@ -111,7 +111,15 @@ function submitConfigChange() {
     });
 }
 
+// Returns true if the URL looks normal.
+// Used to avoid trying to dim special-purpose tabs.
+function isNormalUrl(s) {
+  return s && ((s.indexOf('http://') == 0) || (s.indexOf('https://') == 0));
+}
+
 /*
+ * TODO: update this transition chart
+ *
  * Dimmer state transitions for junk pages
  *
  * onTabUpdated:
@@ -137,9 +145,11 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
   }
 
   chrome.tabs.get(tabId, function(tab) {
-    var junkDomain = lookupJunkDomain(tab.url);
-    updateIcon(null, !!junkDomain);
-    if (junkDomain && shouldDimPage()) {
+    if (isNormalUrl(tab.url)) {
+      // If the page was opened from a junk page, the following check will not
+      // indicate that this page is junk. Only the icon is affected though.
+      var junkDomain = lookupJunkDomain(tab.url);
+      updateIcon(null, !!junkDomain);
       invokeDimmer(tabId, "resume");
       lastDimmedTabId = tabId;
     }
@@ -148,48 +158,64 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
 
 function windowFocusChangedHandler(windowId) {
   if (lastDimmedTabId) {
+    // TODO: What if that tab does not exist any more?
     invokeDimmer(lastDimmedTabId, "suspend");
     lastDimmedTabId = null;
   }
 
   if (windowId != chrome.windows.WINDOW_ID_NONE) {
     chrome.tabs.getSelected(windowId, function(tab) {
-      var junkDomain = lookupJunkDomain(tab.url);
-      updateIcon(null, !!junkDomain);
-      if (junkDomain && shouldDimPage()) {
-        invokeDimmer(tab.id, "resume");
-        lastDimmedTabId = tab.id;
+      if (isNormalUrl(tab.url)) {
+        var junkDomain = lookupJunkDomain(tab.url);
+        updateIcon(null, !!junkDomain);
+        if (junkDomain && shouldDimPage()) {
+          invokeDimmer(tab.id, "resume");
+          lastDimmedTabId = tab.id;
+        }
       }
     });
   }
 }
 
-// TODO: Also look up current (or last selected) tab to see if the user
-// is branching from a slack site.  Add a config option?
-
+// A wrapper function that also figures out the selected tab.
 function newPageHandler(request, sender, sendResponse) {
-  // Every code path in this function should end with a call to sendResponse.
-  var junkDomain = lookupJunkDomain(sender.tab.url);
+  chrome.tabs.getSelected(null, function(selectedTab) {
+    handleNewPage(sender.tab, selectedTab, sendResponse);
+  });
+}
+
+// Every code path in this function should call sendResponse.
+function handleNewPage(newTab, selectedTab, sendResponse) {
+  // Collect data.
+  var junkDomain = lookupJunkDomain(newTab.url);
   var active = extensionActive();
   var shouldDim = shouldDimPage();
-
-  if (junkDomain) {
-    if (active) {
-      // Do not increment the counter if the extension is not active.
-      incrementJunkCounter(junkDomain);
-    }
-    registerHit(junkDomain, shouldDim, active);
+  if (!junkDomain && getLocal('checkActiveTab')) {
+    junkDomain = lookupJunkDomain(selectedTab.url);
+    // TODO: This works for "open in background tab", but not for "open in
+    // foreground tab" or "open in new window". Cover these cases by checking
+    // the last seen tab, not just the active tab, and whether the switch was
+    // recent.
+    // TODO: This is easy to circumvent by immediately reloading a page. One
+    // solution is to add a temporary blacklist of pages / domains.
   }
 
+  // Send response.
   if (!(junkDomain && active && shouldDim)) {
     sendResponse({should_dim: false});
   } else {
-    chrome.tabs.getSelected(null, function(selectedTab) {
-      var tabIsActive = (selectedTab.id == sender.tab.id);
-      sendResponse({should_dim: true,
-                    action: tabIsActive ? "create" : "create_suspended",
-                    delay: getLocal('dimmerDelay')});
-    });
+    var tabIsActive = (newTab.id == newTab.id);
+    sendResponse({should_dim: true,
+                  action: tabIsActive ? "create" : "create_suspended",
+                  delay: getLocal('dimmerDelay')});
+  }
+
+  // Tracking and logging.
+  if (junkDomain) {
+    if (active) {
+      incrementJunkCounter(junkDomain);
+    }
+    registerHit(junkDomain, shouldDim, active);
   }
 }
 

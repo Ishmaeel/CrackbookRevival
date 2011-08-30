@@ -127,8 +127,8 @@ function resume(dimmer_el, delay) {
    'action' is one of the following:
      - "create": a dimmer is created on the page if it is not already there and a timer is started
      - "create_suspended": a dimmer is created on the page if it is not already there, no timer is started
-     - "suspend": the countdown is suspended if there is a dimmer on the page
-     - "resume": the countdown is resumed if there is a dimmer on the page
+     - "suspend": the countdown is suspended if there is a dimmer on the page, no-op otherwise
+     - "resume": the countdown is resumed if there is a dimmer on the page, no-op otherwise
    
    'delay' is delay time in seconds.
  */

@@ -42,6 +42,7 @@ var_defaults = {
   hitHistory: '{}',
   junkDomains: '[]',
   reporting: 'true',
+  checkActiveTab: 'true', // TODO: make configurable in UI
   user_id: '0',
   dimmerThreshold: '30',
   dimmerDelay: '20',
