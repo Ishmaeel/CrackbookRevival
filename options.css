@@ -43,7 +43,7 @@ input#dimmerThreshold, input#dimmerDelay {
 }
 
 input#startTime, input#endTime {
-  width: 3em;
+  width: 3.5em;
 }
 
 div#weekdays {
