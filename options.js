@@ -193,8 +193,10 @@ function saveSettings() {
   // Show status message.
   var msg = document.getElementById('saved_message');
   msg.style['display'] = 'inline';
-  // TODO: fade out
-  window.setTimeout(function() { msg.style.display = 'none'}, MSG_SAVED_DELAY);
+  window.setTimeout(function() {
+    msg.style.display = 'none';
+    window.close();
+  }, MSG_SAVED_DELAY);
 
 } // saveSettings
 
