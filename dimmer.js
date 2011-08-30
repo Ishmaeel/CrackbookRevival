@@ -52,6 +52,7 @@ function addDimmer(delay) {
   dimmer.style.paddingTop = window.innerHeight / 2 - 30 + "px";
   dimmer.style.fontSize = '36px';
   dimmer.style.fontFamily = 'Georgia';
+  dimmer.style.fontVariant = 'normal';
 
   var text1 = document.createElement("div");
   text1.innerHTML = DIMMER_TEXT1;
