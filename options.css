@@ -20,11 +20,11 @@ img {
 }
 
 .heading {
-  color: #1921b1;
+  color: #225;
 }
 
 .subheading {
-  color: #1921b1;
+  color: #225;
   font-weight: bold;
 }
 
@@ -58,10 +58,10 @@ div#weekdays {
 }
 
 button {
-  color: #333333;
-  background: #d9dbff;
+  color: #225;
+  background: #dee;
   font-family: Verdana;
-  border: 1px solid #007;
+  border: 1px solid #005;
   border-radius: 3px;
 }
 
