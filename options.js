@@ -18,7 +18,7 @@ function getTopDomains(historyItems) {
       // TODO: test me
       var components = url.split('/');
       if (components.length > 1 && components[0].indexOf('google.') != -1 && components[1] == 'reader') {
-	domain = components[0] + '/' + components[1];
+        domain = components[0] + '/' + components[1];
       }
 
       domains.push(domain);
