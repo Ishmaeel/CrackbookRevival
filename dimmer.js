@@ -41,7 +41,7 @@ function setTimer(dimmer, delay) {
   timerIdInput.value = timerId;
 }
 
-function addDimmer(delay) {
+function addDimmer(delay, appearance) {
   var dimmer = document.createElement('div');
   dimmer.id = DIMMER_DIV_ID;
 
@@ -85,7 +85,9 @@ function addDimmer(delay) {
 
   // Background.
   dimmer.style.background = "#001000";
-  dimmer.style.opacity = "0.95";
+  if (appearance && appearance.transparent) {
+    dimmer.style.opacity = "0.95";
+  }
   dimmer.style.zIndex = "99999";
 
   document.body.insertBefore(dimmer, document.body.firstChild);
@@ -95,16 +97,16 @@ function addDimmer(delay) {
 
 // Actions
 
-function create(dimmer_el, delay) {
+function create(dimmer_el, delay, appearance) {
   if (!dimmer_el) {
-    var dimmer = addDimmer(delay);
+    var dimmer = addDimmer(delay, appearance);
     setTimer(dimmer, delay);
   }
 }
 
-function create_suspended(dimmer_el, delay) {
+function create_suspended(dimmer_el, delay, appearance) {
   if (!dimmer_el) {
-    var dimmer = addDimmer(delay);
+    var dimmer = addDimmer(delay, appearance);
   }
 }
 
@@ -133,7 +135,7 @@ function resume(dimmer_el, delay) {
    
    'delay' is delay time in seconds.
  */
-function dim(action, delay) {
+function dim(action, delay, appearance) {
   // Dispatch by action name.
   var action_fns = {
     create: create,
@@ -145,12 +147,13 @@ function dim(action, delay) {
   var action_fn = action_fns[action];
 
   var dimmer_el = document.getElementById(DIMMER_DIV_ID);
-  action_fn(dimmer_el, delay);
+  action_fn(dimmer_el, delay, appearance);
 }
 
 /* Forwarder function for calls using executeScript() */
 function invoke_dimmer(args) {
-  dim(args.action, args.delay);
+  console.debug(args);
+  dim(args.action, args.delay, args.appearance);
 }
 
 // On initial load, check if this page is supposed to be dimmed.
