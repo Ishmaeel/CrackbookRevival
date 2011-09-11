@@ -46,6 +46,7 @@ var_defaults = {
   user_id: '0',
   dimmerThreshold: '30',
   dimmerDelay: '20',
+  dimmerTransparent: false,
   startTime: '0',
   endTime: '' + 24*60-1,
   weekdays: '"12345"',
