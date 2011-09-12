@@ -207,7 +207,8 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
     var tabIsActive = (newTab.id == newTab.id);
     sendResponse({should_dim: true,
                   action: tabIsActive ? "create" : "create_suspended",
-                  delay: getLocal('dimmerDelay')});
+                  delay: getLocal('dimmerDelay'),
+                  appearance: {transparent: getLocal('dimmerTransparent')}});
   }
 
   // Tracking and logging.
@@ -261,7 +262,8 @@ function invokeDimmer(tabId, action) {
   // - "create_suspended": a dimmer is created on the page if it is not already there, no timer is started
   // - "suspend": the countdown is suspended if there is a dimmer on the page
   // - "resume": the countdown is resumed if there is a dimmer on the page
-  var args = {action: action, delay: getLocal('dimmerDelay')};
+  var args = {action: action, delay: getLocal('dimmerDelay'),
+              appearance: {transparent: getLocal('dimmerTransparent')}};
   var primer_code = "invoke_dimmer(" + JSON.stringify(args) + ");";
   chrome.tabs.executeScript(tabId, { code: primer_code });
 }

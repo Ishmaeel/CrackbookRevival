@@ -114,6 +114,7 @@ function showSettings() {
   // Threshold & delay
   document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay');
+  document.getElementById("dimmerTransparent").value = getLocal('dimmerTransparent');
 
   // Junk domains.
   clearDomainsFromPage();
@@ -163,6 +164,8 @@ function saveSettings() {
   var dimmerDelay = parseInt(document.getElementById("dimmerDelay").value);
   if (!dimmerDelay || dimmerDelay <= 0)
     dimmerDelay = getLocal('dimmerDelay');
+    
+  var dimmerTransparent = document.getElementById("dimmerTransparent").checked;
 
   // TODO: better validation
   var startTime = parseTime(document.getElementById("startTime").value);
@@ -179,6 +182,7 @@ function saveSettings() {
   setLocal('reporting', reporting);
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('dimmerDelay', dimmerDelay);
+  setLocal('dimmerTransparent', dimmerTransparent);
   setLocal('junkDomains', junkDomains);
   setLocal('startTime', startTime);
   setLocal('endTime', endTime);
