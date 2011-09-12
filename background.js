@@ -47,7 +47,7 @@ function updateIcon(active, inJunk) {
   if (!active)
     newIcon += '-inactive';
   newIcon += '-19px.png';
-    
+
   if (iconState != newIcon) {
     iconState = newIcon;
     drawIcon(newIcon);
@@ -118,25 +118,63 @@ function isNormalUrl(s) {
 }
 
 /*
- * TODO: update this transition chart
- *
  * Dimmer state transitions for junk pages
  *
- * onTabUpdated:
+ * handleNewPage:
  *  - tab active --> enable dimmer
  *  - tab inactive --> enable dimmer, suspend timer
  *
- * onTabSelectionChanged:
- *  - previous tab is junk -> suspend timer on previous tab
- *  - new tab is junk -> restart timer on new tab
+ * tabSelectionChangedHandler:
+ *  - suspend timer on previous tab
+ *  - restart timer on new tab
  *
- * onWindowFocusChanged:
+ * windowFocusChangedHandler:
  *  - suspend timer on previous tab
  *  - restart timer on active tab
  *
  */
 
 var lastDimmedTabId = null;
+
+function handleNewPage(newTab, selectedTab, sendResponse) {
+  // Every code path in this function should call sendResponse.
+  // Collect data.
+  var junkDomain = lookupJunkDomain(newTab.url);
+  var active = extensionActive();
+  var shouldDim = shouldDimPage();
+  if (!junkDomain && getLocal('checkActiveTab')) {
+    junkDomain = lookupJunkDomain(selectedTab.url);
+    // TODO: This works for "open in background tab", but not for "open in
+    // foreground tab" or "open in new window". Cover these cases by checking
+    // the last seen tab, not just the active tab, and whether the switch was
+    // recent.
+    // TODO: This is easy to circumvent by immediately reloading a page. One
+    // solution is to add a temporary blacklist of pages / domains.
+  }
+
+  // Send response.
+  if (!(junkDomain && active && shouldDim)) {
+    sendResponse({should_dim: false});
+  } else {
+    var tabIsActive = (newTab.id == selectedTab.id);
+    sendResponse({should_dim: true,
+                  action: tabIsActive ? "create" : "create_suspended",
+                  delay: getLocal('dimmerDelay'),
+                  appearance: {transparent: getLocal('dimmerTransparent')}});
+    if (tabIsActive) {
+      lastDimmedTabId = newTab.id;
+    }
+  }
+
+  // Tracking and logging.
+  updateIcon(null, !!junkDomain);
+  if (junkDomain) {
+    if (active) {
+      incrementJunkCounter(junkDomain);
+    }
+    registerHit(junkDomain, shouldDim, active);
+  }
+}
 
 function tabSelectionChangedHandler(tabId, selectInfo) {
   if (lastDimmedTabId) {
@@ -182,42 +220,6 @@ function newPageHandler(request, sender, sendResponse) {
   chrome.tabs.getSelected(null, function(selectedTab) {
     handleNewPage(sender.tab, selectedTab, sendResponse);
   });
-}
-
-// Every code path in this function should call sendResponse.
-function handleNewPage(newTab, selectedTab, sendResponse) {
-  // Collect data.
-  var junkDomain = lookupJunkDomain(newTab.url);
-  var active = extensionActive();
-  var shouldDim = shouldDimPage();
-  if (!junkDomain && getLocal('checkActiveTab')) {
-    junkDomain = lookupJunkDomain(selectedTab.url);
-    // TODO: This works for "open in background tab", but not for "open in
-    // foreground tab" or "open in new window". Cover these cases by checking
-    // the last seen tab, not just the active tab, and whether the switch was
-    // recent.
-    // TODO: This is easy to circumvent by immediately reloading a page. One
-    // solution is to add a temporary blacklist of pages / domains.
-  }
-
-  // Send response.
-  if (!(junkDomain && active && shouldDim)) {
-    sendResponse({should_dim: false});
-  } else {
-    var tabIsActive = (newTab.id == newTab.id);
-    sendResponse({should_dim: true,
-                  action: tabIsActive ? "create" : "create_suspended",
-                  delay: getLocal('dimmerDelay'),
-                  appearance: {transparent: getLocal('dimmerTransparent')}});
-  }
-
-  // Tracking and logging.
-  if (junkDomain) {
-    if (active) {
-      incrementJunkCounter(junkDomain);
-    }
-    registerHit(junkDomain, shouldDim, active);
-  }
 }
 
 function showNotification() {
