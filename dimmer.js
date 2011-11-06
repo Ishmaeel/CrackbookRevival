@@ -152,7 +152,6 @@ function dim(action, delay, appearance) {
 
 /* Forwarder function for calls using executeScript() */
 function invoke_dimmer(args) {
-  console.debug(args);
   dim(args.action, args.delay, args.appearance);
 }
 
