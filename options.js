@@ -114,7 +114,7 @@ function bindControlHandlers() {
 function showSettings() {
   // Threshold & delay
   document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
-  document.getElementById("dimmerDelay").value = getLocal('dimmerDelay');
+  document.getElementById("dimmerDelay").value = getLocal('dimmerDelay').toFixed(2);
   document.getElementById("dimmerTransparent").value = getLocal('dimmerTransparent');
 
   // Junk domains.
@@ -163,7 +163,7 @@ function saveSettings() {
     dimmerThreshold = getLocal('dimmerThreshold');
   }
 
-  var dimmerDelay = parseInt(document.getElementById("dimmerDelay").value);
+  var dimmerDelay = parseFloat(document.getElementById("dimmerDelay").value);
   if (isNaN(dimmerDelay) || dimmerDelay < 0) {
     dimmerDelay = getLocal('dimmerDelay');
   }

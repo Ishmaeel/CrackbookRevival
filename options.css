@@ -38,8 +38,12 @@ ul#topVisited li input.domain {
   width: 15em;
 }
 
-input#dimmerThreshold, input#dimmerDelay {
+input#dimmerThreshold {
   width: 2em;
+}
+
+input#dimmerDelay {
+  width: 4em;
 }
 
 input#startTime, input#endTime {

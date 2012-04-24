@@ -171,9 +171,15 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
   if (junkDomain) {
     if (active) {
       incrementJunkCounter(junkDomain);
+      increaseDimmerDelay();
     }
     registerHit(junkDomain, shouldDim, active);
   }
+}
+
+function increaseDimmerDelay() {
+  var newDelay = getLocal('dimmerDelay') * (1 + getLocal('dimmerDelayGrowth'));
+  setLocal('dimmerDelay', newDelay);
 }
 
 function tabSelectionChangedHandler(tabId, selectInfo) {
