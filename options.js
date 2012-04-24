@@ -76,8 +76,9 @@ function putDomainsOnPage(topUrls) {
 
   // Remove placeholder, if any.
   var placeholder = document.getElementById("placeholder");
-  if (placeholder)
+  if (placeholder) {
     document.getElementById("topVisited").removeChild(placeholder);
+  }
 } // putDomainsOnPage
 
 
