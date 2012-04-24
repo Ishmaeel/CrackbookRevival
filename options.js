@@ -159,13 +159,15 @@ function saveSettings() {
 
   // Threshold & delay
   var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
-  if (!dimmerThreshold || dimmerThreshold <= 0)
+  if (isNaN(dimmerThreshold) || dimmerThreshold < 0) {
     dimmerThreshold = getLocal('dimmerThreshold');
+  }
 
   var dimmerDelay = parseInt(document.getElementById("dimmerDelay").value);
-  if (!dimmerDelay || dimmerDelay <= 0)
+  if (isNaN(dimmerDelay) || dimmerDelay < 0) {
     dimmerDelay = getLocal('dimmerDelay');
-    
+  }
+
   var dimmerTransparent = document.getElementById("dimmerTransparent").checked;
 
   // TODO: better validation
