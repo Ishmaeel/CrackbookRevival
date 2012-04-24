@@ -44,8 +44,8 @@ var_defaults = {
   reporting: 'true',
   checkActiveTab: 'true', // TODO: make configurable in UI
   user_id: '0',
-  dimmerThreshold: '30',
-  dimmerDelay: '20',
+  dimmerThreshold: '0',
+  dimmerDelay: '3',
   dimmerTransparent: false,
   startTime: '0',
   endTime: '' + 24*60-1,
