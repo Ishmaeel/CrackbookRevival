@@ -3,15 +3,13 @@ Crackbook
 
 See http://xkcd.com/862/
 
-This is a Chrome extension for discouraging the compulsive use of
-attention-sucking websites.  The main idea of the extension is that delaying
+Crackbook is a Chrome extension for discouraging use of attention-sucking
+websites such as Facebook or Reddit. The idea behind Crackbook is that delaying
 access to the website is more effective than straight blocking because you
 are less likely to just disable the block after a while.
 
-After you browse websites from a predefined list for a while, the extension
-will remind you a few times to stop wasting time, and afterwards it will
-start blocking each junk page for half a minute.  The timer is reset if you
-switch away from the tab, so you actually have to wait it out.
+The extension will delay every hit to blacklisted site. The delay is just
+a few seconds initially, but it increases slightly on every hit.
 
 Unless disabled in settings, the extension will collect and anonymously
 submit usage data. Aggregate statistics are available at
