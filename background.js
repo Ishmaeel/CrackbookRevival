@@ -105,6 +105,7 @@ function submitConfigChange() {
         domains: JSON.stringify(getLocal('junkDomains')),
         dimmer_threshold: getLocal('dimmerThreshold'),
         dimmer_delay: getLocal('dimmerDelay'),
+        dimmer_delay_growth: getLocal('dimmerDelayGrowthPercent'),
         start_time: getLocal('startTime'),
         end_time: getLocal('endTime'),
         weekdays: getLocal('weekdays')
