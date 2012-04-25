@@ -115,6 +115,7 @@ function showSettings() {
   // Threshold & delay
   document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay').toFixed(2);
+  document.getElementById("dimmerDelayGrowthPercent").value = getLocal('dimmerDelayGrowthPercent').toFixed(1);
   document.getElementById("dimmerTransparent").value = getLocal('dimmerTransparent');
 
   // Junk domains.
@@ -168,6 +169,11 @@ function saveSettings() {
     dimmerDelay = getLocal('dimmerDelay');
   }
 
+  var dimmerDelayGrowthPercent = parseFloat(document.getElementById("dimmerDelayGrowthPercent").value);
+  if (isNaN(dimmerDelayGrowthPercent) || dimmerDelayGrowthPercent < 0) {
+    dimmerDelayGrowthPercent = getLocal('dimmerDelayGrowthPercent');
+  }
+
   var dimmerTransparent = document.getElementById("dimmerTransparent").checked;
 
   // TODO: better validation
@@ -185,6 +191,7 @@ function saveSettings() {
   setLocal('reporting', reporting);
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('dimmerDelay', dimmerDelay);
+  setLocal('dimmerDelayGrowthPercent', dimmerDelayGrowthPercent);
   setLocal('dimmerTransparent', dimmerTransparent);
   setLocal('junkDomains', junkDomains);
   setLocal('startTime', startTime);

@@ -29,7 +29,7 @@ function setTimer(dimmer, delay) {
   }
 
   // Set timer.
-  var timerId = setTimeout(timeoutFn, delay * 1000);
+  var timerId = setTimeout(timeoutFn, Math.round(delay * 1000));
 
   // Store timer ID.
   if (!timerIdInput) {
@@ -60,7 +60,7 @@ function addDimmer(delay, appearance) {
   dimmer.appendChild(text1);
 
   var text2 = document.createElement("div");
-  text2.innerHTML = DIMMER_TEXT2.replace('%d', delay);
+  text2.innerHTML = DIMMER_TEXT2.replace('%d', Math.round(delay));
   text2.style.textAlign = "center";
   text2.style.paddingTop = "50px";
   text2.style.fontSize = "20px";

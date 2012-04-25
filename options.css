@@ -40,10 +40,17 @@ ul#topVisited li input.domain {
 
 input#dimmerThreshold {
   width: 2em;
+  text-align: right;
 }
 
 input#dimmerDelay {
   width: 4em;
+  text-align: right;
+}
+
+input#dimmerDelayGrowthPercent {
+  width: 3em;
+  text-align: right;
 }
 
 input#startTime, input#endTime {

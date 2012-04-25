@@ -178,7 +178,7 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
 }
 
 function increaseDimmerDelay() {
-  var newDelay = getLocal('dimmerDelay') * (1 + getLocal('dimmerDelayGrowthPercent') * 100.0);
+  var newDelay = getLocal('dimmerDelay') * (1 + getLocal('dimmerDelayGrowthPercent') / 100.0);
   setLocal('dimmerDelay', newDelay);
 }
 
