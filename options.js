@@ -53,6 +53,10 @@ function addUrlField(ulId, value) {
   ul.insertBefore(li, button_li);
 }
 
+function addJunkDomain() {
+  addUrlField('siteBlacklist', '');
+}
+
 function clearDomainsFromPage(ulId) {
   var ul = document.getElementById(ulId);
   for (var i = ul.children.length-1; i >= 0; i--) {
@@ -80,6 +84,24 @@ function loadSavedUrls() {
   putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", getLocal("junkDomains"));
 }
 
+function collectInputs(ulId) {
+  var ul = document.getElementById("siteBlacklist");
+  var junkDomains = [];
+  for (var i = 0; i < ul.childNodes.length; i++) {
+    if (ul.childNodes[i].nodeName == "LI") {
+      var li = ul.childNodes[i];
+      var checkbox = li.childNodes[0];
+      var input = li.childNodes[1];
+      if (checkbox.checked && input.value.indexOf('.') != -1) {
+        junkDomains.push(input.value.trim());
+      }
+    }
+  }
+  return junkDomains;
+}
+
+
+// Collect the most frequently visited domains and prepopulate the blacklist.
 function loadTopUrls() {
   var weekAgo = new Date().getTime() - 1000*3600*24*7;
   chrome.history.search({ text: "", startTime: weekAgo,
@@ -96,7 +118,7 @@ function loadTopUrls() {
 
 
 function bindControlHandlers() {
-  document.getElementById('add_domain_button').onclick = addNewDomain;
+  document.getElementById('add_domain_button').onclick = addJunkDomain;
   document.getElementById('save_button').onclick = saveSettings;
   document.getElementById('crackbookLink').onclick = function() {
     chrome.tabs.create({url: 'http://crackbook.info'});
@@ -137,19 +159,10 @@ function showSettings() {
 function saveSettings() {
   /* Save settings from submitted form. */
 
-  // Junk domains
-  var ul = document.getElementById("siteBlacklist");
-  var junkDomains = [];
-  for (var i = 0; i < ul.childNodes.length; i++) {
-    if (ul.childNodes[i].nodeName == "LI") {
-      var li = ul.childNodes[i];
-      var checkbox = li.childNodes[0];
-      var input = li.childNodes[1];
-      if (checkbox.checked && input.value.indexOf('.') != -1) {
-        var url = trimWWW(trimProtocol(input.value.trim()));
-        junkDomains.push(url);
-      }
-    }
+  var junkDomains = collectInputs("siteBlacklist");
+
+  for (var i = 0; i < junkDomains.length; i++) {
+    junkDomains[i] = trimWWW(trimProtocol(junkDomains[i]));
   }
 
   // Threshold & delay
@@ -208,10 +221,6 @@ function saveSettings() {
 
 } // saveSettings
 
-
-function addNewDomain() {
-  addUrlField('');
-}
 
 
 window.onload = function() {
