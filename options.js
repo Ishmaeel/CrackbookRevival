@@ -143,7 +143,7 @@ function showSettings() {
   }
 
   // Value sites
-  document.getElementById("redirectProbability").value = getLocal('redirectProbability');
+  document.getElementById("redirectProbability").value = getLocal('redirectProbability').toFixed(1);
   clearDomainsFromPage('valueSiteList');
   putDomainsOnPage("valueSiteList", "valueSitePlaceholder", getLocal("valueSites"));
 
