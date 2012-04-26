@@ -110,3 +110,7 @@ function parseTime(s) {
     r = 0;
   return r;
 }
+
+function pickRandomItem(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}

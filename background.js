@@ -156,6 +156,12 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
   // Send response.
   if (!(junkDomain && active && shouldDim)) {
     sendResponse({});  // do nothing
+  } else if (Math.random() < getLocal('redirectProbability') / 100) {
+    var url = pickRandomItem(getLocal('valueSites'));
+    if (url.indexOf('://') == -1) {
+      url = 'http://' + url;
+    }
+    sendResponse({redirectUrl: url});
   } else {
     var tabIsActive = (newTab.id == selectedTab.id);
     sendResponse({dimmerAction: tabIsActive ? "create" : "create_suspended",
