@@ -17,7 +17,7 @@
       <label>Delay junk sites for <input id="dimmerDelay" name="dimmerDelay" type="text" /> seconds</label>
     </div>
     <div>
-      <label>Increase the delay by <input id="dimmerDelayGrowthPercent" name="dimmerDelayGrowthPercent" type="text" />% after every block</label>
+      <label>Increase the delay by <input id="dimmerDelayGrowthPercent" name="dimmerDelayGrowthPercent" type="text" class="percentInput" />% after every block</label>
     </div>
     <div style="padding-top: 0.3em">
       <label>
@@ -32,9 +32,22 @@
     Domains with paths are allowed, e.g. "google.com/reader".
   </div>
 
-  <ul id="siteBlacklist">
+  <ul id="siteBlacklist" class="domainList">
     <li id="blacklistPlaceholder">Please wait...</li>
-    <li><button id="add_domain_button">Add domain</button></li>
+    <li><button id="add_junk_domain_button">Add domain</button></li>
+  </ul>
+
+  <div class="subheading">Value site list</div>
+
+  <div>
+      With
+      <input id="redirectProbability" name="redirectProbability" class="percentInput" type="text" />%
+      probability, redirect to one of the following sites instead of delaying:
+  </div>
+
+  <ul id="valueSiteList" class="domainList">
+    <li id="valueSitePlaceholder">Please wait...</li>
+    <li><button id="add_value_site_button">Add domain</button></li>
   </ul>
 
   <div class="subheading">Schedule</div>

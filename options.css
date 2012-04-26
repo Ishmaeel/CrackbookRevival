@@ -28,14 +28,19 @@ img {
   font-weight: bold;
 }
 
-ul#siteBlacklist {
+.domainList {
   list-style: none;
   padding-left: 1em;
   margin-top: 0.5em;
 }
 
-ul#siteBlacklist li input.domain {
+.domainList li input.domain {
   width: 15em;
+}
+
+.percentInput {
+  width: 3em;
+  text-align: right;
 }
 
 input#dimmerThreshold {
@@ -45,11 +50,6 @@ input#dimmerThreshold {
 
 input#dimmerDelay {
   width: 4em;
-  text-align: right;
-}
-
-input#dimmerDelayGrowthPercent {
-  width: 3em;
   text-align: right;
 }
 

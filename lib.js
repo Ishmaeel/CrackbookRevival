@@ -41,12 +41,14 @@ function todayAsString() {
 var_defaults = {
   hitHistory: '{}',
   junkDomains: '[]',
+  valueSites: '["ocw.mit.edu"]',
   reporting: 'true',
   checkActiveTab: 'true', // TODO: make configurable in UI
   user_id: '0',
   dimmerThreshold: '0',
   dimmerDelay: '3.0',
-  dimmerDelayGrowthPercent: '0.5',  // TODO: make configurable in UI
+  dimmerDelayGrowthPercent: '0.5',
+  redirectProbability: '2',
   dimmerTransparent: false,
   startTime: '0',
   endTime: '' + 24*60-1,

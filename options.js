@@ -53,10 +53,6 @@ function addUrlField(ulId, value) {
   ul.insertBefore(li, button_li);
 }
 
-function addJunkDomain() {
-  addUrlField('siteBlacklist', '');
-}
-
 function clearDomainsFromPage(ulId) {
   var ul = document.getElementById(ulId);
   for (var i = ul.children.length-1; i >= 0; i--) {
@@ -80,24 +76,20 @@ function putDomainsOnPage(ulId, placeholderId, domains) {
 } // putDomainsOnPage
 
 
-function loadSavedUrls() {
-  putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", getLocal("junkDomains"));
-}
-
 function collectInputs(ulId) {
-  var ul = document.getElementById("siteBlacklist");
-  var junkDomains = [];
+  var ul = document.getElementById(ulId);
+  var domains = [];
   for (var i = 0; i < ul.childNodes.length; i++) {
     if (ul.childNodes[i].nodeName == "LI") {
       var li = ul.childNodes[i];
       var checkbox = li.childNodes[0];
       var input = li.childNodes[1];
       if (checkbox.checked && input.value.indexOf('.') != -1) {
-        junkDomains.push(input.value.trim());
+        domains.push(input.value.trim());
       }
     }
   }
-  return junkDomains;
+  return domains;
 }
 
 
@@ -117,8 +109,17 @@ function loadTopUrls() {
 } // loadTopUrls()
 
 
+function addJunkDomain() {
+  addUrlField('siteBlacklist', '');
+}
+
+function addValueSite() {
+  addUrlField('valueSiteList', '');
+}
+
 function bindControlHandlers() {
-  document.getElementById('add_domain_button').onclick = addJunkDomain;
+  document.getElementById('add_junk_domain_button').onclick = addJunkDomain;
+  document.getElementById('add_value_site_button').onclick = addValueSite;
   document.getElementById('save_button').onclick = saveSettings;
   document.getElementById('crackbookLink').onclick = function() {
     chrome.tabs.create({url: 'http://crackbook.info'});
@@ -135,11 +136,16 @@ function showSettings() {
 
   // Junk domains.
   clearDomainsFromPage('siteBlacklist');
-  if (getLocal('junkDomains').length == 0) {
-    loadTopUrls();
+  if (getLocal('junkDomains').length > 0) {
+    putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", getLocal("junkDomains"));
   } else {
-    loadSavedUrls();
+    loadTopUrls();
   }
+
+  // Value sites
+  document.getElementById("redirectProbability").value = getLocal('redirectProbability');
+  clearDomainsFromPage('valueSiteList');
+  putDomainsOnPage("valueSiteList", "valueSitePlaceholder", getLocal("valueSites"));
 
   // Schedule
   document.getElementById("startTime").value = renderTime(getLocal('startTime'));
@@ -160,12 +166,12 @@ function saveSettings() {
   /* Save settings from submitted form. */
 
   var junkDomains = collectInputs("siteBlacklist");
-
   for (var i = 0; i < junkDomains.length; i++) {
     junkDomains[i] = trimWWW(trimProtocol(junkDomains[i]));
   }
 
-  // Threshold & delay
+  var valueSites = collectInputs("valueSiteList");
+
   var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
   if (isNaN(dimmerThreshold) || dimmerThreshold < 0) {
     dimmerThreshold = getLocal('dimmerThreshold');
@@ -179,6 +185,11 @@ function saveSettings() {
   var dimmerDelayGrowthPercent = parseFloat(document.getElementById("dimmerDelayGrowthPercent").value);
   if (isNaN(dimmerDelayGrowthPercent) || dimmerDelayGrowthPercent < 0) {
     dimmerDelayGrowthPercent = getLocal('dimmerDelayGrowthPercent');
+  }
+
+  var redirectProbability = parseFloat(document.getElementById("redirectProbability").value);
+  if (isNaN(redirectProbability) || redirectProbability < 0) {
+    redirectProbability = getLocal('redirectProbability');
   }
 
   var dimmerTransparent = document.getElementById("dimmerTransparent").checked;
@@ -201,6 +212,8 @@ function saveSettings() {
   setLocal('dimmerDelayGrowthPercent', dimmerDelayGrowthPercent);
   setLocal('dimmerTransparent', dimmerTransparent);
   setLocal('junkDomains', junkDomains);
+  setLocal('redirectProbability', redirectProbability);
+  setLocal('valueSites', valueSites);
   setLocal('startTime', startTime);
   setLocal('endTime', endTime);
   setLocal('weekdays', weekdays);
