@@ -28,13 +28,13 @@ img {
   font-weight: bold;
 }
 
-ul#topVisited {
+ul#siteBlacklist {
   list-style: none;
   padding-left: 1em;
   margin-top: 0.5em;
 }
 
-ul#topVisited li input.domain {
+ul#siteBlacklist li input.domain {
   width: 15em;
 }
 

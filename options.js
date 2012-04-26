@@ -33,12 +33,12 @@ function getTopDomains(historyItems) {
 } // getTopDomains
 
 function clearUrls() {
-  var ul = document.getElementById("topVisited");
+  var ul = document.getElementById("siteBlacklist");
   while (ul.childNodes.length > 0)
     ul.removeChild(ul.firstChild);
 }
 
-function addUrlField(value) {
+function addUrlField(ulId, value) {
   var checkbox = document.createElement('input');
   checkbox.setAttribute('type', 'checkbox');
   checkbox.setAttribute('checked', 'checked');
@@ -53,14 +53,14 @@ function addUrlField(value) {
   li.appendChild(checkbox);
   li.appendChild(input);
 
-  var ul = document.getElementById("topVisited");
-  var button_li = document.getElementById("add_domain_button").parentNode;
+  var ul = document.getElementById(ulId);
+  var button_li = ul.children[ul.children.length - 1];
   // Insert field before the "add domain" button.
   ul.insertBefore(li, button_li);
 }
 
-function clearDomainsFromPage() {
-  var ul = document.getElementById("topVisited");
+function clearDomainsFromPage(ulId) {
+  var ul = document.getElementById(ulId);
   for (var i = ul.children.length-1; i >= 0; i--) {
     var li = ul.children[i];
     if (li.getAttribute('class') == 'domain')
@@ -68,24 +68,23 @@ function clearDomainsFromPage() {
   }
 }
 
-function putDomainsOnPage(topUrls) {
+function putDomainsOnPage(ulId, placeholderId, domains) {
   // Put on page.
-  for (var i = 0; i < topUrls.length; i++) {
-    addUrlField(topUrls[i]);
+  for (var i = 0; i < domains.length; i++) {
+    addUrlField(ulId, domains[i]);
   }
 
   // Remove placeholder, if any.
-  var placeholder = document.getElementById("placeholder");
+  var placeholder = document.getElementById(placeholderId);
   if (placeholder) {
-    document.getElementById("topVisited").removeChild(placeholder);
+    document.getElementById(ulId).removeChild(placeholder);
   }
 } // putDomainsOnPage
 
 
 function loadSavedUrls() {
-  putDomainsOnPage(getLocal('junkDomains'));
+  putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", getLocal("junkDomains"));
 }
-
 
 function loadTopUrls() {
   var weekAgo = new Date().getTime() - 1000*3600*24*7;
@@ -96,7 +95,7 @@ function loadTopUrls() {
       setLocal('junkDomains', topUrls);
       // Not calling submitConfigChange here to give the chance for the
       // user to clean the domain list.
-      putDomainsOnPage(topUrls);
+      putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", topUrls);
     }
   );
 } // loadTopUrls()
@@ -119,11 +118,12 @@ function showSettings() {
   document.getElementById("dimmerTransparent").value = getLocal('dimmerTransparent');
 
   // Junk domains.
-  clearDomainsFromPage();
-  if (getLocal('junkDomains').length == 0)
+  clearDomainsFromPage('siteBlacklist');
+  if (getLocal('junkDomains').length == 0) {
     loadTopUrls();
-  else
+  } else {
     loadSavedUrls();
+  }
 
   // Schedule
   document.getElementById("startTime").value = renderTime(getLocal('startTime'));
@@ -144,7 +144,7 @@ function saveSettings() {
   /* Save settings from submitted form. */
 
   // Junk domains
-  var ul = document.getElementById("topVisited");
+  var ul = document.getElementById("siteBlacklist");
   junkDomains = [];
   for (var i = 0; i < ul.childNodes.length; i++) {
     if (ul.childNodes[i].nodeName == "LI") {
