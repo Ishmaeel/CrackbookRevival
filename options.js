@@ -32,12 +32,6 @@ function getTopDomains(historyItems) {
   return topUrls;
 } // getTopDomains
 
-function clearUrls() {
-  var ul = document.getElementById("siteBlacklist");
-  while (ul.childNodes.length > 0)
-    ul.removeChild(ul.firstChild);
-}
-
 function addUrlField(ulId, value) {
   var checkbox = document.createElement('input');
   checkbox.setAttribute('type', 'checkbox');
