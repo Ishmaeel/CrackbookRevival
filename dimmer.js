@@ -152,12 +152,12 @@ function dim(action, delay, appearance) {
 
 /* Forwarder function for calls using executeScript() */
 function invoke_dimmer(args) {
-  dim(args.action, args.delay, args.appearance);
+  dim(args.dimmerAction, args.delay, args.appearance);
 }
 
 // On initial load, check if this page is supposed to be dimmed.
 chrome.extension.sendRequest({}, function(response) {
-  if (response.should_dim) {
+  if (response.dimmerAction) {
     function delayedDimmerFn() {
       if (document.body != null) {
         // The body of the document has started loading, the dimmer can be shown.

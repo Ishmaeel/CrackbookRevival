@@ -155,11 +155,10 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
 
   // Send response.
   if (!(junkDomain && active && shouldDim)) {
-    sendResponse({should_dim: false});
+    sendResponse({});  // do nothing
   } else {
     var tabIsActive = (newTab.id == selectedTab.id);
-    sendResponse({should_dim: true,
-                  action: tabIsActive ? "create" : "create_suspended",
+    sendResponse({dimmerAction: tabIsActive ? "create" : "create_suspended",
                   delay: getLocal('dimmerDelay'),
                   appearance: {transparent: getLocal('dimmerTransparent')}});
     if (tabIsActive) {
@@ -263,7 +262,7 @@ function incrementJunkCounter(domain) {
       showNotification();
 }
 
-function invokeDimmer(tabId, action) {
+function invokeDimmer(tabId, dimmerAction) {
   // Dim the page and start (or restart) the timer.
   //
   // Actions:
@@ -271,9 +270,10 @@ function invokeDimmer(tabId, action) {
   // - "create_suspended": a dimmer is created on the page if it is not already there, no timer is started
   // - "suspend": the countdown is suspended if there is a dimmer on the page
   // - "resume": the countdown is resumed if there is a dimmer on the page
-  var args = {action: action, delay: getLocal('dimmerDelay'),
-              appearance: {transparent: getLocal('dimmerTransparent')}};
-  var primer_code = "invoke_dimmer(" + JSON.stringify(args) + ");";
+  var args = { dimmerAction: dimmerAction,
+               delay: getLocal('dimmerDelay'),
+               appearance: { transparent: getLocal('dimmerTransparent') } };
+  var primer_code = "if (window.invoke_dimmer) { invoke_dimmer(" + JSON.stringify(args) + "); }";
   chrome.tabs.executeScript(tabId, { code: primer_code });
 }
 
