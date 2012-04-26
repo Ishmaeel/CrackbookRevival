@@ -139,7 +139,7 @@ function saveSettings() {
 
   // Junk domains
   var ul = document.getElementById("siteBlacklist");
-  junkDomains = [];
+  var junkDomains = [];
   for (var i = 0; i < ul.childNodes.length; i++) {
     if (ul.childNodes[i].nodeName == "LI") {
       var li = ul.childNodes[i];
