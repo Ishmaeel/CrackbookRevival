@@ -1,8 +1,7 @@
 var BODY_POLL_MS = 30;
 var DIMMER_DIV_ID = '_crackbook_dimmer_';
-var DIMMER_TEXT1 = "Enough junk for today, don't you think?";
-var DIMMER_TEXT2 = "Wait %d seconds for the content to appear.";
-var DIMMER_TEXT3 = "The timer restarts if you switch away from this tab.";
+var DIMMER_TEXT = "Wait %d seconds for the content to appear.";
+var DIMMER_SWITCH_TEXT = "The timer restarts if you switch away from this tab.";
 
 var timeoutFn = function() {
   var dimmer = document.getElementById(DIMMER_DIV_ID);
@@ -54,27 +53,22 @@ function addDimmer(delay, appearance) {
   dimmer.style.fontFamily = 'Georgia';
   dimmer.style.fontVariant = 'normal';
 
-  var text1 = document.createElement("div");
-  text1.innerHTML = DIMMER_TEXT1;
-  text1.style.textAlign = "center";
-  dimmer.appendChild(text1);
+  var text = document.createElement("div");
+  text.innerHTML = DIMMER_TEXT.replace('%d', Math.round(delay));
+  text.style.textAlign = "center";
+  text.style.paddingTop = "50px";
+  text.style.fontSize = "20px";
+  dimmer.appendChild(text);
 
-  var text2 = document.createElement("div");
-  text2.innerHTML = DIMMER_TEXT2.replace('%d', Math.round(delay));
-  text2.style.textAlign = "center";
-  text2.style.paddingTop = "50px";
-  text2.style.fontSize = "20px";
-  dimmer.appendChild(text2);
-
-  var text3 = document.createElement("div");
-  text3.innerHTML = DIMMER_TEXT3;
-  text3.id = DIMMER_DIV_ID + 'stayput';
-  text3.style.display = "none";
-  text3.style.textAlign = "center";
-  text3.style.paddingTop = "10px";
-  text3.style.fontSize = "14px";
-  text3.style.color = "#aaaaaa";
-  dimmer.appendChild(text3);
+  var switch_text = document.createElement("div");
+  switch_text.innerHTML = DIMMER_SWITCH_TEXT;
+  switch_text.id = DIMMER_DIV_ID + 'stayput';
+  switch_text.style.display = "none";
+  switch_text.style.textAlign = "center";
+  switch_text.style.paddingTop = "10px";
+  switch_text.style.fontSize = "14px";
+  switch_text.style.color = "#aaaaaa";
+  dimmer.appendChild(switch_text);
 
   // Positioning.
   dimmer.style.position = "fixed";
@@ -120,8 +114,8 @@ function resume(dimmer_el, delay) {
   if (dimmer_el && dimmer_el.style.display != "none") {
     setTimer(dimmer_el, delay);
 
-    var text3 = document.getElementById(DIMMER_DIV_ID + 'stayput');
-    text3.style.display = "block";
+    var switch_text = document.getElementById(DIMMER_DIV_ID + 'stayput');
+    switch_text.style.display = "block";
   }
 }
 
