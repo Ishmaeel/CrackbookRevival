@@ -22,6 +22,7 @@ function getTopDomains(historyItems) {
       }
 
       domains.push(domain);
+      // TODO(gintas): +=
       typedCounts[domain] = h.typedCount;
     }
   }

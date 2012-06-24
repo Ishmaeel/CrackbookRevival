@@ -24,4 +24,9 @@ window.onload = function() {
       document.getElementById('mark_junk_button').onclick = markAsJunk;
     }
   });
+
+  document.getElementById('stats_link').onclick = function() {
+    chrome.tabs.create({ url: chrome.extension.getURL('stats.html') });
+    return false;
+  };
 }
