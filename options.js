@@ -195,6 +195,7 @@ function saveSettings() {
   }
 
   var dimmerTransparent = document.getElementById("dimmerTransparent").checked;
+  var checkActiveTab = document.getElementById("checkActiveTab").checked;
 
   // TODO: better validation
   var startTime = parseTime(document.getElementById("startTime").value);
@@ -213,6 +214,7 @@ function saveSettings() {
   setLocal('dimmerDelay', dimmerDelay);
   setLocal('dimmerDelayGrowthPercent', dimmerDelayGrowthPercent);
   setLocal('dimmerTransparent', dimmerTransparent);
+  setLocal('checkActiveTab', checkActiveTab);
   setLocal('junkDomains', junkDomains);
   setLocal('redirectProbability', redirectProbability);
   setLocal('valueSites', valueSites);
