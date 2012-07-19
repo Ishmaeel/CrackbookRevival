@@ -43,7 +43,7 @@ var_defaults = {
   junkDomains: '[]',
   valueSites: '["ocw.mit.edu"]',
   reporting: 'true',
-  checkActiveTab: 'true', // TODO: make configurable in UI
+  checkActiveTab: 'true',
   user_id: '0',
   dimmerThreshold: '0',
   dimmerDelay: '3.0',
