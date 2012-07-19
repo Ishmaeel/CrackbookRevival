@@ -134,6 +134,7 @@ function showSettings() {
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay').toFixed(2);
   document.getElementById("dimmerDelayGrowthPercent").value = getLocal('dimmerDelayGrowthPercent').toFixed(1);
   document.getElementById("dimmerTransparent").value = getLocal('dimmerTransparent');
+  document.getElementById("checkActiveTab").checked = getLocal('checkActiveTab');
 
   // Junk domains.
   clearDomainsFromPage('siteBlacklist');
