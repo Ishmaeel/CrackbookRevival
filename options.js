@@ -134,6 +134,7 @@ function showSettings() {
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay').toFixed(2);
   document.getElementById("dimmerDelayGrowthPercent").value = getLocal('dimmerDelayGrowthPercent').toFixed(1);
   document.getElementById("dimmerTransparent").value = getLocal('dimmerTransparent');
+  document.getElementById("checkActiveTab").checked = getLocal('checkActiveTab');
 
   // Junk domains.
   clearDomainsFromPage('siteBlacklist');
@@ -194,6 +195,7 @@ function saveSettings() {
   }
 
   var dimmerTransparent = document.getElementById("dimmerTransparent").checked;
+  var checkActiveTab = document.getElementById("checkActiveTab").checked;
 
   // TODO: better validation
   var startTime = parseTime(document.getElementById("startTime").value);
@@ -212,6 +214,7 @@ function saveSettings() {
   setLocal('dimmerDelay', dimmerDelay);
   setLocal('dimmerDelayGrowthPercent', dimmerDelayGrowthPercent);
   setLocal('dimmerTransparent', dimmerTransparent);
+  setLocal('checkActiveTab', checkActiveTab);
   setLocal('junkDomains', junkDomains);
   setLocal('redirectProbability', redirectProbability);
   setLocal('valueSites', valueSites);
