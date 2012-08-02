@@ -1,17 +1,16 @@
 body {
-  width: 400px;
-  overflow-x:hidden;
+  width: 450px;
   font-family: Verdana, sans-serif;
   font-size: small;
   color: #080e73;
 }
 
 img {
-  margin:5px;
-  border:2px solid black;
-  vertical-align:middle;
-  width:75px;
-  height:75px;
+  margin: 5px;
+  border: 2px solid black;
+  vertical-align: middle;
+  width: 75px;
+  height: 75px;
 }
 
 #header {
@@ -26,6 +25,8 @@ img {
 .subheading {
   color: #225;
   font-weight: bold;
+  font-size: larger;
+  margin-top: 1.5em;
 }
 
 .domainList {
@@ -34,27 +35,35 @@ img {
   margin-top: 0.5em;
 }
 
-.domainList li input.domain {
-  width: 15em;
+input {
+  border: 1px solid #bbb;
 }
 
-.percentInput {
+input.domain {
+  width: 15em;
+  padding-left: 0.2em;
+}
+
+input.percentInput {
   width: 3em;
+}
+
+input.rightAlign {
   text-align: right;
+  padding-right: 0.2em;
 }
 
 input#dimmerThreshold {
   width: 2em;
-  text-align: right;
 }
 
 input#dimmerDelay {
   width: 4em;
-  text-align: right;
 }
 
 input#startTime, input#endTime {
   width: 3.5em;
+  padding-left: 0.2em;
 }
 
 div#weekdays {
@@ -69,20 +78,22 @@ div#weekdays {
 }
 
 button {
-  color: #225;
-  background: #dee;
+  background: #00af3f;
+  color: #fff;
   font-family: Verdana;
   border: 1px solid #005;
-  border-radius: 3px;
 }
 
 button#save_button {
-  font-size: large;
-  padding: 0.05em 0.5em 0.15em 0.5em;
+  font-size: larger;
+  font-weight: bold;
+  background: #ff1b1b;
+  padding: 0.25em 0.5em 0.25em 0.5em;
 }
 
 #saved_message {
   background-color: #a0ffa0;
   border: 1px solid #00aa00;
   padding: 0.5em;
+  opacity: 1;
 }

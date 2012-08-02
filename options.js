@@ -232,13 +232,20 @@ function saveSettings() {
   showSettings();
 
   // Show status message.
+  document.getElementById('save_button').style.display = 'none';
   var msg = document.getElementById('saved_message');
-  msg.style['display'] = 'inline';
-  window.setTimeout(function() {
-    msg.style.display = 'none';
-    window.close();
-  }, MSG_SAVED_DELAY);
-
+  msg.style.display = 'inline';  // show the message
+  var opacityValue = 1.0;
+  var timeoutFn = function() {
+    opacityValue -= 1 / 20.0;
+    msg.style.opacity = opacityValue;
+    if (opacityValue < 0.1) {
+      window.close();
+    } else {
+      setTimeout(timeoutFn, MSG_SAVED_DELAY / 20.0);      
+    }
+  };
+  setTimeout(timeoutFn, MSG_SAVED_DELAY / 20.0);
 } // saveSettings
 
 

@@ -9,32 +9,10 @@
 
   <div id="header" class="heading">Crackbook settings</div>
 
-  <div style="padding-top: 0.5em; padding-bottom: 0.5em">
-    <div>
-      <label>Start blocking junk sites after <input id="dimmerThreshold" name="dimmerThreshold" type="text" /> junk hits in one day</label>
-    </div>
-    <div>
-      <label>Delay junk sites for <input id="dimmerDelay" name="dimmerDelay" type="text" /> seconds</label>
-    </div>
-    <div>
-      <label>Increase the delay by <input id="dimmerDelayGrowthPercent" name="dimmerDelayGrowthPercent" type="text" class="percentInput" />% after every block</label>
-    </div>
-    <div style="padding-top: 0.3em">
-      <label>
-        <input id="dimmerTransparent" name="dimmerTransparent" type="checkbox" />Slightly translucent dimmer
-      </label>
-    </div>
-    <div style="padding-top: 0.3em">
-      <label>
-        <label><input id="checkActiveTab" name="checkActiveTab" type="checkbox" value="1" />Block new background tabs opened from a junk page</label>
-      </label>
-    </div>
-  </div>
-
   <div class="subheading">Junk site list</div>
 
   <div class="details">
-    Domains with paths are allowed, e.g. "google.com/reader".
+    Domains with paths are allowed, for example "google.com/reader".
   </div>
 
   <ul id="siteBlacklist" class="domainList">
@@ -45,8 +23,8 @@
   <div class="subheading">Value site list</div>
 
   <div>
-      With
-      <input id="redirectProbability" name="redirectProbability" class="percentInput" type="text" />%
+      With a
+      <input id="redirectProbability" name="redirectProbability" class="percentInput rightAlign" type="text" />%
       probability, redirect to one of the following sites instead of delaying:
   </div>
 
@@ -75,7 +53,31 @@
     <label><input id="weekday-6" name="weekday-6" type="checkbox" />Sat</label>
   </div>
 
-  <div class="subheading" style="padding-bottom: 0.5em">Usage data</div>
+  <div class="subheading">Parameters</div>
+
+  <div>
+    <div>
+      <label>Start blocking junk sites after <input id="dimmerThreshold" class="rightAlign" name="dimmerThreshold" type="text" /> junk hits in one day</label>
+    </div>
+    <div>
+      <label>Delay junk sites for <input id="dimmerDelay" class="rightAlign" name="dimmerDelay" type="text" /> seconds</label>
+    </div>
+    <div>
+      <label>Increase the delay by <input id="dimmerDelayGrowthPercent" name="dimmerDelayGrowthPercent" type="text" class="percentInput rightAlign" />% after every block</label>
+    </div>
+    <div style="padding-top: 0.3em">
+      <label>
+        <label><input id="checkActiveTab" name="checkActiveTab" type="checkbox" value="1" />Block new background tabs opened from a junk page</label>
+      </label>
+    </div>
+    <div style="padding-top: 0.3em">
+      <label>
+        <input id="dimmerTransparent" name="dimmerTransparent" type="checkbox" />Slightly translucent dimmer
+      </label>
+    </div>
+  </div>
+
+  <div class="subheading" style="padding-bottom: 0.4em">Usage data</div>
   <div>
     <label>
       <input id="upload_stats" name="upload_stats" type="checkbox" />Contribute usage data
@@ -88,7 +90,7 @@
   </div>
 
   <p>
-    <button id="save_button">Save</button>
+    <button id="save_button">SAVE</button>
   </p>
 
   <span id="saved_message" style="display: none">
