@@ -21,9 +21,12 @@ function getTopDomains(historyItems) {
         domain = components[0] + '/' + components[1];
       }
 
-      domains.push(domain);
-      // TODO(gintas): +=
-      typedCounts[domain] = h.typedCount;
+      if (domains.indexOf(domain) == -1) {
+        domains.push(domain);
+        typedCounts[domain] = h.typedCount;  
+      } else {
+        typedCounts[domain] += h.typedCount;  
+      }
     }
   }
   // Sort by typed count (descending).
