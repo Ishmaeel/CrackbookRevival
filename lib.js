@@ -49,7 +49,6 @@ var_defaults = {
   dimmerDelay: '3.0',
   dimmerDelayGrowthPercent: '0.5',
   redirectProbability: '2',
-  dimmerTransparent: false,
   startTime: '0',
   endTime: '' + 24*60-1,
   weekdays: '"12345"',

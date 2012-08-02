@@ -136,7 +136,6 @@ function showSettings() {
   document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay').toFixed(2);
   document.getElementById("dimmerDelayGrowthPercent").value = getLocal('dimmerDelayGrowthPercent').toFixed(1);
-  document.getElementById("dimmerTransparent").value = getLocal('dimmerTransparent');
   document.getElementById("checkActiveTab").checked = getLocal('checkActiveTab');
 
   // Junk domains.
@@ -197,7 +196,6 @@ function saveSettings() {
     redirectProbability = getLocal('redirectProbability');
   }
 
-  var dimmerTransparent = document.getElementById("dimmerTransparent").checked;
   var checkActiveTab = document.getElementById("checkActiveTab").checked;
 
   // TODO: better validation
@@ -216,7 +214,6 @@ function saveSettings() {
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('dimmerDelay', dimmerDelay);
   setLocal('dimmerDelayGrowthPercent', dimmerDelayGrowthPercent);
-  setLocal('dimmerTransparent', dimmerTransparent);
   setLocal('checkActiveTab', checkActiveTab);
   setLocal('junkDomains', junkDomains);
   setLocal('redirectProbability', redirectProbability);
