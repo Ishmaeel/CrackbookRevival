@@ -39,7 +39,6 @@ function todayAsString() {
 //
 
 var_defaults = {
-  hitHistory: '{}',
   junkDomains: '[]',
   valueSites: '["ocw.mit.edu"]',
   reporting: 'true',
