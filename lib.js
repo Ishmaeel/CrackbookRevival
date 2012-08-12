@@ -56,8 +56,9 @@ var_defaults = {
 };
 
 function getLocal(varname) {
-  if (!(varname in localStorage))
+  if (!(varname in localStorage)) {
     localStorage.setItem(varname, var_defaults[varname]);
+  }
   var s = localStorage.getItem(varname);
   return JSON.parse(s);
 }
@@ -78,8 +79,9 @@ function lookupJunkDomain(url) {
   var junkDomains = getLocal('junkDomains');
   var normalized_url = trimWWW(trimProtocol(url.trim()));
   for (var i = 0; i < junkDomains.length; i++) {
-    if (normalized_url.indexOf(junkDomains[i]) == 0)
+    if (normalized_url.indexOf(junkDomains[i]) == 0) {
       return junkDomains[i];
+    }
   }
   return null;
 }
