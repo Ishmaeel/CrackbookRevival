@@ -53,7 +53,7 @@ var_defaults = {
   weekdays: '"12345"',
   day: '""',
   dayHits: '0',
-  hitLog: ""
+  hitLog: '[]'
 };
 
 function getLocal(varname) {
@@ -69,18 +69,26 @@ function setLocal(varname, value) {
 }
 
 function storeHit(domain, blocked) {
-  var timestamp = Math.round(Date.now() / 1000);
-  var entry = JSON.stringify({
-    domain: domain,
-    blocked: blocked,
-    timestamp: timestamp
-  });
+  var dt = new Date();
+
+  // Create an entry.
+  var timestamp = Math.round(dt.getTime() / 1000);
+  var entry = JSON.stringify({ domain: domain, blocked: blocked, timestamp: timestamp });
+
+  var key = 'hitLog-' + (dt.getYear() - 100) + "-" + (dt.getMonth() + 1);
+
+  // Append the entry to the right collection.
   var hitLog = getLocal('hitLog');
-  if (hitLog) {
-    entry = "," + entry;
+  var row = null;
+  if (hitLog.indexOf(key) == -1) {
+    hitLog.push(key);
+    setLocal('hitLog', hitLog);
+    row = entry;
+  } else {
+    row = localStorage.getItem(key) + "," + entry;
   }
-  setLocal('hitLog', hitLog + entry);
-  // TODO: shard by month, use hitLog for collection of months
+  // Access localStorage directly to avoid double stringification.
+  localStorage.setItem(key, row);
 }
 
 function getTodaysHits() {
