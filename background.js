@@ -95,8 +95,10 @@ function ajaxPost(url, fields) {
 
 function registerHit(domain, blocked, active) {
   var params = {domain: domain, blocked: blocked, active: active};
-  if (getLocal('reporting'))
+  if (getLocal('reporting')) {
     ajaxPost(API_URL + 'register_hit', params);
+  }
+  storeHit(domain, blocked, active);
 }
 
 function submitConfigChange() {

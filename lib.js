@@ -52,7 +52,8 @@ var_defaults = {
   endTime: '' + 24*60-1,
   weekdays: '"12345"',
   day: '""',
-  dayHits: '0'
+  dayHits: '0',
+  hitLog: ""
 };
 
 function getLocal(varname) {
@@ -65,6 +66,22 @@ function getLocal(varname) {
 
 function setLocal(varname, value) {
   localStorage.setItem(varname, JSON.stringify(value));
+}
+
+function storeHit(domain, blocked, active) {
+  var timestamp = Math.round(Date.now() / 1000);
+  var entry = JSON.stringify({
+    domain: domain,
+    blocked: blocked,
+    active: active,
+    timestamp: timestamp
+  });
+  var hitLog = getLocal('hitLog');
+  if (hitLog) {
+    entry = "," + entry;
+  }
+  setLocal('hitLog', hitLog + entry);
+  // TODO: shard by month, use hitLog for collection of months
 }
 
 function getTodaysHits() {
