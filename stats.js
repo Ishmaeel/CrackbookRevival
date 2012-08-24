@@ -1,10 +1,10 @@
 var STATS = {};
 var PLOT_DATA = [];
-var STATS_PLOT = null;
+var histPlot = null;
 
 window.onload = function() {
-    createPlot();
-    collectPlotData();
+    var histPlot = createPlot();
+    collectHistoryData(histPlot);
 };
 
 /**
@@ -16,18 +16,36 @@ function createPlot() {
     selection: { mode: "x" }
     //grid: { markings: weekendAreas }
   };
-  STATS_PLOT = $.plot($("#plot"), [], options);
+  return $.plot($("#plot"), [], options);
 }
 
-function redrawPlot(data) {
-  STATS_PLOT.setData(data);
-  STATS_PLOT.setupGrid();
-  STATS_PLOT.draw();
+/**
+ * Redraws a given plot with the given data.
+ */
+function redrawPlot(histPlot, plotData) {
+  histPlot.setData(plotData);
+  histPlot.setupGrid();
+  histPlot.draw();
 }
 
-function addPlotRow(domain, hits_by_date) {
-  var row = hits_by_date;
-  // Convert a histogram hash to a list of pairs.
+/**
+ * Adds an entry to the plot, given 
+ */
+function addPlotRow(histPlot, plotData, domain, hitsByDate) {
+  var row = mapToPairList(hitsByDate);
+  
+  // TODO: ensure order stability of entries
+  plotData.push({
+    label: domain,
+    data: row
+  });
+  redrawPlot(histPlot, plotData);
+}
+
+/**
+ * Convert a dictionary (object) to a list of pairs (in ascending key order).
+ */
+function mapToPairList(row) {
   var keys = [];
   for (var k in row) {
     if (row.hasOwnProperty(k)) {
@@ -39,16 +57,15 @@ function addPlotRow(domain, hits_by_date) {
   for (var i = 0; i < sorted_keys.length; i++) {
     d.push([sorted_keys[i], row[sorted_keys[i]]]);
   }
-  
-  // TODO: ensure order stability
-  PLOT_DATA.push({
-    label: domain,
-    data: d
-  });
-  redrawPlot(PLOT_DATA);
+  return d;
 }
 
-function collectPlotData() {
+/**
+ * Collects history data asynchronously and shows it on the given
+ * plot.
+ */
+function collectHistoryData(histPlot) {
+  var plotData = [];
   var place = document.getElementById('statsplaceholder');
   var junkDomains = getLocal('junkDomains');
   junkDomains.forEach(function(domain) {
@@ -66,7 +83,7 @@ function collectPlotData() {
           hitsByDate[histKey] += 1;
         }
       });
-      addPlotRow(domain, hitsByDate);
+      addPlotRow(histPlot, plotData, domain, hitsByDate);
     });
   });
 }
