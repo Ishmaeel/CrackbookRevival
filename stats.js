@@ -40,6 +40,7 @@ function addPlotRow(domain, hits_by_date) {
     d.push([sorted_keys[i], row[sorted_keys[i]]]);
   }
   
+  // TODO: ensure order stability
   PLOT_DATA.push({
     label: domain,
     data: d
@@ -52,20 +53,20 @@ function collectPlotData() {
   var junkDomains = getLocal('junkDomains');
   junkDomains.forEach(function(domain) {
     findDirectHits(domain, function(visitItems) {
-      var by_date = {};
+      var hitsByDate = {};
       visitItems.forEach(function(item) {
         if (item.transition === 'typed') {
           // TODO(gintas): Also count non-typed transitions?
           var dt = new Date(item.visitTime);
           clearTime(dt);
-          var key = dt.getTime();
-          if (!by_date.hasOwnProperty(key)) {
-            by_date[key] = 0;
+          var histKey = dt.getTime();
+          if (!hitsByDate.hasOwnProperty(histKey)) {
+            hitsByDate[histKey] = 0;
           }
-          by_date[key] += 1;
+          hitsByDate[histKey] += 1;
         }
       });
-      addPlotRow(domain, by_date);
+      addPlotRow(domain, hitsByDate);
     });
   });
 }
@@ -99,21 +100,6 @@ function findDirectHits(domain, visitsHandler) {
 }
 
 /**
- * Finds history items by text-matching on the given domain.
- */
-function findHistoryItems(domain) {
-  var monthAgo = new Date().getTime() - 1000*3600*24*7*30;
-  chrome.history.search({
-    text: domain,
-    startTime: monthAgo,
-    maxResults: 1000
-  }, function(historyitems) {
-    console.log(historyitems);
-    RESULT = historyitems;
-  });
-}
-
-/**
  * Returns variants of a given domain with.
  */
 function domainVariants(domain) {
@@ -125,3 +111,16 @@ function domainVariants(domain) {
   ];
 }
 
+/**
+ * Finds history items by text-matching on the given domain.
+ */
+function findHistoryItems(domain) {
+  var monthAgo = new Date().getTime() - 1000*3600*24*7*30;
+  chrome.history.search({
+    text: domain,
+    startTime: monthAgo,
+    maxResults: 1000
+  }, function(historyitems) {
+    RESULT = historyitems;
+  });
+}
