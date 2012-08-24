@@ -5,4 +5,4 @@ git --no-pager grep TODO | grep -v package.sh
 git --no-pager grep XXX | grep -v package.sh
 
 rm -f crackbook.zip
-zip crackbook.zip manifest.json LICENSE README.md *.html *.js *.css images/*.png
+zip crackbook.zip manifest.json LICENSE README.md *.html *.js *.css images/*.png flot/*.js

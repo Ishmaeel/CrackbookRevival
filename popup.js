@@ -26,8 +26,8 @@ window.onload = function() {
   });
 
   // TODO: personal statistics
-  // document.getElementById('stats_link').onclick = function() {
-  //   chrome.tabs.create({ url: chrome.extension.getURL('stats.html') });
-  //   return false;
-  // };
+  document.getElementById('stats_link').onclick = function() {
+    chrome.tabs.create({ url: chrome.extension.getURL('stats.html') });
+    return false;
+  };
 }

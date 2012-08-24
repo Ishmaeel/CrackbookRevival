@@ -1,21 +1,106 @@
 var STATS = {};
+var PLOT_DATA = [];
+var STATS_PLOT = null;
 
 window.onload = function() {
-  collectStats();
+  createPlot();
+  collectPlotData();
 }
 
-function collectStats() {
+/**
+ * Draws a plot.
+ */
+function createPlot() {
+  var options = {
+    xaxis: { mode: "time", timeformat: "%b %d" },
+    selection: { mode: "x" },
+    //grid: { markings: weekendAreas }
+  };
+  STATS_PLOT = $.plot($("#plot"), [], options);
+}
+
+function redrawPlot(data) {
+  STATS_PLOT.setData(data);
+  STATS_PLOT.setupGrid();
+  STATS_PLOT.draw();
+}
+
+function addPlotRow(domain, hits_by_date) {
+  var row = hits_by_date;
+  // Convert a histogram hash to a list of pairs.
+  var keys = [];
+  for (var k in row) {
+    if (row.hasOwnProperty(k)) {
+      keys.push(k);
+    }
+  }
+  var sorted_keys = keys.sort();
+  var d = [];
+  for (var i = 0; i < sorted_keys.length; i++) {
+    d.push([sorted_keys[i], row[sorted_keys[i]]]);
+  }
+  
+  PLOT_DATA.push({
+    label: domain,
+    data: d
+  });
+  redrawPlot(PLOT_DATA);
+}
+
+function collectPlotData() {
   var place = document.getElementById('statsplaceholder')
   var junkDomains = getLocal('junkDomains');
-  for (var i = 0; i < junkDomains.length; i++) {
-    var domain = junkDomains[i];
-    var div = document.createElement('div');
-    div.setAttribute('id', 'domain-' + domain);
-    place.parentNode.insertBefore(div, place);
-    findDirectHits(domain);
-  }
+  junkDomains.forEach(function(domain) {
+    findDirectHits(domain, function(visitItems) {
+      var by_date = {};
+      visitItems.forEach(function(item) {
+        if (item.transition === 'typed') {
+          // TODO(gintas): Also count non-typed transitions?
+          var dt = new Date(item.visitTime);
+          clearTime(dt);
+          var key = dt.getTime();
+          if (!by_date.hasOwnProperty(key)) {
+            by_date[key] = 0;
+          }
+          by_date[key] += 1;
+        }
+      });
+      addPlotRow(domain, by_date);
+    });
+  });
 }
 
+function clearTime(dt) {
+  dt.setUTCMilliseconds(0);
+  dt.setUTCSeconds(0);
+  dt.setUTCMinutes(0);
+  dt.setUTCHours(0);
+}
+
+
+/**
+ * Finds hits to a given domain.
+ *
+ * Checks common variants of the domain.
+ */
+function findDirectHits(domain, visitsHandler) {
+  var variants = domainVariants(domain);
+  var outstandingRequests = variants.length;
+  var cumulativeVisits = [];
+  variants.forEach(function(url) {
+    chrome.history.getVisits({ url: url }, function(visits) {
+      cumulativeVisits = cumulativeVisits.concat(visits);
+      outstandingRequests--;
+      if (outstandingRequests === 0) {
+        visitsHandler(cumulativeVisits);
+      }
+    });
+  });
+}
+
+/**
+ * Finds history items by text-matching on the given domain.
+ */
 function findHistoryItems(domain) {
   var monthAgo = new Date().getTime() - 1000*3600*24*7*30;
   chrome.history.search({
@@ -28,6 +113,9 @@ function findHistoryItems(domain) {
   });
 }
 
+/**
+ * Returns variants of a given domain with.
+ */
 function domainVariants(domain) {
   return [
     'http://' + domain,
@@ -37,23 +125,3 @@ function domainVariants(domain) {
   ];
 }
 
-function findDirectHits(domain) {
-  var by_date = {};
-  STATS[domain] = by_date;
-  domainVariants(domain).forEach(function(url) {
-    chrome.history.getVisits({ url: url },
-      function(visitItems) {
-        visitItems.forEach(function(item) {
-          if (item.transition === 'typed') {
-            var dt = new Date(item.visitTime);
-            var key = (dt.getMonth() + 1) + "-" + dt.getDate();
-            if (!by_date.hasOwnProperty(key)) {
-              by_date[key] = 0;
-            }
-            by_date[key] += 1;
-          }
-        });
-      }
-    );
-  });
-}
