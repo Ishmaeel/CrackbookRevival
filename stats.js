@@ -3,9 +3,9 @@ var PLOT_DATA = [];
 var STATS_PLOT = null;
 
 window.onload = function() {
-  createPlot();
-  collectPlotData();
-}
+    createPlot();
+    collectPlotData();
+};
 
 /**
  * Draws a plot.
@@ -13,7 +13,7 @@ window.onload = function() {
 function createPlot() {
   var options = {
     xaxis: { mode: "time", timeformat: "%b %d" },
-    selection: { mode: "x" },
+    selection: { mode: "x" }
     //grid: { markings: weekendAreas }
   };
   STATS_PLOT = $.plot($("#plot"), [], options);
@@ -49,7 +49,7 @@ function addPlotRow(domain, hits_by_date) {
 }
 
 function collectPlotData() {
-  var place = document.getElementById('statsplaceholder')
+  var place = document.getElementById('statsplaceholder');
   var junkDomains = getLocal('junkDomains');
   junkDomains.forEach(function(domain) {
     findDirectHits(domain, function(visitItems) {
