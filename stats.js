@@ -1,22 +1,20 @@
-var STATS = {};
-var PLOT_DATA = [];
-var histPlot = null;
-
 window.onload = function() {
-    var histPlot = createPlot();
-    collectHistoryData(histPlot);
+  drawLogPlot();
+
+  var histPlot = createPlot($('#histPlot'));
+  collectHistoryData(histPlot);
 };
 
 /**
  * Draws a plot.
  */
-function createPlot() {
+function createPlot(el) {
   var options = {
     xaxis: { mode: "time", timeformat: "%b %d" },
     selection: { mode: "x" }
     //grid: { markings: weekendAreas }
   };
-  return $.plot($("#plot"), [], options);
+  return $.plot(el, [], options);
 }
 
 /**
@@ -66,7 +64,6 @@ function mapToPairList(row) {
  */
 function collectHistoryData(histPlot) {
   var plotData = [];
-  var place = document.getElementById('statsplaceholder');
   var junkDomains = getLocal('junkDomains');
   junkDomains.forEach(function(domain) {
     findDirectHits(domain, function(visitItems) {
@@ -86,6 +83,38 @@ function collectHistoryData(histPlot) {
       addPlotRow(histPlot, plotData, domain, hitsByDate);
     });
   });
+}
+
+function drawLogPlot() {
+  var logPlot = createPlot($('#logPlot'));
+
+  var domainStats = {};
+  var junkDomains = getLocal('junkDomains');
+  junkDomains.forEach(function(domain) {
+    domainStats[domain] = {};
+  });
+
+  var hitLogKeys = getLocal('hitLogKeys');
+  hitLogKeys.forEach(function(key) {
+    var entries = loadHits(key);
+    entries.forEach(function(entry) {
+      // TODO: remove duplication with collectHistoryData
+      var dt = new Date(entry.timestamp * 1000);
+      clearTime(dt);
+      var histKey = dt.getTime();
+      var hitsByDate = domainStats[entry.domain];
+      if (!hitsByDate.hasOwnProperty(histKey)) {
+        hitsByDate[histKey] = 0;
+      }
+      hitsByDate[histKey] += 1;
+    });
+  });
+
+  var plotData = [];
+  junkDomains.forEach(function(domain) {
+    addPlotRow(logPlot, plotData, domain, domainStats[domain]);
+  });
+  console.log(plotData);
 }
 
 function clearTime(dt) {

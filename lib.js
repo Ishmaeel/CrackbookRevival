@@ -53,7 +53,7 @@ var_defaults = {
   weekdays: '"12345"',
   day: '""',
   dayHits: '0',
-  hitLog: '[]'
+  hitLogKeys: '[]'
 };
 
 function getLocal(varname) {
@@ -75,20 +75,24 @@ function storeHit(domain, blocked) {
   var timestamp = Math.round(dt.getTime() / 1000);
   var entry = JSON.stringify({ domain: domain, blocked: blocked, timestamp: timestamp });
 
-  var key = 'hitLog-' + (dt.getYear() - 100) + "-" + (dt.getMonth() + 1);
+  var key = 'hitLogKeys-' + (dt.getYear() - 100) + "-" + (dt.getMonth() + 1);
 
   // Append the entry to the right collection.
-  var hitLog = getLocal('hitLog');
+  var hitLogKeys = getLocal('hitLogKeys');
   var row = null;
-  if (hitLog.indexOf(key) == -1) {
-    hitLog.push(key);
-    setLocal('hitLog', hitLog);
+  if (hitLogKeys.indexOf(key) == -1) {
+    hitLogKeys.push(key);
+    setLocal('hitLogKeys', hitLogKeys);
     row = entry;
   } else {
     row = localStorage.getItem(key) + "," + entry;
   }
   // Access localStorage directly to avoid double stringification.
   localStorage.setItem(key, row);
+}
+
+function loadHits(key) {
+  return JSON.parse('[' + localStorage.getItem(key) + ']');
 }
 
 function getTodaysHits() {
