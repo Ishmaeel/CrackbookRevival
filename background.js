@@ -176,10 +176,12 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
 
   // Tracking and logging.
   updateIcon(null, !!junkDomain);
-  if (junkDomain && active) {
-    incrementJunkCounter(junkDomain);
-    increaseDimmerDelay();
-    registerHit(junkDomain, shouldDim);
+  if (junkDomain) {
+    if (active) {
+      incrementJunkCounter(junkDomain);
+      increaseDimmerDelay();
+    }
+    registerHit(junkDomain, shouldDim, active);
   }
 }
 

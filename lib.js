@@ -68,12 +68,12 @@ function setLocal(varname, value) {
   localStorage.setItem(varname, JSON.stringify(value));
 }
 
-function storeHit(domain, blocked) {
+function storeHit(domain, blocked, active) {
   var dt = new Date();
 
   // Create an entry.
   var timestamp = Math.round(dt.getTime() / 1000);
-  var entry = JSON.stringify({ domain: domain, blocked: blocked, timestamp: timestamp });
+  var entry = JSON.stringify({ domain: domain, blocked: blocked, timestamp: timestamp, active: active });
 
   var key = 'hitLogKeys-' + (dt.getYear() - 100) + "-" + (dt.getMonth() + 1);
 
