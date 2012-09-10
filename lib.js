@@ -40,7 +40,6 @@ function todayAsString() {
 
 var_defaults = {
   junkDomains: '[]',
-  valueSites: '["ocw.mit.edu"]',
   reporting: 'true',
   checkActiveTab: 'true',
   user_id: '0',

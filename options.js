@@ -117,13 +117,8 @@ function addJunkDomain() {
   addUrlField('siteBlacklist', '');
 }
 
-function addValueSite() {
-  addUrlField('valueSiteList', '');
-}
-
 function bindControlHandlers() {
   document.getElementById('add_junk_domain_button').onclick = addJunkDomain;
-  document.getElementById('add_value_site_button').onclick = addValueSite;
   document.getElementById('save_button').onclick = saveSettings;
   document.getElementById('crackbookLink').onclick = function() {
     chrome.tabs.create({url: 'http://crackbook.info'});
@@ -145,11 +140,6 @@ function showSettings() {
   } else {
     loadTopUrls();
   }
-
-  // Value sites
-  document.getElementById("redirectProbability").value = getLocal('redirectProbability').toFixed(1);
-  clearDomainsFromPage('valueSiteList');
-  putDomainsOnPage("valueSiteList", "valueSitePlaceholder", getLocal("valueSites"));
 
   // Schedule
   document.getElementById("startTime").value = renderTime(getLocal('startTime'));
@@ -173,8 +163,6 @@ function saveSettings() {
   for (var i = 0; i < junkDomains.length; i++) {
     junkDomains[i] = trimWWW(trimProtocol(junkDomains[i]));
   }
-
-  var valueSites = collectInputs("valueSiteList");
 
   var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
   if (isNaN(dimmerThreshold) || dimmerThreshold < 0) {
@@ -217,7 +205,6 @@ function saveSettings() {
   setLocal('checkActiveTab', checkActiveTab);
   setLocal('junkDomains', junkDomains);
   setLocal('redirectProbability', redirectProbability);
-  setLocal('valueSites', valueSites);
   setLocal('startTime', startTime);
   setLocal('endTime', endTime);
   setLocal('weekdays', weekdays);
