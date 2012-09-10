@@ -46,7 +46,8 @@ var_defaults = {
   user_id: '0',
   dimmerThreshold: '0',
   dimmerDelay: '3.0',
-  dimmerDelayGrowthPercent: '0.5',
+  dimmerDelayGrowthPercent: '0.5',  // TODO: remove
+  dimmerDelayIncrement: '0.05',
   redirectProbability: '2',
   startTime: '0',
   endTime: '' + 24*60-1,

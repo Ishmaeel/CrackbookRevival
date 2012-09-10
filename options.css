@@ -61,6 +61,10 @@ input#dimmerDelay {
   width: 4em;
 }
 
+input#dimmerDelayIncrement {
+  width: 3em;
+}
+
 input#startTime, input#endTime {
   width: 3.5em;
   padding-left: 0.2em;

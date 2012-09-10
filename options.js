@@ -135,7 +135,7 @@ function showSettings() {
   // Threshold & delay
   document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay').toFixed(2);
-  document.getElementById("dimmerDelayGrowthPercent").value = getLocal('dimmerDelayGrowthPercent').toFixed(1);
+  document.getElementById("dimmerDelayIncrement").value = getLocal('dimmerDelayIncrement').toFixed(2);
   document.getElementById("checkActiveTab").checked = getLocal('checkActiveTab');
 
   // Junk domains.
@@ -186,9 +186,9 @@ function saveSettings() {
     dimmerDelay = getLocal('dimmerDelay');
   }
 
-  var dimmerDelayGrowthPercent = parseFloat(document.getElementById("dimmerDelayGrowthPercent").value);
-  if (isNaN(dimmerDelayGrowthPercent) || dimmerDelayGrowthPercent < 0) {
-    dimmerDelayGrowthPercent = getLocal('dimmerDelayGrowthPercent');
+  var dimmerDelayIncrement = parseFloat(document.getElementById("dimmerDelayIncrement").value);
+  if (isNaN(dimmerDelayIncrement) || dimmerDelayIncrement < 0) {
+    dimmerDelayIncrement = getLocal('dimmerDelayIncrement');
   }
 
   var redirectProbability = parseFloat(document.getElementById("redirectProbability").value);
@@ -213,7 +213,7 @@ function saveSettings() {
   setLocal('reporting', reporting);
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('dimmerDelay', dimmerDelay);
-  setLocal('dimmerDelayGrowthPercent', dimmerDelayGrowthPercent);
+  setLocal('dimmerDelayIncrement', dimmerDelayIncrement);
   setLocal('checkActiveTab', checkActiveTab);
   setLocal('junkDomains', junkDomains);
   setLocal('redirectProbability', redirectProbability);

@@ -107,7 +107,7 @@ function submitConfigChange() {
         domains: JSON.stringify(getLocal('junkDomains')),
         dimmer_threshold: getLocal('dimmerThreshold'),
         dimmer_delay: getLocal('dimmerDelay'),
-        dimmer_delay_growth: getLocal('dimmerDelayGrowthPercent'),
+        dimmer_delay_growth: getLocal('dimmerDelayGrowthPercent'),  // TODO: remove
         start_time: getLocal('startTime'),
         end_time: getLocal('endTime'),
         weekdays: getLocal('weekdays')
@@ -186,7 +186,7 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
 }
 
 function increaseDimmerDelay() {
-  var newDelay = getLocal('dimmerDelay') * (1 + getLocal('dimmerDelayGrowthPercent') / 100.0);
+  var newDelay = getLocal('dimmerDelay') + getLocal('dimmerDelayIncrement');
   setLocal('dimmerDelay', newDelay);
 }
 
