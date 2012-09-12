@@ -1,10 +1,11 @@
-MIN_HISTORY_LENGTH =   7 * 24 * 3600 * 1000;  // one week
+MIN_HISTORY_LENGTH = 4 * 24 * 3600 * 1000;  // 4 days
 
 window.onload = function() {
   if (enoughLogData()) {
     drawLogPlot();
   } else {
-    // TODO: Show "not enough data message"
+    $('#logPlot-container').html(
+      "Crackbook has less than 4 days of activity logs. Please come back later.");
   }
 
   $('#show-browser-history-visits').click(function() {
