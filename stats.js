@@ -1,8 +1,20 @@
-window.onload = function() {
-  drawLogPlot();
+MIN_HISTORY_LENGTH =   7 * 24 * 3600 * 1000;  // one week
 
-  var histPlot = createPlot($('#histPlot'));
-  collectHistoryData(histPlot);
+window.onload = function() {
+  if (enoughLogData()) {
+    drawLogPlot();
+  } else {
+    // TODO: Show "not enough data message"
+  }
+
+  $('#show-browser-history-visits').click(function() {
+    $('#browser-history-visits').show();
+    $('#browser-hist').hide();
+    // TODO: Show "Loading..."
+    var histPlot = createPlot($('#histPlot'));
+    collectHistoryData(histPlot);
+    return true;
+  });
 };
 
 /**
@@ -32,6 +44,7 @@ function redrawPlot(histPlot, plotData) {
 function addPlotRow(histPlot, plotData, domain, hitsByDate) {
   var row = mapToPairList(hitsByDate);
   
+  // TODO: zero out days with no hits
   // TODO: ensure order stability of entries
   plotData.push({
     label: domain,
@@ -111,6 +124,27 @@ function drawLogPlot() {
   junkDomains.forEach(function(domain) {
     addPlotRow(logPlot, plotData, domain, domainStats[domain]);
   });
+}
+
+/**
+ * Returns true if there is enough internal log data to show a decent plot.
+ */
+function enoughLogData() {
+  return (new Date() - earliestLogTimestamp()) > MIN_HISTORY_LENGTH;
+}
+
+function earliestLogTimestamp() {
+  var timestamp = null;
+  var hitLogKeys = getLocal('hitLogKeys');
+  hitLogKeys.forEach(function(key) {
+    var entries = loadHits(key);
+    entries.forEach(function(entry) {
+      if (timestamp === null || entry.timestamp < timestamp) {
+        timestamp = entry.timestamp;
+      }
+    });
+  });
+  return (timestamp !== null) ? new Date(timestamp * 1000) : new Date();
 }
 
 function clearTime(dt) {

@@ -6,18 +6,29 @@
   <script src="flot/jquery.flot.js"></script>
   <script src="stats.js"></script>
 
-  <title>Statistics</title>
+  <link rel="stylesheet" href="stats.css" type="text/css" />
+  <title>Crackbook Statistics</title>
 </head>
 
 <body>
-  <h1>Statistics</h1>
+  <h1>Crackbook statistics: visits</h1>
 
-  <h2>Visits (based on browser history)</h2>
+  <div id="logPlot-container">
+    <div id="logPlot" style="height: 500px; width: 900px"></div>
+  </div>
 
-  <div id="histPlot" style="height: 500px; width: 900px"></div>
+  <div id="browser-hist">
+    <a href="#browser-history" id="show-browser-history-visits">
+      Show browser history
+    </a>
+    <!-- TODO: add explanation -->
+  </div>
 
-  <h2>Visits (based on Crackbook logs)</h2>
-  <div id="logPlot" style="height: 500px; width: 900px"></div>
+  <div id="browser-history-visits" style="display: none">
+    <a name="browser-history"></a>
+    <h2>Visits (based on browser history)</h2>
+    <div id="histPlot" style="height: 500px; width: 900px"></div>
+  </div>
 
 </body>
 </html>
