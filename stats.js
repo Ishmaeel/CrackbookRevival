@@ -89,15 +89,43 @@ function redrawPlot(histPlot, plotData) {
  * Adds an entry to the plot, given a dictionary of hits by date.
  */
 function addPlotRow(histPlot, plotData, domain, hitsByDate) {
+  addMissingZeroes(hitsByDate);
   var row = mapToPairList(hitsByDate);
 
-  // TODO: zero out days with no hits
   // TODO: ensure order stability of entries
   plotData.push({
     label: domain,
     data: row
   });
   redrawPlot(histPlot, plotData);
+}
+
+/**
+ * Adds zeroes for days where no hits have been logged.
+ *
+ * <p>Modifies the list in place.
+ *
+ * @param hitsByDate a map of date -> hitcount.
+ */
+function addMissingZeroes(hitsByDate) {
+  var min = null;
+  for (var k in hitsByDate) {
+    if (hitsByDate.hasOwnProperty(k)) {
+      var t = parseInt(k, 10);
+      if (min === null || t < min) {
+        min = t;
+      }
+    }
+  }
+
+  var max = new Date().getTime();  // the current moment is the upper bound
+  var dt = new Date(min);
+  while (dt.getTime() < max) {
+    if (!hitsByDate.hasOwnProperty(dt.getTime())) {
+      hitsByDate[dt.getTime()] = 0;
+    }
+    dt.setDate(dt.getDate() + 1);
+  }
 }
 
 /**
