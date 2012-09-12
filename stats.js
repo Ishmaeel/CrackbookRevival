@@ -113,7 +113,7 @@ function mapToPairList(row) {
   var d = [];
   for (var i = 0; i < sorted_keys.length; i++) {
     d.push([sorted_keys[i], row[sorted_keys[i]]]);
-p  }
+  }
   return d;
 }
 
@@ -203,7 +203,7 @@ function clearTime(dt) {
 
 /**
  * Finds hits to a given domain.
- * 
+ *
  * <p>Finds only direct hits (usually caused by user typing in a domain). Checks common variants of
  * the domain.
  */
