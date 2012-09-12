@@ -58,6 +58,16 @@ function mapToPairList(row) {
   return d;
 }
 
+function markHit(timestamp, hitsByDate) {
+  var dt = new Date(timestamp);
+  clearTime(dt);
+  var histKey = dt.getTime();
+  if (!hitsByDate.hasOwnProperty(histKey)) {
+    hitsByDate[histKey] = 0;
+  }
+  hitsByDate[histKey] += 1;
+}
+
 /**
  * Collects history data asynchronously and shows it on the given plot.
  */
@@ -68,23 +78,21 @@ function collectHistoryData(histPlot) {
     findDirectHits(domain, function(visitItems) {
       var hitsByDate = {};
       visitItems.forEach(function(item) {
-        var dt = new Date(item.visitTime);
-        clearTime(dt);
-        var histKey = dt.getTime();
-        if (!hitsByDate.hasOwnProperty(histKey)) {
-          hitsByDate[histKey] = 0;
-        }
-        hitsByDate[histKey] += 1;
+        markHit(item.visitTime, hitsByDate);
       });
       addPlotRow(histPlot, plotData, domain, hitsByDate);
     });
   });
 }
 
+/**
+ * Draws plot of hits, according to the internal Crackbook log.
+ */
 function drawLogPlot() {
   var logPlot = createPlot($('#logPlot'));
 
   var domainStats = {};
+  // Initialize domainStats.
   var junkDomains = getLocal('junkDomains');
   junkDomains.forEach(function(domain) {
     domainStats[domain] = {};
@@ -94,15 +102,8 @@ function drawLogPlot() {
   hitLogKeys.forEach(function(key) {
     var entries = loadHits(key);
     entries.forEach(function(entry) {
-      // TODO: remove duplication with collectHistoryData
-      var dt = new Date(entry.timestamp * 1000);
-      clearTime(dt);
-      var histKey = dt.getTime();
       var hitsByDate = domainStats[entry.domain];
-      if (!hitsByDate.hasOwnProperty(histKey)) {
-        hitsByDate[histKey] = 0;
-      }
-      hitsByDate[histKey] += 1;
+      markHit(entry.timestamp * 1000, hitsByDate);
     });
   });
 
@@ -110,7 +111,6 @@ function drawLogPlot() {
   junkDomains.forEach(function(domain) {
     addPlotRow(logPlot, plotData, domain, domainStats[domain]);
   });
-  console.log(plotData);
 }
 
 function clearTime(dt) {
@@ -155,15 +155,15 @@ function domainVariants(domain) {
 }
 
 /**
- * Finds history items by text-matching on the given domain.
+ * Finds Chrome history items by text-matching on the given domain.
  */
-function findHistoryItems(domain) {
+function findHistoryItems(domain, callback) {
   var monthAgo = new Date().getTime() - 1000*3600*24*7*30;
   chrome.history.search({
     text: domain,
     startTime: monthAgo,
     maxResults: 1000
   }, function(historyitems) {
-    RESULT = historyitems;
+    // TODO
   });
 }
