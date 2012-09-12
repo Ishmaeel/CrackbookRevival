@@ -40,3 +40,6 @@ has been put into public domain by the author.
 `wrench.png` is <http://commons.wikimedia.org/wiki/File:Farm-Fresh_wrench.png>,
 which is provided under the Creative Commons Attribution 3.0 US licence
 by FatCow Web Hosting at <http://www.fatcow.com/free-icons/>.
+
+`stats-256.png` is available from <http://www.iconspedia.com/icon/stats-8103.html>
+under the CC BY-SA 3.0 license.
