@@ -4,6 +4,7 @@
 
   <script src="flot/jquery.min.js"></script>
   <script src="flot/jquery.flot.js"></script>
+  <script src="flot/jquery.flot.selection.min.js"></script>
   <script src="stats.js"></script>
 
   <link rel="stylesheet" href="stats.css" type="text/css" />
@@ -11,10 +12,11 @@
 </head>
 
 <body>
-  <h1>Crackbook statistics: visits</h1>
+  <h1>Visits per day</h1>
 
   <div id="logPlot-container">
     <div id="logPlot" style="height: 500px; width: 900px"></div>
+    <div class="zoomout">Drag on the plot to zoom in. <a href="#">Zoom out</a></div>
   </div>
 
   <div id="browser-hist">
@@ -26,8 +28,9 @@
 
   <div id="browser-history-visits" style="display: none">
     <a name="browser-history"></a>
-    <h2>Visits (based on browser history)</h2>
+    <h2>Visits per day (based on browser history)</h2>
     <div id="histPlot" style="height: 500px; width: 900px"></div>
+    <div class="zoomout">Drag on the plot to zoom in. <a href="#">Zoom out</a></div>
   </div>
 
 </body>

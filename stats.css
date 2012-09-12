@@ -1,0 +1,19 @@
+body {
+  padding: 1em;
+  font-family: Verdana, sans-serif;
+}
+
+h1, h2 {
+  color: #225;
+  font-weight: bold;
+}
+
+#logPlot-container {
+  padding-bottom: 2em;
+}
+
+.zoomout {
+  padding: 1em;
+  font-size: small;
+  color: #999;
+}

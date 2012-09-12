@@ -21,12 +21,58 @@ window.onload = function() {
  * Draws a plot.
  */
 function createPlot(el) {
+
+  // Helper for returning the weekends in a period
+  // Copied from flot samples.
+  function weekendAreas(axes) {
+    var markings = [];
+    var d = new Date(axes.xaxis.min);
+    // go to the first Saturday
+    d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7));
+    d.setUTCSeconds(0);
+    d.setUTCMinutes(0);
+    d.setUTCHours(0);
+    var i = d.getTime();
+    do {
+      // when we don't set yaxis, the rectangle automatically
+      // extends to infinity upwards and downwards
+      markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 } });
+      i += 7 * 24 * 60 * 60 * 1000;
+    } while (i < axes.xaxis.max);
+
+    return markings;
+  }
+
   var options = {
-    xaxis: { mode: "time", timeformat: "%b %d" },
-    selection: { mode: "x" }
-    //grid: { markings: weekendAreas }
+    xaxis: { mode: "time", timeformat: "%b %d", minTickSize: [1, "day"] },
+    selection: { mode: "x" },
+    grid: { markings: weekendAreas },
+    legend: { position: "nw" }
   };
-  return $.plot(el, [], options);
+
+  var plot = $.plot(el, [], options);
+
+  el.bind("plotselected", function (event, ranges) {
+    // Zoom into selected area.
+    var options = plot.getOptions();
+    options.xaxes[0].min = ranges.xaxis.from;
+    options.xaxes[0].max = ranges.xaxis.to;
+    plot.clearSelection();
+    plot.setupGrid();
+    plot.draw();
+  });
+
+  $(el).next("div.zoomout").click(function(e) {
+    // Zoom out to view the entire dataset.
+    e.preventDefault();
+    var options = plot.getOptions();
+    options.xaxes[0].min = options.xaxes[0].datamin;
+    options.xaxes[0].max = options.xaxes[0].datamax;
+    plot.setupGrid();
+    plot.draw();
+  });
+
+  return plot;
 }
 
 /**
@@ -43,7 +89,7 @@ function redrawPlot(histPlot, plotData) {
  */
 function addPlotRow(histPlot, plotData, domain, hitsByDate) {
   var row = mapToPairList(hitsByDate);
-  
+
   // TODO: zero out days with no hits
   // TODO: ensure order stability of entries
   plotData.push({
@@ -67,7 +113,7 @@ function mapToPairList(row) {
   var d = [];
   for (var i = 0; i < sorted_keys.length; i++) {
     d.push([sorted_keys[i], row[sorted_keys[i]]]);
-  }
+p  }
   return d;
 }
 
