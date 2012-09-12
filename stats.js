@@ -59,8 +59,7 @@ function mapToPairList(row) {
 }
 
 /**
- * Collects history data asynchronously and shows it on the given
- * plot.
+ * Collects history data asynchronously and shows it on the given plot.
  */
 function collectHistoryData(histPlot) {
   var plotData = [];
@@ -69,16 +68,13 @@ function collectHistoryData(histPlot) {
     findDirectHits(domain, function(visitItems) {
       var hitsByDate = {};
       visitItems.forEach(function(item) {
-        if (item.transition === 'typed') {
-          // TODO(gintas): Also count non-typed transitions?
-          var dt = new Date(item.visitTime);
-          clearTime(dt);
-          var histKey = dt.getTime();
-          if (!hitsByDate.hasOwnProperty(histKey)) {
-            hitsByDate[histKey] = 0;
-          }
-          hitsByDate[histKey] += 1;
+        var dt = new Date(item.visitTime);
+        clearTime(dt);
+        var histKey = dt.getTime();
+        if (!hitsByDate.hasOwnProperty(histKey)) {
+          hitsByDate[histKey] = 0;
         }
+        hitsByDate[histKey] += 1;
       });
       addPlotRow(histPlot, plotData, domain, hitsByDate);
     });
@@ -127,8 +123,9 @@ function clearTime(dt) {
 
 /**
  * Finds hits to a given domain.
- *
- * Checks common variants of the domain.
+ * 
+ * <p>Finds only direct hits (usually caused by user typing in a domain). Checks common variants of
+ * the domain.
  */
 function findDirectHits(domain, visitsHandler) {
   var variants = domainVariants(domain);
