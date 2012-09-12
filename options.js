@@ -179,11 +179,6 @@ function saveSettings() {
     dimmerDelayIncrement = getLocal('dimmerDelayIncrement');
   }
 
-  var redirectProbability = parseFloat(document.getElementById("redirectProbability").value);
-  if (isNaN(redirectProbability) || redirectProbability < 0) {
-    redirectProbability = getLocal('redirectProbability');
-  }
-
   var checkActiveTab = document.getElementById("checkActiveTab").checked;
 
   // TODO: better validation
@@ -204,7 +199,6 @@ function saveSettings() {
   setLocal('dimmerDelayIncrement', dimmerDelayIncrement);
   setLocal('checkActiveTab', checkActiveTab);
   setLocal('junkDomains', junkDomains);
-  setLocal('redirectProbability', redirectProbability);
   setLocal('startTime', startTime);
   setLocal('endTime', endTime);
   setLocal('weekdays', weekdays);
