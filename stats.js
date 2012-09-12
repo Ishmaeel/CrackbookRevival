@@ -85,7 +85,7 @@ function redrawPlot(histPlot, plotData) {
 }
 
 /**
- * Adds an entry to the plot, given 
+ * Adds an entry to the plot, given a dictionary of hits by date.
  */
 function addPlotRow(histPlot, plotData, domain, hitsByDate) {
   var row = mapToPairList(hitsByDate);
