@@ -153,17 +153,3 @@ function domainVariants(domain) {
     'https://www.' + domain
   ];
 }
-
-/**
- * Finds Chrome history items by text-matching on the given domain.
- */
-function findHistoryItems(domain, callback) {
-  var monthAgo = new Date().getTime() - 1000*3600*24*7*30;
-  chrome.history.search({
-    text: domain,
-    startTime: monthAgo,
-    maxResults: 1000
-  }, function(historyitems) {
-    // TODO
-  });
-}
