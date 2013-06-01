@@ -3,13 +3,17 @@ var DIMMER_DIV_ID = '_crackbook_dimmer_';
 var DIMMER_TEXT = "Wait %d seconds for the content to appear.";
 var DIMMER_SWITCH_TEXT = "The timer restarts if you switch away from this tab.";
 
+var original_url = null;
+var dimmer_args = null;
+
 var timeoutFn = function() {
   var dimmer = document.getElementById(DIMMER_DIV_ID);
   dimmer.style.display = "none";
-  // Disable the dimmer, and do not dim this page again.
+  // Disable the dimmer. This page may be dimmed again if the URL changes.
 }
 
-function clearTimer(dimmer) {
+
+function clearDimTimer(dimmer) {
   // Clear old timer.
   var timerIdInput = document.getElementById(DIMMER_DIV_ID + "timerId");
   if (timerIdInput) {
@@ -19,7 +23,7 @@ function clearTimer(dimmer) {
   }
 }
 
-function setTimer(dimmer, delay) {
+function setDimTimer(dimmer, delay) {
   // Clear old timer.
   var timerIdInput = document.getElementById(DIMMER_DIV_ID + "timerId");
   if (timerIdInput) {
@@ -86,7 +90,20 @@ function addDimmer(delay, appearance) {
 
   document.body.insertBefore(dimmer, document.body.firstChild);
 
+  // Install URL change watcher.
+  original_url = document.URL;
+  setInterval(watchUrlChanges, 1000);
+  // TODO(gintas): Disable watcher when the tab is not active.
+
   return dimmer;
+}
+
+/* Watches for URL changes and reshows the dimmer if a change is detected. */
+function watchUrlChanges() {
+  if (document.URL != original_url) {
+    reshow_dimmer();
+    original_url = document.URL;
+  }
 }
 
 // Actions
@@ -94,7 +111,7 @@ function addDimmer(delay, appearance) {
 function create(dimmer_el, delay, appearance) {
   if (!dimmer_el) {
     var dimmer = addDimmer(delay, appearance);
-    setTimer(dimmer, delay);
+    setDimTimer(dimmer, delay);
   }
 }
 
@@ -106,16 +123,24 @@ function create_suspended(dimmer_el, delay, appearance) {
 
 function suspend(dimmer_el, delay) {
   if (dimmer_el) {
-    clearTimer(dimmer_el);
+    clearDimTimer(dimmer_el);
   }
 }
 
 function resume(dimmer_el, delay) {
   if (dimmer_el && dimmer_el.style.display != "none") {
-    setTimer(dimmer_el, delay);
+    setDimTimer(dimmer_el, delay);
 
     var switch_text = document.getElementById(DIMMER_DIV_ID + 'stayput');
     switch_text.style.display = "block";
+  }
+}
+
+function reshow(dimmer_el, delay) {
+  if (dimmer_el) {
+    dimmer_el.style.display = "block";
+    setDimTimer(dimmer_el, delay);
+    // TODO(gintas): Do not assume that this tab is currently active.
   }
 }
 
@@ -126,7 +151,7 @@ function resume(dimmer_el, delay) {
      - "create_suspended": a dimmer is created on the page if it is not already there, no timer is started
      - "suspend": the countdown is suspended if there is a dimmer on the page, no-op otherwise
      - "resume": the countdown is resumed if there is a dimmer on the page, no-op otherwise
-   
+
    'delay' is delay time in seconds.
  */
 function dim(action, delay, appearance) {
@@ -135,7 +160,8 @@ function dim(action, delay, appearance) {
     create: create,
     suspend: suspend,
     resume: resume,
-    create_suspended: create_suspended
+    create_suspended: create_suspended,
+    reshow: reshow
   };
 
   var action_fn = action_fns[action];
@@ -145,8 +171,12 @@ function dim(action, delay, appearance) {
 }
 
 /* Forwarder function for calls using executeScript() */
-function invoke_dimmer(args) {
-  dim(args.dimmerAction, args.delay, args.appearance);
+function invoke_dimmer() {
+  dim(dimmer_args.dimmerAction, dimmer_args.delay, dimmer_args.appearance);
+}
+
+function reshow_dimmer() {
+  dim('reshow', dimmer_args.delay, dimmer_args.appearance);
 }
 
 // On initial load, check with the extension whether action needs to be taken.
@@ -154,10 +184,11 @@ chrome.extension.sendRequest({}, function(response) {
   if (response.redirectUrl) {
     window.location.href = response.redirectUrl;
   } else if (response.dimmerAction) {
+    dimmer_args = response;
     function delayedDimmerFn() {
       if (document.body != null) {
         // The body of the document has started loading, the dimmer can be shown.
-        invoke_dimmer(response);
+        invoke_dimmer();
       } else {
         // The body is not yet available.
         setTimeout(delayedDimmerFn, BODY_POLL_MS);
