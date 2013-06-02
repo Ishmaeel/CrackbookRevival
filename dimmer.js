@@ -3,15 +3,11 @@ var DIMMER_DIV_ID = '_crackbook_dimmer_';
 var DIMMER_TEXT = "Wait %d seconds for the content to appear.";
 var DIMMER_SWITCH_TEXT = "The timer restarts if you switch away from this tab.";
 
+var TRACING = false;
+
 var original_url = null;
-var dimmer_args = null;
-
-var timeoutFn = function() {
-  var dimmer = document.getElementById(DIMMER_DIV_ID);
-  dimmer.style.display = "none";
-  // Disable the dimmer. This page may be dimmed again if the URL changes.
-}
-
+var dimmer_delay = null;
+var dimmer_appearance = null;
 
 function clearDimTimer(dimmer) {
   // Clear old timer.
@@ -30,6 +26,12 @@ function setDimTimer(dimmer, delay) {
     timerId = parseInt(timerIdInput.value);
     clearTimeout(timerId);
   }
+
+  var timeoutFn = function() {
+    var dimmer = document.getElementById(DIMMER_DIV_ID);
+    dimmer.style.display = "none";
+    // Disable the dimmer. This page may be dimmed again if the URL changes.
+  };
 
   // Set timer.
   var timerId = setTimeout(timeoutFn, Math.round(delay * 1000));
@@ -101,8 +103,8 @@ function addDimmer(delay, appearance) {
 /* Watches for URL changes and reshows the dimmer if a change is detected. */
 function watchUrlChanges() {
   if (document.URL != original_url) {
-    reshow_dimmer();
     original_url = document.URL;
+    dim('reshow');
   }
 }
 
@@ -152,9 +154,8 @@ function reshow(dimmer_el, delay) {
      - "suspend": the countdown is suspended if there is a dimmer on the page, no-op otherwise
      - "resume": the countdown is resumed if there is a dimmer on the page, no-op otherwise
 
-   'delay' is delay time in seconds.
  */
-function dim(action, delay, appearance) {
+function dim(action) {
   // Dispatch by action name.
   var action_fns = {
     create: create,
@@ -164,19 +165,19 @@ function dim(action, delay, appearance) {
     reshow: reshow
   };
 
+  if (TRACING) {
+    console.log("action: " + action);
+  }
+
   var action_fn = action_fns[action];
 
   var dimmer_el = document.getElementById(DIMMER_DIV_ID);
-  action_fn(dimmer_el, delay, appearance);
+  action_fn(dimmer_el, dimmer_delay, dimmer_appearance);
 }
 
 /* Forwarder function for calls using executeScript() */
-function invoke_dimmer() {
-  dim(dimmer_args.dimmerAction, dimmer_args.delay, dimmer_args.appearance);
-}
-
-function reshow_dimmer() {
-  dim('reshow', dimmer_args.delay, dimmer_args.appearance);
+function invoke_dimmer(action) {
+  dim(action);
 }
 
 // On initial load, check with the extension whether action needs to be taken.
@@ -184,11 +185,13 @@ chrome.extension.sendRequest({}, function(response) {
   if (response.redirectUrl) {
     window.location.href = response.redirectUrl;
   } else if (response.dimmerAction) {
-    dimmer_args = response;
+    // Save dimmer parameters.
+    dimmer_delay = response.delay;
+    dimmer_appearance = response.appearance;
     function delayedDimmerFn() {
       if (document.body != null) {
         // The body of the document has started loading, the dimmer can be shown.
-        invoke_dimmer();
+        invoke_dimmer(response.dimmerAction);
       } else {
         // The body is not yet available.
         setTimeout(delayedDimmerFn, BODY_POLL_MS);

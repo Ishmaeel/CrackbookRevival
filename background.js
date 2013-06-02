@@ -10,6 +10,8 @@ var API_URL = 'http://crackbook.info/api/';
 var NOTIFICATION_THRESHOLD = 5;
 var NOTIFICATION_HIT_INTERVAL = 5;
 
+var TRACING = false;
+
 function drawIcon(img_name) {
   img_path = "images/" + img_name;
   chrome.browserAction.setIcon({ path: img_path });
@@ -238,7 +240,7 @@ function showNotification() {
           NOTIFICATION_TEXT,
           "");
   notification_obj.show();
-  window.setTimeout(function() { notification_obj.cancel() }, 3000);
+  window.setTimeout(function() { notification_obj.cancel(); }, 3000);
 }
 
 function incrementJunkCounter(domain) {
@@ -254,7 +256,7 @@ function incrementJunkCounter(domain) {
   setLocal('dayHits', hits);
 
   chrome.browserAction.setBadgeText({text: "" + hits});
-  setTimeout(function() { chrome.browserAction.setBadgeText({text: ''}) },
+  setTimeout(function() { chrome.browserAction.setBadgeText({text: ''}); },
       3000);
 
   // Show notification if needed.
@@ -274,10 +276,10 @@ function invokeDimmer(tabId, dimmerAction) {
   // - "create_suspended": a dimmer is created on the page if it is not already there, no timer is started
   // - "suspend": the countdown is suspended if there is a dimmer on the page
   // - "resume": the countdown is resumed if there is a dimmer on the page
-  var args = { dimmerAction: dimmerAction,
-               delay: getLocal('dimmerDelay'),
-               appearance: { transparent: false } };
-  var primer_code = "if (window.invoke_dimmer) { invoke_dimmer(" + JSON.stringify(args) + "); }";
+  if (TRACING) {
+    console.log("Invoking action: " + tabId + " -> " + dimmerAction);
+  }
+  var primer_code = "if (window.invoke_dimmer) { invoke_dimmer('" + dimmerAction + "'); }";
   chrome.tabs.executeScript(tabId, { code: primer_code });
 }
 
@@ -293,7 +295,7 @@ function initUserID() {
 
 function initExtension() {
   initUserID();
-  chrome.extension.onRequest.addListener(newPageHandler)
+  chrome.extension.onRequest.addListener(newPageHandler);
   chrome.tabs.onSelectionChanged.addListener(tabSelectionChangedHandler);
   chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
   initIcon();
