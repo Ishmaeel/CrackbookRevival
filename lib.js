@@ -52,7 +52,9 @@ var_defaults = {
   weekdays: '"12345"',
   day: '""',
   dayHits: '0',
-  hitLogKeys: '[]'
+  hitLogKeys: '[]',
+  reset_daily_flag: 'false',
+  base_delay: '10.0'
 };
 
 function getLocal(varname) {
