@@ -10,7 +10,7 @@ var API_URL = 'http://crackbook.info/api/';
 var NOTIFICATION_THRESHOLD = 5;
 var NOTIFICATION_HIT_INTERVAL = 5;
 
-var TRACING = true;
+var TRACING = false;
 
 function drawIcon(img_name) {
   img_path = "images/" + img_name;
