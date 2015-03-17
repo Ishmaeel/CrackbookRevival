@@ -33,9 +33,9 @@ function drawTextOnBg(canvas, image, value) {
 var iconState = null;
 
 function updateIcon(active, inJunk) {
-  if (active == null) // null or undefined
+  if (active === null) // null or undefined
     active = extensionActive();
-  if (inJunk == null) { // null or undefined
+  if (inJunk === null) { // null or undefined
     chrome.tabs.getSelected(null, function(selectedTab) {
       var junkDomain = lookupJunkDomain(selectedTab.url);
       updateIcon(active, !!junkDomain);
@@ -80,7 +80,7 @@ function shouldDimPage() {
 function toQueryString(obj) {
   // Convert an object to a query string.
   var components = [];
-  for (k in obj) {
+  for (var k in obj) {
     var v = obj[k];
     components.push(k + '=' + encodeURIComponent(v));
   }
@@ -121,7 +121,7 @@ function submitConfigChange() {
 // Returns true if the URL looks normal.
 // Used to avoid trying to dim special-purpose tabs.
 function isNormalUrl(s) {
-  return s && ((s.indexOf('http://') == 0) || (s.indexOf('https://') == 0));
+  return s && ((s.indexOf('http://') === 0) || (s.indexOf('https://') === 0));
 }
 
 /*
@@ -255,13 +255,17 @@ function incrementJunkCounter(domain) {
   }
   setLocal('dayHits', hits);
 
+  // Also, if the day changed and reset_daily_flag is set, reset.
+  if (day != today && getLocal('reset_daily_flag')) {
+    setLocal('dimmerDelay', getLocal('base_delay'));
+  }
+
   chrome.browserAction.setBadgeText({text: "" + hits});
   setTimeout(function() { chrome.browserAction.setBadgeText({text: ''}); },
       3000);
 
   // Show notification if needed.
-  if (hits > NOTIFICATION_THRESHOLD
-      && (hits % NOTIFICATION_HIT_INTERVAL == 0))
+  if (hits > NOTIFICATION_THRESHOLD && (hits % NOTIFICATION_HIT_INTERVAL === 0))
     // If hits >= dimmerThreshold, the notification is not needed any
     // more as the dimmer kicks in.
     if (hits < getLocal('dimmerThreshold'))
@@ -289,7 +293,7 @@ function initIcon() {
 
 function initUserID() {
   var user_id = getLocal('user_id');
-  if (user_id == 0)
+  if (user_id === 0)
     setLocal('user_id', Math.floor(Math.random() * 256*256*256*127));
 }
 
@@ -300,7 +304,7 @@ function initExtension() {
   chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
   initIcon();
 
-  if (getLocal('junkDomains').length == 0)
+  if (getLocal('junkDomains').length === 0)
     chrome.tabs.create({ url: "options.html" });
 }
 

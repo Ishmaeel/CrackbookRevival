@@ -23,14 +23,14 @@ function getTopDomains(historyItems) {
 
       if (domains.indexOf(domain) == -1) {
         domains.push(domain);
-        typedCounts[domain] = h.typedCount;  
+        typedCounts[domain] = h.typedCount;
       } else {
-        typedCounts[domain] += h.typedCount;  
+        typedCounts[domain] += h.typedCount;
       }
     }
   }
   // Sort by typed count (descending).
-  domains.sort(function(a, b) { return typedCounts[b] - typedCounts[a] });
+  domains.sort(function(a, b) { return typedCounts[b] - typedCounts[a]; });
   // Take top N.
   var topUrls = domains.slice(0, TOP_DOMAINS_NUM);
   return topUrls;
@@ -131,6 +131,9 @@ function showSettings() {
   document.getElementById("dimmerThreshold").value = getLocal('dimmerThreshold');
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay').toFixed(2);
   document.getElementById("dimmerDelayIncrement").value = getLocal('dimmerDelayIncrement').toFixed(2);
+  document.getElementById("reset_daily_flag").checked = getLocal('reset_daily_flag');
+  document.getElementById("base_delay").value = getLocal('base_delay');
+
   document.getElementById("checkActiveTab").checked = getLocal('checkActiveTab');
 
   // Junk domains.
@@ -164,7 +167,7 @@ function saveSettings() {
     junkDomains[i] = trimWWW(trimProtocol(junkDomains[i]));
   }
 
-  var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value);
+  var dimmerThreshold = parseInt(document.getElementById("dimmerThreshold").value, 10);
   if (isNaN(dimmerThreshold) || dimmerThreshold < 0) {
     dimmerThreshold = getLocal('dimmerThreshold');
   }
@@ -179,6 +182,13 @@ function saveSettings() {
     dimmerDelayIncrement = getLocal('dimmerDelayIncrement');
   }
 
+  var base_delay = parseFloat(document.getElementById("base_delay").value);
+  if (isNaN(base_delay) || base_delay < 0) {
+    base_delay = getLocal('base_delay');
+  }
+
+  var reset_daily_flag = !!document.getElementById('reset_daily_flag').checked;
+
   var checkActiveTab = document.getElementById("checkActiveTab").checked;
 
   // TODO: better validation
@@ -186,9 +196,10 @@ function saveSettings() {
   var endTime = parseTime(document.getElementById("endTime").value);
 
   var weekdays = "";
-  for (var i = 0; i < 7; i++)
+  for (i = 0; i < 7; i++) {
     if (document.getElementById("weekday-" + i).checked)
       weekdays += i;
+  }
 
   var reporting = document.getElementById("upload_stats").checked;
 
@@ -197,6 +208,9 @@ function saveSettings() {
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('dimmerDelay', dimmerDelay);
   setLocal('dimmerDelayIncrement', dimmerDelayIncrement);
+  setLocal('reset_daily_flag', reset_daily_flag);
+  setLocal('base_delay', base_delay);
+
   setLocal('checkActiveTab', checkActiveTab);
   setLocal('junkDomains', junkDomains);
   setLocal('startTime', startTime);
@@ -220,7 +234,7 @@ function saveSettings() {
     if (opacityValue < 0.1) {
       window.close();
     } else {
-      setTimeout(timeoutFn, MSG_SAVED_DELAY / 20.0);      
+      setTimeout(timeoutFn, MSG_SAVED_DELAY / 20.0);
     }
   };
   setTimeout(timeoutFn, MSG_SAVED_DELAY / 20.0);
@@ -231,7 +245,7 @@ function saveSettings() {
 window.onload = function() {
   bindControlHandlers();
   showSettings();
-}
+};
 
 
 // Google Analytics
