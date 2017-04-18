@@ -1,5 +1,6 @@
 {
   "name": "Crackbook Revival",
+  "short_name": "Crackbook-RV",
   "version": "1.2.9",
   "manifest_version": 2,
   "description": "Limit junk sites in your daily infodiet.",
@@ -22,7 +23,7 @@
       "run_at": "document_start"
     }
   ],
-  "content_security_policy":  "script-src 'self'",
+  "content_security_policy":  "script-src 'self'; object-src 'self'",
   "permissions": [
     "history",
     "notifications",
