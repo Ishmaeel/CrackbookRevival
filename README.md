@@ -1,5 +1,16 @@
-Crackbook
-=========
+Crackbook Revival
+=================
+
+Crackbook Revival is a fork of the original Crackbook by Gintautas Miliauskas,
+hosted at http://github.com/gintas/crackbook 
+
+Modified Readme
+---------------
+
+The text below has been modified. The original should be available at
+https://github.com/gintas/crackbook/blob/master/README.md
+
+---
 
 See http://xkcd.com/862/
 
@@ -11,21 +22,11 @@ are less likely to just disable the block after a while.
 The extension will delay every hit to blacklisted site. The delay is just
 a few seconds initially, but it increases slightly on every hit.
 
-Unless disabled in settings, the extension will collect and anonymously
-submit usage data. Aggregate statistics are available at
-<http://crackbook.info>.
-
-The junk page counter resets daily.
-
-
-The extension is available on the Chrome Store at:
-https://chrome.google.com/extensions/detail/nbgjmohekjolcgemlolblankocjlgalf
-
 The source code is available under the MIT license (see the file LICENSE).
-It is hosted at http://github.com/gintas/crackbook (patches welcome!).
 
-Copyright (C) 2011 Gintautas Miliauskas <gintautas@miliauskas.lt>
+Original work Copyright (c) 2011-2015 Gintautas Miliauskas <gintautas@miliauskas.lt>
 
+Modifications Copyright (c) 2017 Ishmaeel
 
 Acknowledgements
 ----------------

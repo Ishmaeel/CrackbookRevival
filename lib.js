@@ -40,7 +40,6 @@ function todayAsString() {
 
 var_defaults = {
   junkDomains: '[]',
-  reporting: 'true',
   checkActiveTab: 'true',
   user_id: '0',
   dimmerThreshold: '0',
