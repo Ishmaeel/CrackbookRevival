@@ -8,7 +8,6 @@ function markAsJunk() {
     document.getElementById('mark_junk_button').style.display = "none";
     var bg = bgPage();
     bg.updateIcon(bg.extensionActive(), true);
-    bg.submitConfigChange();
   });
 }
 

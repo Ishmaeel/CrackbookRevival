@@ -105,8 +105,6 @@ function loadTopUrls() {
     function(historyItems) {
       var topUrls = getTopDomains(historyItems);
       setLocal('junkDomains', topUrls);
-      // Not calling submitConfigChange here to give the chance for the
-      // user to clean the domain list.
       putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", topUrls);
     }
   );
@@ -120,9 +118,6 @@ function addJunkDomain() {
 function bindControlHandlers() {
   document.getElementById('add_junk_domain_button').onclick = addJunkDomain;
   document.getElementById('save_button').onclick = saveSettings;
-  document.getElementById('crackbookLink').onclick = function() {
-    chrome.tabs.create({url: 'http://crackbook.info'});
-  }
 }
 
 
@@ -152,10 +147,6 @@ function showSettings() {
   for (var i = 0; i < 7; i++) {
     document.getElementById("weekday-" + i).checked = currentWeekdays.indexOf("" + i) != -1;
   }
-
-  // Reporting
-  if (getLocal('reporting'))
-    document.getElementById("upload_stats").checked = true;
 }
 
 
@@ -201,10 +192,7 @@ function saveSettings() {
       weekdays += i;
   }
 
-  var reporting = document.getElementById("upload_stats").checked;
-
   // Write settings to storage.
-  setLocal('reporting', reporting);
   setLocal('dimmerThreshold', dimmerThreshold);
   setLocal('dimmerDelay', dimmerDelay);
   setLocal('dimmerDelayIncrement', dimmerDelayIncrement);
@@ -217,7 +205,6 @@ function saveSettings() {
   setLocal('endTime', endTime);
   setLocal('weekdays', weekdays);
 
-  bgPage().submitConfigChange();
   bgPage().updateIcon(null, true);
 
   // Re-render saved settings so that invalid settings can be seen.
@@ -240,21 +227,7 @@ function saveSettings() {
   setTimeout(timeoutFn, MSG_SAVED_DELAY / 20.0);
 } // saveSettings
 
-
-
 window.onload = function() {
   bindControlHandlers();
-  showSettings();
+  showSettings();  
 };
-
-
-// Google Analytics
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-6080477-5']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = 'https://ssl.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();

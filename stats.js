@@ -5,7 +5,7 @@ window.onload = function() {
     drawLogPlot();
   } else {
     $('#logPlot-container').html(
-      "Crackbook has less than 4 days of activity logs. Please come back later.");
+      "Crackbook Revival has less than 4 days of activity logs. Please come back later.");
   }
 
   $('#show-browser-history-visits').click(function() {

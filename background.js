@@ -3,7 +3,6 @@ var HITNUM_COLOR = "rgb(255,255,255)";
 var HITNUM_POS_X = 3;
 var HITNUM_POS_Y = 12;
 var NOTIFICATION_TEXT = 'Time to get back to work!';
-var API_URL = 'http://crackbook.info/api/';
 
 // TODO: the following should be configurable
 
@@ -96,26 +95,7 @@ function ajaxPost(url, fields) {
 }
 
 function registerHit(domain, blocked, active) {
-  var params = {domain: domain, blocked: blocked, active: active};
-  if (getLocal('reporting')) {
-    ajaxPost(API_URL + 'register_hit', params);
-  }
   storeHit(domain, blocked, active);
-}
-
-function submitConfigChange() {
-  if (getLocal('reporting'))
-    ajaxPost(API_URL + 'register_configuration', {
-        domains: JSON.stringify(getLocal('junkDomains')),
-        dimmer_threshold: getLocal('dimmerThreshold'),
-        dimmer_delay: getLocal('dimmerDelay'),
-        dimmer_delay_increment: getLocal('dimmerDelayIncrement'),
-        dimmer_delay_growth: '-1',  // TODO: remove
-        redirect_probability: '-1',  // TODO: remove
-        start_time: getLocal('startTime'),
-        end_time: getLocal('endTime'),
-        weekdays: getLocal('weekdays')
-    });
 }
 
 // Returns true if the URL looks normal.
@@ -310,13 +290,3 @@ function initExtension() {
 
 initExtension();
 
-// Google Analytics
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-6080477-5']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = 'https://ssl.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
