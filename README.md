@@ -2,17 +2,24 @@ Crackbook Revival
 =================
 
 Crackbook Revival is a fork of the original Crackbook by Gintautas Miliauskas,
-hosted at http://github.com/gintas/crackbook 
+hosted at http://github.com/gintas/crackbook
+
+Installation
+============
+
+The extension is available on Chrome Web Store at:
+
+<https://chrome.google.com/webstore/detail/crackbook-revival/fakedinbmdjifniaepnfbplcheaecebc>
 
 Modified Readme
 ---------------
 
 The text below has been modified. The original should be available at
-https://github.com/gintas/crackbook/blob/master/README.md
+<https://github.com/gintas/crackbook/blob/master/README.md>
 
 ---
 
-See http://xkcd.com/862/
+See <http://xkcd.com/862/>
 
 Crackbook is a Chrome extension for discouraging use of attention-sucking
 websites such as Facebook or Reddit. The idea behind Crackbook is that delaying
