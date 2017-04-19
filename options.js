@@ -211,20 +211,30 @@ function saveSettings() {
   showSettings();
 
   // Show status message.
-  document.getElementById('save_button').style.display = 'none';
+  var saveButton = document.getElementById('save_button');
   var msg = document.getElementById('saved_message');
-  msg.style.display = 'inline';  // show the message
+  var inPopup = (location.hash === "#popup");
   var opacityValue = 1.0;
+  var speedFactor = inPopup ? 20 : 80;
+
+  saveButton.style.display = 'none';
+  msg.style.display = 'inline'; 
+
   var timeoutFn = function() {
-    opacityValue -= 1 / 20.0;
+    opacityValue -= 1 / 20;
     msg.style.opacity = opacityValue;
     if (opacityValue < 0.1) {
-      window.close();
+      if (inPopup){
+        window.close();
+      } else {
+        msg.style.display = 'none';
+        saveButton.style.display = 'inline';
+      }
     } else {
-      setTimeout(timeoutFn, MSG_SAVED_DELAY / 20.0);
+      setTimeout(timeoutFn, MSG_SAVED_DELAY / speedFactor);
     }
   };
-  setTimeout(timeoutFn, MSG_SAVED_DELAY / 20.0);
+  setTimeout(timeoutFn, MSG_SAVED_DELAY / speedFactor);
 } // saveSettings
 
 window.onload = function() {
