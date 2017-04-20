@@ -28,9 +28,12 @@ function setDimTimer(dimmer, delay) {
   }
 
   var timeoutFn = function() {
+    // Disable the dimmer. This page may be dimmed again if the URL changes.
     var dimmer = document.getElementById(DIMMER_DIV_ID);
     dimmer.style.display = "none";
-    // Disable the dimmer. This page may be dimmed again if the URL changes.
+
+    // Re-enable the scroll bars
+    document.body.style.overflow = null;
   };
 
   // Set timer.
@@ -88,9 +91,12 @@ function addDimmer(delay, appearance) {
   if (appearance && appearance.transparent) {
     dimmer.style.opacity = "0.95";
   }
-  dimmer.style.zIndex = "99999";
+  dimmer.style.zIndex = "2147483647";
 
   document.body.insertBefore(dimmer, document.body.firstChild);
+
+  // Disable the scroll bars
+  document.body.style.overflow = "hidden";
 
   // Install URL change watcher.
   original_url = document.URL;
