@@ -147,6 +147,7 @@ function resume(dimmer_el, delay) {
 function reshow(dimmer_el, delay) {
   if (dimmer_el) {
     dimmer_el.style.display = "block";
+    document.body.style.overflow = "hidden";
     setDimTimer(dimmer_el, delay);
     // TODO(gintas): Do not assume that this tab is currently active.
   }
