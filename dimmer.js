@@ -32,8 +32,7 @@ function setDimTimer(dimmer, delay) {
     var dimmer = document.getElementById(DIMMER_DIV_ID);
     dimmer.style.display = "none";
 
-    // Re-enable the scroll bars
-    document.body.style.overflow = null;
+    showScrollbars();
   };
 
   // Set timer.
@@ -95,8 +94,7 @@ function addDimmer(delay, appearance) {
 
   document.body.insertBefore(dimmer, document.body.firstChild);
 
-  // Disable the scroll bars
-  document.body.style.overflow = "hidden";
+  hideScrollbars();
 
   // Install URL change watcher.
   original_url = document.URL;
@@ -147,7 +145,9 @@ function resume(dimmer_el, delay) {
 function reshow(dimmer_el, delay) {
   if (dimmer_el) {
     dimmer_el.style.display = "block";
-    document.body.style.overflow = "hidden";
+    
+    hideScrollbars();
+
     setDimTimer(dimmer_el, delay);
     // TODO(gintas): Do not assume that this tab is currently active.
   }
@@ -208,3 +208,13 @@ chrome.extension.sendRequest({}, function(response) {
     delayedDimmerFn();
   }
 });
+
+function hideScrollbars() {
+  document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden";
+}
+
+function showScrollbars() {
+  document.body.style.overflow = null;
+  document.documentElement.style.overflow = null;
+}
