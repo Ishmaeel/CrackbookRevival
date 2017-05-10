@@ -73,7 +73,7 @@ function extensionActive() {
 }
 
 function shouldDimPage() {
-  return getTodaysHits() > getLocal('dimmerThreshold');
+  return getTodaysHits() >= getLocal('dimmerThreshold');
 }
 
 function toQueryString(obj) {
