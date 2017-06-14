@@ -118,6 +118,10 @@ function addMissingZeroes(hitsByDate) {
     }
   }
 
+  if (min === null) {
+  	return;
+  }
+
   var max = new Date().getTime();  // the current moment is the upper bound
   var dt = new Date(min);
   while (dt.getTime() < max) {
@@ -191,7 +195,9 @@ function drawLogPlot() {
     var entries = loadHits(key);
     entries.forEach(function(entry) {
       var hitsByDate = domainStats[entry.domain];
-      markHit(entry.timestamp * 1000, hitsByDate);
+      if (hitsByDate) {
+      	markHit(entry.timestamp * 1000, hitsByDate);
+      }
     });
   });
 
