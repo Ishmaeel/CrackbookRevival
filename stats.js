@@ -92,12 +92,17 @@ function addPlotRow(histPlot, plotData, domain, hitsByDate) {
   addMissingZeroes(hitsByDate);
   var row = mapToPairList(hitsByDate);
 
-  // TODO: ensure order stability of entries
-  plotData.push({
-    label: domain,
-    data: row
-  });
-  redrawPlot(histPlot, plotData);
+  if (row.length > 0) {
+		plotData.push({
+			label: domain,
+			data: row,
+			weight: row.length
+		});
+
+		plotData.sort(function (a, b) { return b.weight - a.weight; })
+
+		redrawPlot(histPlot, plotData);
+	}
 }
 
 /**
