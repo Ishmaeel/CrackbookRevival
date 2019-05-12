@@ -86,14 +86,6 @@ function toQueryString(obj) {
   return components.join('&');
 }
 
-function ajaxPost(url, fields) {
-  fields['user_id'] = getLocal('user_id');
-  fields['timestamp'] = new Date().valueOf();
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", url, true);
-  xhr.send(toQueryString(fields));
-}
-
 function registerHit(domain, blocked, active) {
   storeHit(domain, blocked, active);
 }
