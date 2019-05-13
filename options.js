@@ -132,7 +132,7 @@ function showSettings() {
   clearDomainsFromPage('siteBlacklist');
   if (getLocal('junkDomains').length > 0) {
     putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", getLocal("junkDomains"));
-  } else {
+  } else if (getLocal('first_run')) {
     loadTopUrls();
   }
 
@@ -201,6 +201,8 @@ function saveSettings() {
   setLocal('startTime', startTime);
   setLocal('endTime', endTime);
   setLocal('weekdays', weekdays);
+
+  setLocal('first_run', false);
 
   bgPage().updateIcon(null, true);
 
