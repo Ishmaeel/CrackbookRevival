@@ -269,7 +269,7 @@ function initExtension() {
   chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
   initIcon();
 
-  if (getLocal('junkDomains').length === 0)
+  if (getLocal('first_run'))
     chrome.tabs.create({ url: "options.html" });
 }
 
