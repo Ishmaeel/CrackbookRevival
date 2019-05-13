@@ -41,7 +41,6 @@ function todayAsString() {
 var_defaults = {
   junkDomains: '[]',
   checkActiveTab: 'true',
-  user_id: '0',
   dimmerThreshold: '0',
   dimmerDelay: '3.0',
   dimmerDelayIncrement: '0.05',

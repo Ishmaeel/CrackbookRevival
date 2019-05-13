@@ -263,14 +263,7 @@ function initIcon() {
   updateIcon(null, false);
 }
 
-function initUserID() {
-  var user_id = getLocal('user_id');
-  if (user_id === 0)
-    setLocal('user_id', Math.floor(Math.random() * 256*256*256*127));
-}
-
 function initExtension() {
-  initUserID();
   chrome.extension.onRequest.addListener(newPageHandler);
   chrome.tabs.onSelectionChanged.addListener(tabSelectionChangedHandler);
   chrome.windows.onFocusChanged.addListener(windowFocusChangedHandler);
