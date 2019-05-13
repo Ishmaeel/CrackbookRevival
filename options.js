@@ -63,19 +63,19 @@ function clearDomainsFromPage(ulId) {
   }
 }
 
-function putDomainsOnPage(ulId, placeholderId, domains) {
-  // Put on page.
+function putDomainsOnPage(ulId, domains) {
   for (var i = 0; i < domains.length; i++) {
     addUrlField(ulId, domains[i]);
   }
+}
 
-  // Remove placeholder, if any.
+function togglePlaceholder(placeholderId) {
   var placeholder = document.getElementById(placeholderId);
   if (placeholder) {
-    document.getElementById(ulId).removeChild(placeholder);
+    var domains = getLocal("junkDomains");
+    placeholder.style.display = domains.length > 0 ? 'none' : 'inline-block';
   }
-} // putDomainsOnPage
-
+}
 
 function collectInputs(ulId) {
   var ul = document.getElementById(ulId);
@@ -93,6 +93,10 @@ function collectInputs(ulId) {
   return domains;
 }
 
+function generateFromHistory() {
+  clearDomainsFromPage('siteBlacklist');
+  loadTopUrls();
+}
 
 // Collect the most frequently visited domains and prepopulate the blacklist.
 function loadTopUrls() {
@@ -102,7 +106,7 @@ function loadTopUrls() {
     function(historyItems) {
       var topUrls = getTopDomains(historyItems);
       setLocal('junkDomains', topUrls);
-      putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", topUrls);
+      putDomainsOnPage("siteBlacklist", topUrls);
     }
   );
 } // loadTopUrls()
@@ -113,6 +117,7 @@ function addJunkDomain() {
 }
 
 function bindControlHandlers() {
+  document.getElementById('generate_blacklist_button').onclick = generateFromHistory;
   document.getElementById('add_junk_domain_button').onclick = addJunkDomain;
   document.getElementById('save_button').onclick = saveSettings;
 }
@@ -131,10 +136,12 @@ function showSettings() {
   // Junk domains.
   clearDomainsFromPage('siteBlacklist');
   if (getLocal('junkDomains').length > 0) {
-    putDomainsOnPage("siteBlacklist", "blacklistPlaceholder", getLocal("junkDomains"));
+    putDomainsOnPage("siteBlacklist", getLocal("junkDomains"));
   } else if (getLocal('first_run')) {
     loadTopUrls();
   }
+
+  togglePlaceholder("blacklistPlaceholder");
 
   // Schedule
   document.getElementById("startTime").value = renderTime(getLocal('startTime'));
