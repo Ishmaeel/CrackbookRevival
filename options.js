@@ -8,9 +8,6 @@ function getTopDomains(historyItems) {
   for (var i = 0; i < historyItems.length; i++) {
     var h = historyItems[i];
     if (h.url && h.typedCount) {
-      if (h.url.slice(0, 5) == 'https')
-        continue; // https URLs are probably not junk
-
       var url = trimWWW(trimProtocol(h.url.trim()));
       var domain = trimPath(url);
 
