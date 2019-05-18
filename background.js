@@ -26,7 +26,7 @@ function drawTextOnBg(canvas, image, value) {
   ctx.fillText("" + value, HITNUM_POS_X, HITNUM_POS_Y);
 
   var imageData = ctx.getImageData(0, 0, 19, 19);
-  chrome.browserAction.setIcon({imageData: imageData});
+  chrome.browserAction.setIcon({ imageData: imageData });
 } // drawTextOnBg
 
 var iconState = null;
@@ -35,7 +35,7 @@ function updateIcon(active, inJunk) {
   if (active === null) // null or undefined
     active = extensionActive();
   if (inJunk === null) { // null or undefined
-    chrome.tabs.getSelected(null, function(selectedTab) {
+    chrome.tabs.getSelected(null, function (selectedTab) {
       var junkDomain = lookupJunkDomain(selectedTab.url);
       updateIcon(active, !!junkDomain);
     });
@@ -131,27 +131,38 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
     // solution is to add a temporary blacklist of pages / domains.
   }
 
-  // Send response.
-  if (!(junkDomain && active && shouldDim)) {
-    sendResponse({});  // do nothing
-  } else {
-    var tabIsActive = (newTab.id == selectedTab.id);
-    sendResponse({dimmerAction: tabIsActive ? "create" : "create_suspended",
-                  delay: getLocal('dimmerDelay'),
-                  appearance: {transparent: false}});
-    if (tabIsActive) {
-      lastDimmedTabId = newTab.id;
+  updateIcon(null, !!junkDomain);
+
+  var responseSent = false;
+
+  if (junkDomain) {
+    registerHit(junkDomain, shouldDim, active);
+
+    if (active) {
+      incrementJunkCounter(junkDomain);
+
+      if (shouldDim) {
+        var tabIsActive = (newTab.id == selectedTab.id);
+       
+        sendResponse({
+          dimmerAction: tabIsActive ? "create" : "create_suspended",
+          delay: getLocal('dimmerDelay'),
+          appearance: { transparent: false }
+        });
+
+        responseSent = true;
+
+        if (tabIsActive) {
+          lastDimmedTabId = newTab.id;
+        }
+
+        increaseDimmerDelay();
+      }
     }
   }
 
-  // Tracking and logging.
-  updateIcon(null, !!junkDomain);
-  if (junkDomain) {
-    if (active) {
-      incrementJunkCounter(junkDomain);
-      increaseDimmerDelay();
-    }
-    registerHit(junkDomain, shouldDim, active);
+  if (!responseSent) {
+    sendResponse({});  // do nothing
   }
 }
 
@@ -166,7 +177,7 @@ function tabSelectionChangedHandler(tabId, selectInfo) {
     lastDimmedTabId = null;
   }
 
-  chrome.tabs.get(tabId, function(tab) {
+  chrome.tabs.get(tabId, function (tab) {
     if (isNormalUrl(tab.url)) {
       // If the page was opened from a junk page, the following check will not
       // indicate that this page is junk. Only the icon is affected though.
@@ -186,7 +197,7 @@ function windowFocusChangedHandler(windowId) {
   }
 
   if (windowId != chrome.windows.WINDOW_ID_NONE) {
-    chrome.tabs.getSelected(windowId, function(tab) {
+    chrome.tabs.getSelected(windowId, function (tab) {
       if (isNormalUrl(tab.url)) {
         var junkDomain = lookupJunkDomain(tab.url);
         updateIcon(null, !!junkDomain);
@@ -201,18 +212,18 @@ function windowFocusChangedHandler(windowId) {
 
 // A wrapper function that also figures out the selected tab.
 function newPageHandler(request, sender, sendResponse) {
-  chrome.tabs.getSelected(null, function(selectedTab) {
+  chrome.tabs.getSelected(null, function (selectedTab) {
     handleNewPage(sender.tab, selectedTab, sendResponse);
   });
 }
 
 function showNotification() {
   var notification_obj = webkitNotifications.createNotification(
-          'images/hamburger-128px.png',
-          NOTIFICATION_TEXT,
-          "");
+    'images/hamburger-128px.png',
+    NOTIFICATION_TEXT,
+    "");
   notification_obj.show();
-  window.setTimeout(function() { notification_obj.cancel(); }, 3000);
+  window.setTimeout(function () { notification_obj.cancel(); }, 3000);
 }
 
 function incrementJunkCounter(domain) {
@@ -232,9 +243,9 @@ function incrementJunkCounter(domain) {
     setLocal('dimmerDelay', getLocal('base_delay'));
   }
 
-  chrome.browserAction.setBadgeText({text: "" + hits});
-  setTimeout(function() { chrome.browserAction.setBadgeText({text: ''}); },
-      3000);
+  chrome.browserAction.setBadgeText({ text: "" + hits });
+  setTimeout(function () { chrome.browserAction.setBadgeText({ text: '' }); },
+    3000);
 
   // Show notification if needed.
   if (hits > NOTIFICATION_THRESHOLD && (hits % NOTIFICATION_HIT_INTERVAL === 0))
