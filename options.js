@@ -129,7 +129,7 @@ function showSettings() {
   document.getElementById("dimmerDelay").value = getLocal('dimmerDelay').toFixed(2);
   document.getElementById("dimmerDelayIncrement").value = getLocal('dimmerDelayIncrement').toFixed(2);
   document.getElementById("reset_daily_flag").checked = getLocal('reset_daily_flag');
-  document.getElementById("base_delay").value = getLocal('base_delay');
+  document.getElementById("base_delay").value = getLocal('base_delay').toFixed(2);
 
   document.getElementById("checkActiveTab").checked = getLocal('checkActiveTab');
 

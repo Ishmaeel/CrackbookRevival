@@ -52,7 +52,7 @@ var_defaults = {
   dayHits: '0',
   hitLogKeys: '[]',
   reset_daily_flag: 'false',
-  base_delay: '10.0',
+  base_delay: '3.0',
   first_run: true
 };
 
