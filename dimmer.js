@@ -114,16 +114,16 @@ function watchUrlChanges() {
 
 // Actions
 
-function create(dimmer_el, delay, options) {
+function create(dimmer_el, delay) {
   if (!dimmer_el) {
-    var dimmer = addDimmer(delay, options);
+    var dimmer = addDimmer(delay);
     setDimTimer(dimmer, delay);
   }
 }
 
-function create_suspended(dimmer_el, delay, options) {
+function create_suspended(dimmer_el, delay) {
   if (!dimmer_el) {
-    var dimmer = addDimmer(delay, options);
+    var dimmer = addDimmer(delay);
   }
 }
 
