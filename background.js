@@ -146,10 +146,10 @@ function handleNewPage(newTab, selectedTab, sendResponse) {
        
         sendResponse({
           dimmerAction: tabIsActive ? "create" : "create_suspended",
-	  options: {
-	    blurBackground: getLocal('blurBackground'),
-	    delay: getLocal('dimmerDelay'),
-	  }
+	    options: {
+	      blurBackground: getLocal('blurBackground'),
+	      delay: getLocal('dimmerDelay'),
+	    }
         });
 
         responseSent = true;
