@@ -133,6 +133,8 @@ function showSettings() {
 
   document.getElementById("checkActiveTab").checked = getLocal('checkActiveTab');
 
+  document.getElementById("blurBackground").checked = getLocal('blurBackground');
+
   // Junk domains.
   clearDomainsFromPage('siteBlacklist');
   if (getLocal('junkDomains').length > 0) {
@@ -185,6 +187,7 @@ function saveSettings() {
   var reset_daily_flag = !!document.getElementById('reset_daily_flag').checked;
 
   var checkActiveTab = document.getElementById("checkActiveTab").checked;
+  var blurBackground = document.getElementById("blurBackground").checked;
 
   // TODO: better validation
   var startTime = parseTime(document.getElementById("startTime").value);
@@ -202,6 +205,7 @@ function saveSettings() {
   setLocal('dimmerDelayIncrement', dimmerDelayIncrement);
   setLocal('reset_daily_flag', reset_daily_flag);
   setLocal('base_delay', base_delay);
+  setLocal('blurBackground', blurBackground);
 
   setLocal('checkActiveTab', checkActiveTab);
   setLocal('junkDomains', junkDomains);
