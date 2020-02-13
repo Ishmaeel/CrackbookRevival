@@ -88,8 +88,8 @@ function addDimmer(delay) {
   dimmer.style.zIndex = "2147483647";
   dimmer.style.background = "#001000";
   if (dimmer_options.blurBackground) {
-	  dimmer.style.background = "rgba(0, 16, 0, .6)";
-	  dimmer.style.backdropFilter = "blur(10px)";
+    dimmer.style.background = "rgba(0, 16, 0, .6)";
+    dimmer.style.backdropFilter = "blur(10px)";
   }
 
   document.body.insertBefore(dimmer, document.body.firstChild);
