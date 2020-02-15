@@ -8,6 +8,7 @@ var TRACING = false;
 var original_url = null;
 var dimmer_delay = null;
 var dimmer_appearance = null;
+var media_timer = null;
 
 function clearDimTimer(dimmer) {
   // Clear old timer.
@@ -33,10 +34,7 @@ function setDimTimer(dimmer, delay) {
     dimmer.style.display = "none";
 
     showScrollbars();
-
-    if (mediaTimer !== null) {
-      window.clearInterval(mediaTimer);
-    }
+    unSuppressMedia();
   };
 
   // Set timer.
@@ -111,8 +109,6 @@ function addDimmer(delay, appearance) {
   return dimmer;
 }
 
-var mediaTimer = null;
-
 function suppressMedia() {
   function pauseAll() {
     for (var video of document.getElementsByTagName("video")) {
@@ -131,12 +127,19 @@ function suppressMedia() {
   }
   pauseAll();
 
-  if (mediaTimer !== null) {
-    window.clearInterval(mediaTimer);
+  if (media_timer !== null) {
+    window.clearInterval(media_timer);
   }
 
   // Media elements may be inserted in to the page later...
-  mediaTimer = window.setInterval(pauseAll, 250);
+  media_timer = window.setInterval(pauseAll, 250);
+}
+
+function unSuppressMedia() {
+  if (media_timer !== null) {
+    window.clearInterval(media_timer);
+    media_timer = null;
+  }
 }
 
 /* Watches for URL changes and reshows the dimmer if a change is detected. */
@@ -158,7 +161,7 @@ function create(dimmer_el, delay, appearance) {
 
 function create_suspended(dimmer_el, delay, appearance) {
   if (!dimmer_el) {
-    var dimmer = addDimmer(delay, appearance);
+    addDimmer(delay, appearance);
   }
 }
 
