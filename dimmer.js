@@ -6,8 +6,7 @@ var DIMMER_SWITCH_TEXT = "The timer restarts if you switch away from this tab.";
 var TRACING = false;
 
 var original_url = null;
-var dimmer_delay = null;
-var dimmer_appearance = null;
+var dimmer_options = {};
 
 function clearDimTimer(dimmer) {
   // Clear old timer.
@@ -48,7 +47,7 @@ function setDimTimer(dimmer, delay) {
   timerIdInput.value = timerId;
 }
 
-function addDimmer(delay, appearance) {
+function addDimmer(delay) {
   var dimmer = document.createElement('div');
   dimmer.id = DIMMER_DIV_ID;
 
@@ -86,11 +85,12 @@ function addDimmer(delay, appearance) {
   dimmer.style.height = "100%";
 
   // Background.
-  dimmer.style.background = "#001000";
-  if (appearance && appearance.transparent) {
-    dimmer.style.opacity = "0.95";
-  }
   dimmer.style.zIndex = "2147483647";
+  dimmer.style.background = "#001000";
+  if (dimmer_options.blurBackground) {
+    dimmer.style.background = "rgba(0, 16, 0, .6)";
+    dimmer.style.backdropFilter = "blur(10px)";
+  }
 
   document.body.insertBefore(dimmer, document.body.firstChild);
 
@@ -114,16 +114,16 @@ function watchUrlChanges() {
 
 // Actions
 
-function create(dimmer_el, delay, appearance) {
+function create(dimmer_el, delay) {
   if (!dimmer_el) {
-    var dimmer = addDimmer(delay, appearance);
+    var dimmer = addDimmer(delay);
     setDimTimer(dimmer, delay);
   }
 }
 
-function create_suspended(dimmer_el, delay, appearance) {
+function create_suspended(dimmer_el, delay) {
   if (!dimmer_el) {
-    var dimmer = addDimmer(delay, appearance);
+    var dimmer = addDimmer(delay);
   }
 }
 
@@ -179,7 +179,7 @@ function dim(action) {
   var action_fn = action_fns[action];
 
   var dimmer_el = document.getElementById(DIMMER_DIV_ID);
-  action_fn(dimmer_el, dimmer_delay, dimmer_appearance);
+  action_fn(dimmer_el, dimmer_options.delay);
 }
 
 /* Forwarder function for calls using executeScript() */
@@ -193,8 +193,7 @@ chrome.extension.sendRequest({}, function(response) {
     window.location.href = response.redirectUrl;
   } else if (response.dimmerAction) {
     // Save dimmer parameters.
-    dimmer_delay = response.delay;
-    dimmer_appearance = response.appearance;
+    dimmer_options = response.options;
     function delayedDimmerFn() {
       if (document.body != null) {
         // The body of the document has started loading, the dimmer can be shown.
