@@ -53,7 +53,8 @@ var_defaults = {
   hitLogKeys: '[]',
   reset_daily_flag: 'false',
   base_delay: '3.0',
-  first_run: true
+  first_run: true,
+  blurBackground: false
 };
 
 function getLocal(varname) {
