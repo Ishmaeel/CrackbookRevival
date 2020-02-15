@@ -7,6 +7,7 @@ var TRACING = false;
 
 var original_url = null;
 var dimmer_options = {};
+var media_timer = null;
 
 function clearDimTimer(dimmer) {
   // Clear old timer.
@@ -32,6 +33,7 @@ function setDimTimer(dimmer, delay) {
     dimmer.style.display = "none";
 
     showScrollbars();
+    unSuppressMedia();
   };
 
   // Set timer.
@@ -101,7 +103,43 @@ function addDimmer(delay) {
   setInterval(watchUrlChanges, 1000);
   // TODO(gintas): Disable watcher when the tab is not active.
 
+  // Pause audio/video
+  suppressMedia();
+
   return dimmer;
+}
+
+function suppressMedia() {
+  function pauseAll() {
+    for (var video of document.getElementsByTagName("video")) {
+      if (video.autoplay || !video.paused) {
+        video.autoplay = false;
+        video.pause();
+      }
+    }
+
+    for (var audio of document.getElementsByTagName("audio")) {
+      if (audio.autoplay || !audio.paused) {
+        audio.autoplay = false;
+        audio.pause();
+      }
+    }
+  }
+  pauseAll();
+
+  if (media_timer !== null) {
+    window.clearInterval(media_timer);
+  }
+
+  // Media elements may be inserted in to the page later...
+  media_timer = window.setInterval(pauseAll, 250);
+}
+
+function unSuppressMedia() {
+  if (media_timer !== null) {
+    window.clearInterval(media_timer);
+    media_timer = null;
+  }
 }
 
 /* Watches for URL changes and reshows the dimmer if a change is detected. */
@@ -136,6 +174,7 @@ function suspend(dimmer_el, delay) {
 function resume(dimmer_el, delay) {
   if (dimmer_el && dimmer_el.style.display != "none") {
     setDimTimer(dimmer_el, delay);
+    suppressMedia();
 
     var switch_text = document.getElementById(DIMMER_DIV_ID + 'stayput');
     switch_text.style.display = "block";
@@ -145,10 +184,10 @@ function resume(dimmer_el, delay) {
 function reshow(dimmer_el, delay) {
   if (dimmer_el) {
     dimmer_el.style.display = "block";
-    
-    hideScrollbars();
 
+    hideScrollbars();
     setDimTimer(dimmer_el, delay);
+    suppressMedia();
     // TODO(gintas): Do not assume that this tab is currently active.
   }
 }
