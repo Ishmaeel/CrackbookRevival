@@ -1,7 +1,7 @@
 {
   "name": "Crackbook Revival",
   "short_name": "Crackbook-RV",
-  "version": "1.4.0",
+  "version": "1.5.0-dev",
   "manifest_version": 2,
   "description": "Limit junk sites in your daily infodiet.",
   "icons": {

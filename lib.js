@@ -58,7 +58,10 @@ var_defaults = {
 
 function getLocal(varname) {
   if (!(varname in localStorage)) {
-    localStorage.setItem(varname, var_defaults[varname]);
+    var defaultValue = var_defaults[varname];
+    if (defaultValue) {
+      localStorage.setItem(varname, defaultValue);
+    }
   }
   var s = localStorage.getItem(varname);
   return JSON.parse(s);
