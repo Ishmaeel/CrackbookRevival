@@ -44,27 +44,27 @@
   <div class="subheading">Parameters</div>
 
   <div>
-    <div>
-      <label>Start blocking junk sites after <input id="dimmerThreshold" class="rightAlign" name="dimmerThreshold" type="text" /> junk hits in one day</label>
+    <div class="parameterInput">
+      <label>Start blocking junk sites after <input id="dimmerThreshold" class="rightAlign" name="dimmerThreshold" type="text" /> junk hits in one day.</label>
     </div>
-    <div>
-      <label>Delay junk sites for <input id="dimmerDelay" class="rightAlign" name="dimmerDelay" type="text" /> seconds</label>
+    <div class="parameterInput">
+      <label>Delay junk sites for <input id="dimmerDelay" class="rightAlign" name="dimmerDelay" type="text" /> seconds.</label>
     </div>
-    <div>
-      <label>Increase the delay by <input id="dimmerDelayIncrement" class="rightAlign" name="dimmerDelayIncrement" type="text" /> seconds after every block</label>
+    <div class="parameterInput">
+      <label>Increase the delay by <input id="dimmerDelayIncrement" class="rightAlign" name="dimmerDelayIncrement" type="text" /> seconds after every block.</label>
     </div>
-    <div>
+    <div class="parameterInput">
       <label><input type="checkbox" id="reset_daily_flag" />Reset the delay every day to </label>
       <input id="base_delay" class="rightAlign" name="base_delay"></input> seconds.
     </div>
-    <div style="padding-top: 0.3em">
+    <div class="parameterInput">
       <label>
-        <label><input id="blurBackground" name="blurBackground" type="checkbox" value="1" />Visually blur website while delaying instead of solid black background</label>
+        <label><input id="checkActiveTab" name="checkActiveTab" type="checkbox" value="1" />Block new background tabs opened from a junk page.</label>
       </label>
     </div>
-    <div style="padding-top: 0.3em">
+    <div class="parameterInput">
       <label>
-        <label><input id="checkActiveTab" name="checkActiveTab" type="checkbox" value="1" />Block new background tabs opened from a junk page</label>
+        <label><input id="blurBackground" name="blurBackground" type="checkbox" value="1" />Blur website instead of using solid overlay.</label>
       </label>
     </div>
   </div>
@@ -77,7 +77,11 @@
     Settings saved.
   </span>
 
-  <p></p>
+  <style>
+    .parameterInput{
+      padding-top: 0.3em;
+    }
+  </style>
 
 </body>
 </html>
